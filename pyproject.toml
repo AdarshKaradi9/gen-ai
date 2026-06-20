@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "indian-market-snapshot"
+version = "0.1.0"
+description = "A core snapshot of the Indian stock market — broad & sector indices, movers, breadth."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+live = ["yfinance>=0.2.40"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+indian-market-snapshot = "indian_market.cli:main"
+
+[tool.setuptools]
+packages = ["indian_market"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

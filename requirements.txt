@@ -1,0 +1,7 @@
+# Core toolkit has no runtime dependencies — it runs offline on the stdlib.
+
+# Optional: enables the --live fetch layer for real-time quotes.
+yfinance>=0.2.40
+
+# Development / testing.
+pytest>=8.0
