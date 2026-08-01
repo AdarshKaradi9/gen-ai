@@ -250,8 +250,8 @@ section { padding-top: 64px; }
 
 .screen { display: grid; gap: 28px; align-items: start; }
 @media (min-width: 940px) {
-  .screen { grid-template-columns: 380px minmax(0, 1fr); gap: 56px; }
-  .screen.flip { grid-template-columns: minmax(0, 1fr) 380px; }
+  .screen { grid-template-columns: 412px minmax(0, 1fr); gap: 56px; }
+  .screen.flip { grid-template-columns: minmax(0, 1fr) 412px; }
   .screen.flip .phone-wrap { order: 2; }
 }
 
@@ -288,19 +288,19 @@ section { padding-top: 64px; }
 /* ---------- phone chrome ---------- */
 .phone-wrap { display: flex; justify-content: center; }
 .phone {
-  width: 380px;
+  width: 412px;
   max-width: 100%;
   background: var(--frame);
-  border-radius: 42px;
+  border-radius: 44px;
   padding: 11px;
   box-shadow: var(--shadow);
   flex: none;
 }
 .viewport {
   background: var(--ground);
-  border-radius: 32px;
+  border-radius: 34px;
   overflow: hidden;
-  height: 786px;
+  height: 844px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -339,7 +339,7 @@ section { padding-top: 64px; }
   padding: 0 16px 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* ---------- cards ---------- */
@@ -347,7 +347,8 @@ section { padding-top: 64px; }
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 16px;
-  padding: 16px;
+  padding: 15px;
+  flex: none;
 }
 .card.flat { background: transparent; border-color: var(--rule-2); }
 .card.sunk { background: var(--sunk); border-color: transparent; }
@@ -432,7 +433,7 @@ section { padding-top: 64px; }
 
 /* ---------- forest plot ---------- */
 .forest { display: flex; flex-direction: column; }
-.forest .fr { padding: 12px 0; border-top: 1px solid var(--rule-2); }
+.forest .fr { padding: 10px 0; border-top: 1px solid var(--rule-2); }
 .forest .fr:first-child { border-top: 0; padding-top: 4px; }
 .forest .fh { display: flex; align-items: baseline; gap: 8px; }
 .forest .fh .name { font-size: 12.5px; font-weight: 500; }
@@ -447,7 +448,12 @@ section { padding-top: 64px; }
 .bg-pos { background: var(--moss); }
 .bg-nul { background: var(--ink-3); }
 
-.axis { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--ink-3); padding-top: 8px; border-top: 1px solid var(--rule-2); margin-top: 4px; }
+/* axis: labels are pinned to their true positions on the scale
+   (-60 to +40 min, so 1 min = 1%), never merely space-between */
+.axis { position: relative; height: 14px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); padding-top: 8px; border-top: 1px solid var(--rule-2); margin-top: 4px; }
+.axis span { position: absolute; top: 8px; white-space: nowrap; }
+.axis span.z { transform: translateX(-50%); color: var(--ink-2); }
+.axis span.hi { right: 0; }
 
 .footnote { font-family: var(--serif); font-size: 12.5px; line-height: 1.5; color: var(--ink-2); }
 
@@ -487,7 +493,7 @@ section { padding-top: 64px; }
 }
 .toggle span.sel { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px #00000014; }
 
-.dual { position: relative; height: 118px; margin-top: 14px; }
+.dual { position: relative; height: 108px; margin-top: 12px; }
 .dual svg { width: 100%; height: 100%; display: block; overflow: visible; }
 .gridline { stroke: var(--rule-2); stroke-width: 1; }
 .serie-a { fill: none; stroke: var(--brick); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -516,7 +522,7 @@ section { padding-top: 64px; }
 .sw.off::after { right: auto; left: 2px; }
 
 .vitals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
-.vitals .v { background: var(--sunk); border-radius: 10px; padding: 10px; }
+.vitals .v { background: var(--sunk); border-radius: 10px; padding: 9px 10px; }
 .vitals .v .n { font-family: var(--mono); font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; margin-top: 4px; }
 
 /* ---------- sources ---------- */
@@ -676,7 +682,7 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                 <div class="card move">
                   <div class="klabel">Today's one move</div>
                   <h4>Last coffee<br>before 11:40</h4>
-                  <p>Caffeine after noon has cost you a median 38&nbsp;min of deep sleep on 9 of the last 11 occasions &mdash; your largest single lever.</p>
+                  <p>Caffeine after noon has cost you a median 38&nbsp;min of deep sleep on 9 of the last 11 occasions. Your largest single lever.</p>
                   <div class="row">
                     <span class="chip key">High confidence</span>
                     <span class="chip">n = 11 days</span>
@@ -698,8 +704,7 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
 
                   <div class="band">
                     <div class="track">
-                      <div class="normal" style="left:34%;right:24%"></div>
-                      <div class="mark" style="left:52%"></div>
+                      <div class="normal" style="left:35%;right:35%"></div>
                       <div class="today" style="left:47%"></div>
                     </div>
                     <div class="scale"><span>40</span><span>60</span><span>80</span><span>100</span></div>
@@ -710,7 +715,6 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <div class="r"><span class="dot neg"></span> 2 units alcohol, 21:10 <span class="w neg">&minus;6</span></div>
                     <div class="r"><span class="dot neg"></span> Dinner 21:40 <span class="mut">&mdash; late</span> <span class="w neg">&minus;3</span></div>
                     <div class="r"><span class="dot pos"></span> Zone 2, 46 min <span class="w pos">+5</span></div>
-                    <div class="r"><span class="dot mut"></span> Everything else <span class="w mut">&plusmn;0</span></div>
                   </div>
                 </div>
 
@@ -780,11 +784,11 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <div class="fr">
                       <div class="fh"><span class="name">Alcohol, 2+ units</span><span class="eff neg">&minus;41 min</span></div>
                       <div class="plot">
-                        <div class="zero" style="left:62%"></div>
-                        <div class="ci bg-neg" style="left:20%;right:44%"></div>
-                        <div class="cap bg-neg" style="left:20%"></div>
-                        <div class="cap bg-neg" style="left:56%"></div>
-                        <div class="pt bg-neg" style="left:38%"></div>
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-neg" style="left:2%;right:64%"></div>
+                        <div class="cap bg-neg" style="left:2%"></div>
+                        <div class="cap bg-neg" style="left:36%"></div>
+                        <div class="pt bg-neg" style="left:19%"></div>
                       </div>
                       <div class="meta">95% CI &minus;58 to &minus;24 &nbsp;&middot;&nbsp; n = 23 nights &nbsp;&middot;&nbsp; strong</div>
                     </div>
@@ -792,11 +796,11 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <div class="fr">
                       <div class="fh"><span class="name">Caffeine after 12:00</span><span class="eff neg">&minus;38 min</span></div>
                       <div class="plot">
-                        <div class="zero" style="left:62%"></div>
-                        <div class="ci bg-neg" style="left:19%;right:47%"></div>
-                        <div class="cap bg-neg" style="left:19%"></div>
-                        <div class="cap bg-neg" style="left:53%"></div>
-                        <div class="pt bg-neg" style="left:40%"></div>
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-neg" style="left:1%;right:57%"></div>
+                        <div class="cap bg-neg" style="left:1%"></div>
+                        <div class="cap bg-neg" style="left:43%"></div>
+                        <div class="pt bg-neg" style="left:22%"></div>
                       </div>
                       <div class="meta">95% CI &minus;59 to &minus;17 &nbsp;&middot;&nbsp; n = 11 nights &nbsp;&middot;&nbsp; moderate</div>
                     </div>
@@ -804,11 +808,11 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <div class="fr">
                       <div class="fh"><span class="name">Bedroom above 21&deg;C</span><span class="eff neg">&minus;22 min</span></div>
                       <div class="plot">
-                        <div class="zero" style="left:62%"></div>
-                        <div class="ci bg-neg" style="left:30%;right:36%"></div>
-                        <div class="cap bg-neg" style="left:30%"></div>
-                        <div class="cap bg-neg" style="left:64%"></div>
-                        <div class="pt bg-neg" style="left:48%"></div>
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-neg" style="left:20%;right:44%"></div>
+                        <div class="cap bg-neg" style="left:20%"></div>
+                        <div class="cap bg-neg" style="left:56%"></div>
+                        <div class="pt bg-neg" style="left:38%"></div>
                       </div>
                       <div class="meta">95% CI &minus;40 to &minus;4 &nbsp;&middot;&nbsp; n = 31 nights &nbsp;&middot;&nbsp; moderate</div>
                     </div>
@@ -816,7 +820,7 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <div class="fr">
                       <div class="fh"><span class="name">Zone 2, 40+ min</span><span class="eff pos">+19 min</span></div>
                       <div class="plot">
-                        <div class="zero" style="left:62%"></div>
+                        <div class="zero" style="left:60%"></div>
                         <div class="ci bg-pos" style="left:66%;right:8%"></div>
                         <div class="cap bg-pos" style="left:66%"></div>
                         <div class="cap bg-pos" style="left:92%"></div>
@@ -828,24 +832,28 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <div class="fr">
                       <div class="fh"><span class="name mut">Magnesium glycinate</span><span class="eff mut">+4 min</span></div>
                       <div class="plot">
-                        <div class="zero" style="left:62%"></div>
-                        <div class="ci bg-nul" style="left:48%;right:22%"></div>
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-nul" style="left:48%;right:20%"></div>
                         <div class="cap bg-nul" style="left:48%"></div>
-                        <div class="cap bg-nul" style="left:78%"></div>
+                        <div class="cap bg-nul" style="left:80%"></div>
                         <div class="pt bg-nul" style="left:64%"></div>
                       </div>
                       <div class="meta">95% CI &minus;12 to +20 &nbsp;&middot;&nbsp; n = 18 nights &nbsp;&middot;&nbsp; no effect detected</div>
                     </div>
 
-                    <div class="axis"><span>&minus;60 min</span><span>0</span><span>+30 min</span></div>
+                    <div class="axis">
+                      <span style="left:0">&minus;60 min</span>
+                      <span class="z" style="left:60%">0</span>
+                      <span class="hi">+40 min</span>
+                    </div>
                   </div>
                 </div>
 
                 <div class="card flat">
                   <p class="footnote">
                     Effects compare your nights with and without each factor, adjusted for
-                    day of week, training load and season. An interval crossing zero means
-                    we cannot tell it apart from noise &mdash; not that it is useless to you.
+                    day of week, training load and season. An interval crossing zero cannot
+                    be told apart from noise.
                   </p>
                 </div>
               </div>
@@ -1043,8 +1051,8 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
 
                   <p class="footnote" style="margin-top:12px">
                     Still "normal" by the lab's population range. It is a 44% fall from
-                    <em>your</em> two-year baseline, and your resting heart rate has climbed
-                    over the same window &mdash; in your record those two move together.
+                    <em>your</em> two-year baseline, and your resting heart rate climbed
+                    over the same window.
                   </p>
                 </div>
 
@@ -1054,11 +1062,10 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                   <div class="p"><span class="dot" style="color:var(--ochre)"></span> Vitamin D <span class="v" style="color:var(--ochre)">28 &darr;</span></div>
                   <div class="p"><span class="dot" style="color:var(--moss)"></span> hs-CRP <span class="v pos">0.4</span></div>
                   <div class="p"><span class="dot" style="color:var(--moss)"></span> HbA1c <span class="v pos">5.1%</span></div>
-                  <div class="p"><span class="dot" style="color:var(--moss)"></span> TSH <span class="v pos">1.9</span></div>
                 </div>
 
                 <div class="card sunk noise">
-                  <div class="klabel">Next draw &middot; 12 Aug &mdash; ferritin, B12, hs-CRP</div>
+                  <div class="klabel">Next draw &middot; 12 Aug &mdash; ferritin, B12</div>
                   <span class="v">Book &rsaquo;</span>
                 </div>
               </div>
@@ -1120,7 +1127,7 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                   <div class="klabel" style="color:#ffffff9E">Context detected &mdash; 06:41</div>
                   <h4 style="font-size:21px">You're getting sick.<br>Today doesn't count.</h4>
                   <p style="color:#ffffffC4">
-                    Resting HR +9 bpm, HRV down 22%, skin temp +0.6&deg;C, three nights running.
+                    Resting HR +9, HRV down 22%, temp +0.6&deg;C, three nights running.
                     Targets are cleared and today is excluded from your baselines.
                   </p>
                   <div class="row">
@@ -1147,10 +1154,6 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <div><div class="t">Training target cleared</div><div class="d">No deficit, no catch-up owed tomorrow</div></div>
                     <span class="sw"></span>
                   </div>
-                  <div class="s">
-                    <div><div class="t">Notifications muted</div><div class="d">Except your 08:00 medication reminder</div></div>
-                    <span class="sw off"></span>
-                  </div>
                 </div>
 
                 <div class="card flat">
@@ -1161,7 +1164,6 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule);
                     <span class="chip">Cycle phase</span>
                     <span class="chip">Altitude</span>
                     <span class="chip">Deload week</span>
-                    <span class="chip">Night shift</span>
                   </div>
                 </div>
               </div>

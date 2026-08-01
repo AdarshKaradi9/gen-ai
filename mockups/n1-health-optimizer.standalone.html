@@ -1,0 +1,1368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; }
+  img, svg, video, canvas { display: block; max-width: 100%; }
+  button, input, select, textarea { font: inherit; }
+</style>
+</head>
+<body>
+<title>n=1 — Health Optimizer Mockups</title>
+
+<style>
+/* ============================================================
+   n=1 — design tokens
+   ============================================================ */
+:root {
+  color-scheme: light dark;
+
+  --ground:   #EDEAE3;
+  --surface:  #F8F6F1;
+  --sunk:     #E4E0D7;
+  --ink:      #17161A;
+  --ink-2:    #6E695F;
+  --ink-3:    #948E82;
+  --rule:     #D9D4C7;
+  --rule-2:   #E6E2D8;
+
+  --accent:   #0E6E8C;
+  --accent-w: #0E6E8C1F;
+
+  --moss:     #4C7A34;
+  --ochre:    #B0761A;
+  --brick:    #A8342A;
+  --moss-w:   #4C7A3422;
+  --ochre-w:  #B0761A22;
+  --brick-w:  #A8342A22;
+
+  --shadow:   0 1px 2px #17161A0F, 0 12px 34px -18px #17161A40;
+  --frame:    #26241F;
+
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --step--1: 0.75rem;
+  --step-0:  0.875rem;
+  --step-1:  1.0625rem;
+  --step-2:  1.375rem;
+  --step-3:  2rem;
+  --step-4:  clamp(2.5rem, 6vw, 4.25rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:   #14161A;
+    --surface:  #1C1F25;
+    --sunk:     #101216;
+    --ink:      #EDEAE3;
+    --ink-2:    #9A968D;
+    --ink-3:    #6B675F;
+    --rule:     #2C3037;
+    --rule-2:   #23262C;
+    --accent:   #46B4D4;
+    --accent-w: #46B4D426;
+    --moss:     #86B85E;
+    --ochre:    #DCA53F;
+    --brick:    #E07764;
+    --moss-w:   #86B85E22;
+    --ochre-w:  #DCA53F22;
+    --brick-w:  #E0776422;
+    --shadow:   0 1px 2px #00000060, 0 14px 40px -20px #000000AA;
+    --frame:    #0A0B0D;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground:   #14161A;
+  --surface:  #1C1F25;
+  --sunk:     #101216;
+  --ink:      #EDEAE3;
+  --ink-2:    #9A968D;
+  --ink-3:    #6B675F;
+  --rule:     #2C3037;
+  --rule-2:   #23262C;
+  --accent:   #46B4D4;
+  --accent-w: #46B4D426;
+  --moss:     #86B85E;
+  --ochre:    #DCA53F;
+  --brick:    #E07764;
+  --moss-w:   #86B85E22;
+  --ochre-w:  #DCA53F22;
+  --brick-w:  #E0776422;
+  --shadow:   0 1px 2px #00000060, 0 14px 40px -20px #000000AA;
+  --frame:    #0A0B0D;
+}
+
+:root[data-theme="light"] {
+  --ground:   #EDEAE3;
+  --surface:  #F8F6F1;
+  --sunk:     #E4E0D7;
+  --ink:      #17161A;
+  --ink-2:    #6E695F;
+  --ink-3:    #948E82;
+  --rule:     #D9D4C7;
+  --rule-2:   #E6E2D8;
+  --accent:   #0E6E8C;
+  --accent-w: #0E6E8C1F;
+  --moss:     #4C7A34;
+  --ochre:    #B0761A;
+  --brick:    #A8342A;
+  --moss-w:   #4C7A3422;
+  --ochre-w:  #B0761A22;
+  --brick-w:  #A8342A22;
+  --shadow:   0 1px 2px #17161A0F, 0 12px 34px -18px #17161A40;
+  --frame:    #26241F;
+}
+
+/* ============================================================
+   page shell
+   ============================================================ */
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page { max-width: 1180px; margin-inline: auto; padding: 0 24px 96px; }
+
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+
+/* ---------- masthead ---------- */
+.masthead {
+  border-bottom: 1px solid var(--rule);
+  padding: 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.brandbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.wordmark {
+  font-family: var(--mono);
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.wordmark span { color: var(--accent); }
+
+.thesis { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; padding-bottom: 44px; }
+@media (min-width: 900px) { .thesis { grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: end; } }
+
+h1 {
+  font-family: var(--mono);
+  font-size: var(--step-4);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+  text-wrap: balance;
+  margin: 12px 0 0;
+}
+h1 em { font-style: normal; color: var(--accent); }
+
+.deck {
+  font-family: var(--serif);
+  font-size: var(--step-1);
+  line-height: 1.62;
+  color: var(--ink-2);
+  max-width: 56ch;
+  margin-top: 18px;
+}
+.deck strong { color: var(--ink); font-weight: 600; }
+
+.trace { width: 100%; height: auto; display: block; }
+.trace path.line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  animation: draw 2.6s cubic-bezier(.32,.72,.3,1) 0.15s forwards;
+}
+.trace path.grid { fill: none; stroke: var(--rule); stroke-width: 1; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .trace path.line { animation: none; stroke-dashoffset: 0; }
+}
+
+/* ---------- section scaffolding ---------- */
+section { padding-top: 64px; }
+.sec-head { display: flex; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--rule); padding-bottom: 10px; margin-bottom: 32px; }
+.sec-head h2 {
+  font-family: var(--mono);
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.sec-head .eyebrow { margin-left: auto; }
+
+/* ---------- gap table ---------- */
+.gaps { width: 100%; border-collapse: collapse; font-size: var(--step-0); }
+.gaps th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+  padding: 0 16px 10px 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: bottom;
+}
+.gaps td { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--rule-2); vertical-align: top; }
+.gaps tr td:first-child { color: var(--ink-2); width: 34%; }
+.gaps tr td:last-child { padding-right: 0; }
+.gaps b { font-weight: 600; }
+.gaps .ref {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  color: var(--accent);
+  white-space: nowrap;
+  width: 1%;
+}
+@media (max-width: 700px) {
+  .gaps, .gaps tbody, .gaps tr, .gaps td { display: block; width: auto; }
+  .gaps thead { display: none; }
+  .gaps tr { border-bottom: 1px solid var(--rule); padding: 16px 0; }
+  .gaps td { border: 0; padding: 0 0 6px; }
+  .gaps tr td:first-child { width: auto; }
+  .gaps .ref { width: auto; padding-bottom: 8px; }
+}
+
+/* ============================================================
+   screens
+   ============================================================ */
+.screens { display: flex; flex-direction: column; gap: 72px; }
+
+.screen { display: grid; gap: 28px; align-items: start; }
+@media (min-width: 940px) {
+  .screen { grid-template-columns: 412px minmax(0, 1fr); gap: 56px; }
+  .screen.flip { grid-template-columns: minmax(0, 1fr) 412px; }
+  .screen.flip .phone-wrap { order: 2; }
+}
+
+.annot { padding-top: 4px; max-width: 46ch; }
+.annot h3 {
+  font-family: var(--mono);
+  font-size: var(--step-2);
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 8px 0 0;
+  text-wrap: balance;
+}
+.annot p { color: var(--ink-2); margin: 12px 0 0; }
+.annot p.abstract { font-family: var(--serif); font-size: var(--step-1); line-height: 1.6; }
+.annot ul { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+.annot li {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid var(--rule-2);
+  font-size: var(--step-0);
+}
+.annot li span {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-top: 1px;
+}
+.annot li b { font-weight: 500; color: var(--ink); }
+
+/* ---------- phone chrome ---------- */
+.phone-wrap { display: flex; justify-content: center; }
+.phone {
+  width: 412px;
+  max-width: 100%;
+  background: var(--frame);
+  border-radius: 44px;
+  padding: 11px;
+  box-shadow: var(--shadow);
+  flex: none;
+}
+.viewport {
+  background: var(--ground);
+  border-radius: 34px;
+  overflow: hidden;
+  height: 844px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 26px 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  flex: none;
+}
+.statusbar .icons { display: flex; align-items: flex-end; gap: 5px; }
+.bar { width: 3px; background: var(--ink); border-radius: 1px; }
+.batt { width: 22px; height: 11px; border: 1.4px solid var(--ink); border-radius: 3px; position: relative; padding: 1.4px; }
+.batt::after { content: ""; position: absolute; right: -3.4px; top: 3px; width: 2px; height: 4px; background: var(--ink); border-radius: 0 1px 1px 0; }
+.batt i { display: block; height: 100%; width: 72%; background: var(--ink); border-radius: 1px; }
+
+.appbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 10px 20px 12px;
+  flex: none;
+}
+.appbar .date { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.appbar .title { font-family: var(--mono); font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
+
+.body {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- cards ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 15px;
+  flex: none;
+}
+.card.flat { background: transparent; border-color: var(--rule-2); }
+.card.sunk { background: var(--sunk); border-color: transparent; }
+
+.klabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.chip.good { color: var(--moss); background: var(--moss-w); border-color: transparent; }
+.chip.warn { color: var(--ochre); background: var(--ochre-w); border-color: transparent; }
+.chip.crit { color: var(--brick); background: var(--brick-w); border-color: transparent; }
+.chip.key  { color: var(--accent); background: var(--accent-w); border-color: transparent; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+
+/* the one-move card */
+.move { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+.move .klabel { color: #ffffff88; }
+.move h4 {
+  font-family: var(--mono);
+  font-size: 23px;
+  line-height: 1.14;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  margin: 10px 0 0;
+  color: var(--ground);
+}
+.move p { font-family: var(--serif); font-size: 13.5px; line-height: 1.5; color: #ffffffB8; margin: 10px 0 0; }
+.move .row { display: flex; align-items: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.move .chip { border-color: #ffffff33; color: #ffffffCC; }
+.move .chip.key { background: #ffffff1F; color: var(--ground); }
+
+/* readiness */
+.readout { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.readout .big { font-family: var(--mono); font-size: 46px; line-height: 0.9; font-weight: 700; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+.readout .sub { font-size: 12px; color: var(--ink-2); margin-top: 8px; }
+
+.band { margin-top: 14px; }
+.band .track { height: 30px; position: relative; border-radius: 6px; background: var(--sunk); overflow: hidden; }
+.band .normal { position: absolute; top: 0; bottom: 0; background: var(--accent-w); }
+.band .mark { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); }
+.band .today { position: absolute; top: -3px; bottom: -3px; width: 3px; background: var(--ink); border-radius: 2px; }
+.band .scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 5px; font-variant-numeric: tabular-nums; }
+
+.reasons { display: flex; flex-direction: column; gap: 0; margin-top: 4px; }
+.reasons .r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--rule-2);
+  font-size: 12.5px;
+}
+.reasons .r:first-child { border-top: 0; }
+.reasons .r .w { margin-left: auto; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; }
+.neg { color: var(--brick); }
+.pos { color: var(--moss); }
+.mut { color: var(--ink-3); }
+
+.noise { display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
+.noise .klabel { flex: 1; }
+.noise .v { font-family: var(--mono); font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+/* ---------- forest plot ---------- */
+.forest { display: flex; flex-direction: column; }
+.forest .fr { padding: 10px 0; border-top: 1px solid var(--rule-2); }
+.forest .fr:first-child { border-top: 0; padding-top: 4px; }
+.forest .fh { display: flex; align-items: baseline; gap: 8px; }
+.forest .fh .name { font-size: 12.5px; font-weight: 500; }
+.forest .fh .eff { margin-left: auto; font-family: var(--mono); font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.forest .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 3px; letter-spacing: 0.04em; }
+.plot { position: relative; height: 18px; margin-top: 7px; }
+.plot .zero { position: absolute; top: -2px; bottom: -2px; width: 1px; background: var(--ink-3); opacity: 0.55; }
+.plot .ci { position: absolute; top: 8px; height: 2px; border-radius: 1px; opacity: 0.42; }
+.plot .cap { position: absolute; top: 4px; height: 10px; width: 1.5px; opacity: 0.42; }
+.plot .pt { position: absolute; top: 4px; width: 10px; height: 10px; border-radius: 50%; transform: translateX(-5px); }
+.bg-neg { background: var(--brick); }
+.bg-pos { background: var(--moss); }
+.bg-nul { background: var(--ink-3); }
+
+/* axis: labels are pinned to their true positions on the scale
+   (-60 to +40 min, so 1 min = 1%), never merely space-between */
+.axis { position: relative; height: 14px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); padding-top: 8px; border-top: 1px solid var(--rule-2); margin-top: 4px; }
+.axis span { position: absolute; top: 8px; white-space: nowrap; }
+.axis span.z { transform: translateX(-50%); color: var(--ink-2); }
+.axis span.hi { right: 0; }
+
+.footnote { font-family: var(--serif); font-size: 12.5px; line-height: 1.5; color: var(--ink-2); }
+
+/* ---------- trial ---------- */
+.nights { display: grid; grid-template-columns: repeat(14, 1fr); gap: 4px; margin-top: 12px; }
+.nights i { display: block; aspect-ratio: 1; border-radius: 4px; background: var(--sunk); }
+.nights i.on { background: var(--accent); }
+.nights i.off { background: var(--rule); }
+.nights i.pend { background: transparent; border: 1px dashed var(--rule); }
+.legend { display: flex; gap: 12px; margin-top: 9px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+.legend b { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+.progress { height: 4px; background: var(--sunk); border-radius: 2px; overflow: hidden; margin-top: 12px; }
+.progress i { display: block; height: 100%; background: var(--accent); }
+
+.verdict { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--ochre-w); }
+.verdict .klabel { color: var(--ochre); }
+.verdict p { font-size: 12.5px; color: var(--ink-2); margin: 4px 0 0; line-height: 1.45; }
+
+.queue .q { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-top: 1px solid var(--rule-2); font-size: 12.5px; }
+.queue .q:first-of-type { border-top: 0; }
+.queue .q .n { font-family: var(--mono); font-size: 11px; color: var(--ink-3); width: 16px; flex: none; }
+.queue .q .go { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--accent); }
+
+/* ---------- labs ---------- */
+.toggle { display: flex; padding: 3px; background: var(--sunk); border-radius: 10px; gap: 3px; }
+.toggle span {
+  flex: 1;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 7px 4px;
+  border-radius: 8px;
+  color: var(--ink-3);
+}
+.toggle span.sel { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px #00000014; }
+
+.dual { position: relative; height: 108px; margin-top: 12px; }
+.dual svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.gridline { stroke: var(--rule-2); stroke-width: 1; }
+.serie-a { fill: none; stroke: var(--brick); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.serie-b { fill: none; stroke: var(--ink-3); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.pt-a { fill: var(--brick); }
+.refband { fill: var(--moss-w); }
+
+.dualkey { display: flex; gap: 14px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 10px; }
+.dualkey b { display: inline-block; width: 12px; height: 2px; margin-right: 6px; vertical-align: 3px; }
+
+.panel .p { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--rule-2); font-size: 12.5px; }
+.panel .p:first-of-type { border-top: 0; }
+.panel .p .v { margin-left: auto; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+
+/* ---------- context ---------- */
+.modes { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+.modes .chip.sel { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+
+.switches .s { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-top: 1px solid var(--rule-2); }
+.switches .s:first-child { border-top: 0; }
+.switches .s .t { font-size: 12.5px; }
+.switches .s .d { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.sw { margin-left: auto; width: 38px; height: 22px; border-radius: 999px; background: var(--accent); position: relative; flex: none; }
+.sw::after { content: ""; position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; }
+.sw.off { background: var(--rule); }
+.sw.off::after { right: auto; left: 2px; }
+
+.vitals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.vitals .v { background: var(--sunk); border-radius: 10px; padding: 9px 10px; }
+.vitals .v .n { font-family: var(--mono); font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; margin-top: 4px; }
+
+/* ---------- sources ---------- */
+.src .s { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--rule-2); }
+.src .s:first-child { border-top: 0; }
+.src .ic { width: 30px; height: 30px; border-radius: 9px; background: var(--sunk); display: grid; place-items: center; flex: none; }
+.src .ic svg { width: 15px; height: 15px; stroke: var(--ink-2); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.src .nm { font-size: 12.5px; font-weight: 500; }
+.src .fd { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.04em; margin-top: 2px; }
+.src .st { margin-left: auto; }
+
+.merge { padding: 14px; border-radius: 12px; background: var(--accent-w); }
+.merge p { font-family: var(--serif); font-size: 12.5px; line-height: 1.5; color: var(--ink-2); margin: 6px 0 0; }
+.merge .klabel { color: var(--accent); }
+
+/* ---------- tab bar ---------- */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--rule);
+  background: var(--surface);
+  padding: 9px 8px 20px;
+  flex: none;
+}
+.tabs .t { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--ink-3); }
+.tabs .t.on { color: var(--accent); }
+.tabs .t svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.tabs .t span { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; }
+
+.homebar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 122px; height: 4px; border-radius: 2px; background: var(--ink); opacity: 0.28; }
+
+/* ---------- system strip ---------- */
+.system { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.sw-item { flex: 1 1 84px; }
+.sw-item i { display: block; height: 46px; border-radius: 8px; border: 1px solid #00000014; }
+.sw-item b { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; margin-top: 7px; font-weight: 400; }
+.sw-item em { display: block; font-family: var(--mono); font-size: 10px; color: var(--ink-3); font-style: normal; }
+
+.typespec p { margin: 0 0 12px; }
+.typespec .t1 { font-family: var(--mono); font-size: 22px; font-weight: 700; letter-spacing: -0.035em; }
+.typespec .t2 { font-family: var(--serif); font-size: 16px; }
+.typespec .t3 { font-family: var(--sans); font-size: 14px; }
+.typespec small { display: block; font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+
+footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="brandbar">
+      <div class="wordmark">n<span>=</span>1</div>
+      <div class="eyebrow">Concept mockups &middot; v0.1 &middot; iPhone 390&times;844</div>
+    </div>
+
+    <div class="thesis">
+      <div>
+        <p class="eyebrow">Health optimizer</p>
+        <h1>Your body is a sample size of <em>one</em>. Stop averaging it away.</h1>
+        <p class="deck">
+          Every tracker on the market answers <em>what happened</em>. None of them answer
+          <strong>what to do about it</strong>, and none can prove that anything you changed
+          actually worked. n=1 merges your wearables, labs and logs into a single record,
+          estimates effects <strong>within your own data</strong>, and runs real randomized
+          trials on you &mdash; one variable at a time.
+        </p>
+      </div>
+      <div>
+        <svg class="trace" viewBox="0 0 400 150" role="img" aria-label="A stylized physiological trace over a faint measurement grid.">
+          <path class="grid" d="M0 30h400M0 60h400M0 90h400M0 120h400M50 0v150M100 0v150M150 0v150M200 0v150M250 0v150M300 0v150M350 0v150" />
+          <path class="line" d="M0 96 L34 96 L44 88 L52 104 L60 30 L68 130 L76 82 L88 96 L104 96 L118 92 L128 99 L142 96 L176 96 L186 88 L194 104 L202 34 L210 128 L218 84 L230 96 L248 96 L262 91 L272 100 L286 96 L318 96 L328 89 L336 103 L344 38 L352 124 L360 86 L372 96 L400 96" />
+        </svg>
+        <p class="eyebrow" style="margin-top:14px">Fig. 1 &mdash; the signal every app records and none of them explains</p>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <h2>What today's apps leave on the table</h2>
+      <p class="eyebrow">Problem &rarr; response</p>
+    </div>
+
+    <table class="gaps">
+      <thead>
+        <tr><th>Where trackers stop</th><th>What n=1 does instead</th><th>Screen</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A readiness score appears with no stated cause. You are told you scored 61 and left to guess.</td>
+          <td><b>Every score is decomposed</b> into the inputs that moved it, with the size of each contribution.</td>
+          <td class="ref">01</td>
+        </tr>
+        <tr>
+          <td>Correlations are implied but never quantified, so folk theories go untested for years.</td>
+          <td><b>A causal ledger</b> &mdash; within-person effect sizes with confidence intervals and the number of nights behind each one.</td>
+          <td class="ref">02</td>
+        </tr>
+        <tr>
+          <td>You cannot test anything. Change three things at once, read a flat chart, learn nothing.</td>
+          <td><b>Randomized n-of-1 trials.</b> The app schedules on and off nights, holds everything else steady, and refuses to call a result early.</td>
+          <td class="ref">03</td>
+        </tr>
+        <tr>
+          <td>Blood work lives in a PDF in your email. Continuous data lives in a ring. They never meet.</td>
+          <td><b>Labs plotted against wearable data</b> on one timeline, and reference ranges set from your history, not the population's.</td>
+          <td class="ref">04</td>
+        </tr>
+        <tr>
+          <td>Illness, travel and cycle phase are scored as failure. The streak breaks, the trend distorts.</td>
+          <td><b>Context re-baselines the model.</b> Trials pause, targets clear, and the day is excluded from estimates rather than punished.</td>
+          <td class="ref">05</td>
+        </tr>
+        <tr>
+          <td>Six apps hold six partial copies of you, disagreeing silently about last night.</td>
+          <td><b>One record with visible arbitration</b> &mdash; when sources conflict, you see which one was kept and why.</td>
+          <td class="ref">06</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Screens</h2>
+      <p class="eyebrow">01&ndash;06</p>
+    </div>
+
+    <div class="screens">
+
+      <!-- ============ 01 TODAY ============ -->
+      <article class="screen">
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="viewport">
+              <div class="statusbar">
+                <span class="num">7:14</span>
+                <span class="icons">
+                  <span class="bar" style="height:5px"></span>
+                  <span class="bar" style="height:7px"></span>
+                  <span class="bar" style="height:9px"></span>
+                  <span class="bar" style="height:11px;opacity:.3"></span>
+                  <span class="batt" style="margin-left:4px"><i></i></span>
+                </span>
+              </div>
+
+              <div class="appbar">
+                <div>
+                  <div class="date">Mon 12 May</div>
+                  <div class="title">Today</div>
+                </div>
+                <span class="chip"><span class="dot" style="color:var(--moss)"></span>18 sources synced</span>
+              </div>
+
+              <div class="body">
+                <div class="card move">
+                  <div class="klabel">Today's one move</div>
+                  <h4>Last coffee<br>before 11:40</h4>
+                  <p>Caffeine after noon has cost you a median 38&nbsp;min of deep sleep on 9 of the last 11 occasions. Your largest single lever.</p>
+                  <div class="row">
+                    <span class="chip key">High confidence</span>
+                    <span class="chip">n = 11 days</span>
+                    <span class="chip">Why this &rsaquo;</span>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="readout">
+                    <div>
+                      <div class="klabel">Readiness</div>
+                      <div class="big" style="margin-top:8px">68</div>
+                    </div>
+                    <div style="text-align:right">
+                      <div class="chip">Typical range 61&ndash;79</div>
+                      <div class="sub">Inside your normal band.<br>Not a bad day. An ordinary one.</div>
+                    </div>
+                  </div>
+
+                  <div class="band">
+                    <div class="track">
+                      <div class="normal" style="left:35%;right:35%"></div>
+                      <div class="today" style="left:47%"></div>
+                    </div>
+                    <div class="scale"><span>40</span><span>60</span><span>80</span><span>100</span></div>
+                  </div>
+
+                  <div class="reasons" style="margin-top:16px">
+                    <div class="r"><span class="dot neg"></span> Slept 6h12m <span class="mut">&mdash; 52 min short</span> <span class="w neg">&minus;9</span></div>
+                    <div class="r"><span class="dot neg"></span> 2 units alcohol, 21:10 <span class="w neg">&minus;6</span></div>
+                    <div class="r"><span class="dot neg"></span> Dinner 21:40 <span class="mut">&mdash; late</span> <span class="w neg">&minus;3</span></div>
+                    <div class="r"><span class="dot pos"></span> Zone 2, 46 min <span class="w pos">+5</span></div>
+                  </div>
+                </div>
+
+                <div class="card sunk noise">
+                  <div class="klabel">Not worth your attention today</div>
+                  <span class="v">HRV 58 &middot; RHR 54 &middot; SpO&#8322; 97%</span>
+                </div>
+              </div>
+
+              <nav class="tabs">
+                <div class="t on"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>Today</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-7M4 20h16"/></svg><span>Why</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-5-9V3"/></svg><span>Trials</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Labs</span></div>
+              </nav>
+              <div class="homebar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annot">
+          <p class="eyebrow">Screen 01</p>
+          <h3>One decision, not forty charts</h3>
+          <p class="abstract">
+            The home screen commits to a single action for the day and shows the evidence
+            behind it. The readiness number is demoted &mdash; it sits below the decision, banded
+            by the user's own typical range so an ordinary 68 stops reading as a failing grade.
+          </p>
+          <ul>
+            <li><span>Hierarchy</span><b>Action first, score second, raw metrics last and deliberately dimmed.</b></li>
+            <li><span>Decompose</span><b>Every point of the score is attributed to a logged input. No unexplained deltas.</b></li>
+            <li><span>Honesty</span><b>Confidence and sample size ride alongside the claim, never hidden behind a tap.</b></li>
+            <li><span>Restraint</span><b>Metrics with nothing to say are collapsed into one muted line.</b></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ============ 02 WHY ============ -->
+      <article class="screen flip">
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="viewport">
+              <div class="statusbar">
+                <span class="num">7:16</span>
+                <span class="icons">
+                  <span class="bar" style="height:5px"></span>
+                  <span class="bar" style="height:7px"></span>
+                  <span class="bar" style="height:9px"></span>
+                  <span class="bar" style="height:11px;opacity:.3"></span>
+                  <span class="batt" style="margin-left:4px"><i></i></span>
+                </span>
+              </div>
+
+              <div class="appbar">
+                <div>
+                  <div class="date">Rolling 90 days</div>
+                  <div class="title">Why</div>
+                </div>
+                <span class="chip key">Deep sleep</span>
+              </div>
+
+              <div class="body">
+                <div class="card">
+                  <div class="klabel">Estimated effect on deep sleep</div>
+                  <div class="forest" style="margin-top:10px">
+
+                    <div class="fr">
+                      <div class="fh"><span class="name">Alcohol, 2+ units</span><span class="eff neg">&minus;41 min</span></div>
+                      <div class="plot">
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-neg" style="left:2%;right:64%"></div>
+                        <div class="cap bg-neg" style="left:2%"></div>
+                        <div class="cap bg-neg" style="left:36%"></div>
+                        <div class="pt bg-neg" style="left:19%"></div>
+                      </div>
+                      <div class="meta">95% CI &minus;58 to &minus;24 &nbsp;&middot;&nbsp; n = 23 nights &nbsp;&middot;&nbsp; strong</div>
+                    </div>
+
+                    <div class="fr">
+                      <div class="fh"><span class="name">Caffeine after 12:00</span><span class="eff neg">&minus;38 min</span></div>
+                      <div class="plot">
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-neg" style="left:1%;right:57%"></div>
+                        <div class="cap bg-neg" style="left:1%"></div>
+                        <div class="cap bg-neg" style="left:43%"></div>
+                        <div class="pt bg-neg" style="left:22%"></div>
+                      </div>
+                      <div class="meta">95% CI &minus;59 to &minus;17 &nbsp;&middot;&nbsp; n = 11 nights &nbsp;&middot;&nbsp; moderate</div>
+                    </div>
+
+                    <div class="fr">
+                      <div class="fh"><span class="name">Bedroom above 21&deg;C</span><span class="eff neg">&minus;22 min</span></div>
+                      <div class="plot">
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-neg" style="left:20%;right:44%"></div>
+                        <div class="cap bg-neg" style="left:20%"></div>
+                        <div class="cap bg-neg" style="left:56%"></div>
+                        <div class="pt bg-neg" style="left:38%"></div>
+                      </div>
+                      <div class="meta">95% CI &minus;40 to &minus;4 &nbsp;&middot;&nbsp; n = 31 nights &nbsp;&middot;&nbsp; moderate</div>
+                    </div>
+
+                    <div class="fr">
+                      <div class="fh"><span class="name">Zone 2, 40+ min</span><span class="eff pos">+19 min</span></div>
+                      <div class="plot">
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-pos" style="left:66%;right:8%"></div>
+                        <div class="cap bg-pos" style="left:66%"></div>
+                        <div class="cap bg-pos" style="left:92%"></div>
+                        <div class="pt bg-pos" style="left:79%"></div>
+                      </div>
+                      <div class="meta">95% CI +6 to +32 &nbsp;&middot;&nbsp; n = 27 nights &nbsp;&middot;&nbsp; moderate</div>
+                    </div>
+
+                    <div class="fr">
+                      <div class="fh"><span class="name mut">Magnesium glycinate</span><span class="eff mut">+4 min</span></div>
+                      <div class="plot">
+                        <div class="zero" style="left:60%"></div>
+                        <div class="ci bg-nul" style="left:48%;right:20%"></div>
+                        <div class="cap bg-nul" style="left:48%"></div>
+                        <div class="cap bg-nul" style="left:80%"></div>
+                        <div class="pt bg-nul" style="left:64%"></div>
+                      </div>
+                      <div class="meta">95% CI &minus;12 to +20 &nbsp;&middot;&nbsp; n = 18 nights &nbsp;&middot;&nbsp; no effect detected</div>
+                    </div>
+
+                    <div class="axis">
+                      <span style="left:0">&minus;60 min</span>
+                      <span class="z" style="left:60%">0</span>
+                      <span class="hi">+40 min</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card flat">
+                  <p class="footnote">
+                    Effects compare your nights with and without each factor, adjusted for
+                    day of week, training load and season. An interval crossing zero cannot
+                    be told apart from noise.
+                  </p>
+                </div>
+              </div>
+
+              <nav class="tabs">
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>Today</span></div>
+                <div class="t on"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-7M4 20h16"/></svg><span>Why</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-5-9V3"/></svg><span>Trials</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Labs</span></div>
+              </nav>
+              <div class="homebar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annot">
+          <p class="eyebrow">Screen 02</p>
+          <h3>The causal ledger</h3>
+          <p class="abstract">
+            A forest plot, borrowed intact from clinical literature, because it is the right
+            instrument: point estimate, interval, sample size, all legible at a glance. The
+            zero line is the whole argument &mdash; anything whose whisker crosses it has not
+            earned a behavior change yet.
+          </p>
+          <ul>
+            <li><span>Ranking</span><b>Sorted by effect magnitude, so the biggest lever is always the top row.</b></li>
+            <li><span>Null result</span><b>Findings of "no effect" are shown, greyed, not deleted. Ruling things out is the product.</b></li>
+            <li><span>Color</span><b>Brick and moss encode direction; the petrol accent is reserved for interface, never for data.</b></li>
+            <li><span>Swappable</span><b>The outcome chip switches the whole ledger to energy, resting HR, glucose or mood.</b></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ============ 03 TRIALS ============ -->
+      <article class="screen">
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="viewport">
+              <div class="statusbar">
+                <span class="num">7:18</span>
+                <span class="icons">
+                  <span class="bar" style="height:5px"></span>
+                  <span class="bar" style="height:7px"></span>
+                  <span class="bar" style="height:9px"></span>
+                  <span class="bar" style="height:11px;opacity:.3"></span>
+                  <span class="batt" style="margin-left:4px"><i></i></span>
+                </span>
+              </div>
+
+              <div class="appbar">
+                <div>
+                  <div class="date">Trial 04 &middot; randomized</div>
+                  <div class="title">Trials</div>
+                </div>
+                <span class="chip warn"><span class="dot"></span>Running</span>
+              </div>
+
+              <div class="body">
+                <div class="card">
+                  <div class="klabel">Active</div>
+                  <h4 style="font-family:var(--mono);font-size:19px;letter-spacing:-.03em;margin:8px 0 0;font-weight:700">Magnesium glycinate<br>400 mg, 60 min pre-bed</h4>
+                  <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+                    <span class="chip">Blinded capsules</span>
+                    <span class="chip">Order randomized</span>
+                  </div>
+
+                  <div class="nights">
+                    <i class="on"></i><i class="off"></i><i class="off"></i><i class="on"></i>
+                    <i class="on"></i><i class="off"></i><i class="on"></i><i class="off"></i>
+                    <i class="on"></i><i class="pend"></i><i class="pend"></i><i class="pend"></i>
+                    <i class="pend"></i><i class="pend"></i>
+                  </div>
+                  <div class="legend">
+                    <span><b style="background:var(--accent)"></b>Active</span>
+                    <span><b style="background:var(--rule)"></b>Placebo</span>
+                    <span><b style="background:transparent;border:1px dashed var(--rule)"></b>Upcoming</span>
+                  </div>
+
+                  <div class="progress"><i style="width:64%"></i></div>
+                  <div style="display:flex;justify-content:space-between;margin-top:7px" class="klabel">
+                    <span>Night 9 of 14</span><span>Reads out 17 May</span>
+                  </div>
+                </div>
+
+                <div class="card verdict">
+                  <div>
+                    <div class="klabel">Interim &mdash; do not act on this yet</div>
+                    <p>
+                      Running estimate <b class="num">+4 min</b> deep sleep, 95% CI
+                      <span class="num">&minus;19 to +27</span>. Too wide to separate from
+                      nothing. Five nights left; skipping them costs you the answer.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="card queue">
+                  <div class="klabel" style="margin-bottom:8px">Queued next</div>
+                  <div class="q"><span class="n">05</span> Dinner before 19:30 <span class="go">14 nights &rsaquo;</span></div>
+                  <div class="q"><span class="n">06</span> Bedroom at 18&deg;C <span class="go">10 nights &rsaquo;</span></div>
+                  <div class="q"><span class="n">07</span> Zone 2 before 15:00 <span class="go">21 days &rsaquo;</span></div>
+                </div>
+
+                <div class="card flat">
+                  <p class="footnote">
+                    One variable at a time. n=1 will refuse to start a second trial that
+                    contaminates this one.
+                  </p>
+                </div>
+              </div>
+
+              <nav class="tabs">
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>Today</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-7M4 20h16"/></svg><span>Why</span></div>
+                <div class="t on"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-5-9V3"/></svg><span>Trials</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Labs</span></div>
+              </nav>
+              <div class="homebar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annot">
+          <p class="eyebrow">Screen 03</p>
+          <h3>Randomized trials, run on you</h3>
+          <p class="abstract">
+            The feature no consumer tracker ships. The app randomizes the order of active and
+            placebo nights, blinds the capsules, and holds the rest of your protocol fixed for
+            the duration. The night grid is both a schedule and the study design, readable in
+            one look.
+          </p>
+          <ul>
+            <li><span>Discipline</span><b>Interim results are shown but explicitly marked unactionable. No early calls.</b></li>
+            <li><span>Cost framing</span><b>Adherence is motivated by what quitting costs &mdash; the answer &mdash; not by a streak.</b></li>
+            <li><span>Isolation</span><b>Concurrent trials that would confound each other are blocked, with the reason given.</b></li>
+            <li><span>Queue</span><b>Next trials are proposed from the ledger's widest intervals: test what you least know.</b></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ============ 04 LABS ============ -->
+      <article class="screen flip">
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="viewport">
+              <div class="statusbar">
+                <span class="num">7:21</span>
+                <span class="icons">
+                  <span class="bar" style="height:5px"></span>
+                  <span class="bar" style="height:7px"></span>
+                  <span class="bar" style="height:9px"></span>
+                  <span class="bar" style="height:11px;opacity:.3"></span>
+                  <span class="batt" style="margin-left:4px"><i></i></span>
+                </span>
+              </div>
+
+              <div class="appbar">
+                <div>
+                  <div class="date">4 draws &middot; since Nov 2024</div>
+                  <div class="title">Labs</div>
+                </div>
+                <span class="chip">Ferritin</span>
+              </div>
+
+              <div class="body">
+                <div class="card">
+                  <div class="toggle">
+                    <span>Population range</span>
+                    <span class="sel">Your range</span>
+                  </div>
+
+                  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:14px">
+                    <div>
+                      <div class="klabel">Ferritin</div>
+                      <div class="num" style="font-size:34px;font-weight:700;line-height:1;margin-top:6px">34 <span style="font-size:13px;color:var(--ink-3);font-weight:400">ng/mL</span></div>
+                    </div>
+                    <span class="chip crit"><span class="dot"></span>Below your baseline</span>
+                  </div>
+
+                  <div class="dual">
+                    <svg viewBox="0 0 320 118" preserveAspectRatio="none" role="img" aria-label="Ferritin falling from 61 to 34 while resting heart rate rises over the same window.">
+                      <rect class="refband" x="0" y="14" width="320" height="34" />
+                      <path class="gridline" d="M0 14h320M0 48h320M0 82h320M0 116h320" />
+                      <path class="serie-b" d="M6 92 L110 86 L214 66 L314 52" />
+                      <path class="serie-a" d="M6 30 L110 38 L214 62 L314 84" />
+                      <circle class="pt-a" cx="6" cy="30" r="4" />
+                      <circle class="pt-a" cx="110" cy="38" r="4" />
+                      <circle class="pt-a" cx="214" cy="62" r="4" />
+                      <circle class="pt-a" cx="314" cy="84" r="4.5" />
+                    </svg>
+                  </div>
+                  <div class="dualkey">
+                    <span><b style="background:var(--brick)"></b>Ferritin &middot; 61 &rarr; 34</span>
+                    <span><b style="background:var(--ink-3)"></b>Resting HR &middot; +4 bpm</span>
+                  </div>
+
+                  <p class="footnote" style="margin-top:12px">
+                    Still "normal" by the lab's population range. It is a 44% fall from
+                    <em>your</em> two-year baseline, and your resting heart rate climbed
+                    over the same window.
+                  </p>
+                </div>
+
+                <div class="card panel">
+                  <div class="klabel" style="margin-bottom:8px">Last panel &middot; 18 Apr</div>
+                  <div class="p"><span class="dot" style="color:var(--brick)"></span> Ferritin <span class="v neg">34 &darr;</span></div>
+                  <div class="p"><span class="dot" style="color:var(--ochre)"></span> Vitamin D <span class="v" style="color:var(--ochre)">28 &darr;</span></div>
+                  <div class="p"><span class="dot" style="color:var(--moss)"></span> hs-CRP <span class="v pos">0.4</span></div>
+                  <div class="p"><span class="dot" style="color:var(--moss)"></span> HbA1c <span class="v pos">5.1%</span></div>
+                </div>
+
+                <div class="card sunk noise">
+                  <div class="klabel">Next draw &middot; 12 Aug &mdash; ferritin, B12</div>
+                  <span class="v">Book &rsaquo;</span>
+                </div>
+              </div>
+
+              <nav class="tabs">
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>Today</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-7M4 20h16"/></svg><span>Why</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-5-9V3"/></svg><span>Trials</span></div>
+                <div class="t on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Labs</span></div>
+              </nav>
+              <div class="homebar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annot">
+          <p class="eyebrow">Screen 04</p>
+          <h3>Blood work, finally on the same timeline</h3>
+          <p class="abstract">
+            Four discrete lab draws overlaid on continuous wearable data. The toggle is the
+            argument: a population reference range says you are fine, while your own two-year
+            baseline says something changed. Both are shown; the personal one is the default.
+          </p>
+          <ul>
+            <li><span>Sparse vs. dense</span><b>Lab points stay discrete and marked; continuous data is dashed and recessive.</b></li>
+            <li><span>Linkage</span><b>The chart pairs a lab marker with the wearable signal that historically tracks it.</b></li>
+            <li><span>Next step</span><b>The panel ends in an action &mdash; a dated draw with the exact markers to request.</b></li>
+            <li><span>Semantics</span><b>Brick, ochre and moss carry status; no traffic-light green is used decoratively.</b></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ============ 05 CONTEXT ============ -->
+      <article class="screen">
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="viewport">
+              <div class="statusbar">
+                <span class="num">6:58</span>
+                <span class="icons">
+                  <span class="bar" style="height:5px"></span>
+                  <span class="bar" style="height:7px"></span>
+                  <span class="bar" style="height:9px;opacity:.3"></span>
+                  <span class="bar" style="height:11px;opacity:.3"></span>
+                  <span class="batt" style="margin-left:4px"><i></i></span>
+                </span>
+              </div>
+
+              <div class="appbar">
+                <div>
+                  <div class="date">Tue 13 May</div>
+                  <div class="title">Today</div>
+                </div>
+                <span class="chip crit"><span class="dot"></span>Illness</span>
+              </div>
+
+              <div class="body">
+                <div class="card move" style="background:var(--brick);border-color:var(--brick)">
+                  <div class="klabel" style="color:#ffffff9E">Context detected &mdash; 06:41</div>
+                  <h4 style="font-size:21px">You're getting sick.<br>Today doesn't count.</h4>
+                  <p style="color:#ffffffC4">
+                    Resting HR +9, HRV down 22%, temp +0.6&deg;C, three nights running.
+                    Targets are cleared and today is excluded from your baselines.
+                  </p>
+                  <div class="row">
+                    <span class="chip" style="border-color:#ffffff3D;color:#ffffffD6">I'm fine, undo</span>
+                  </div>
+                </div>
+
+                <div class="vitals">
+                  <div class="v"><div class="klabel">RHR</div><div class="n neg">63 &uarr;</div></div>
+                  <div class="v"><div class="klabel">HRV</div><div class="n neg">41 &darr;</div></div>
+                  <div class="v"><div class="klabel">Skin temp</div><div class="n neg">+0.6</div></div>
+                </div>
+
+                <div class="card switches">
+                  <div class="s">
+                    <div><div class="t">Trial 04 paused</div><div class="d">Resumes at night 9 of 14, nothing lost</div></div>
+                    <span class="sw"></span>
+                  </div>
+                  <div class="s">
+                    <div><div class="t">Excluded from estimates</div><div class="d">Sick days would bias every effect size</div></div>
+                    <span class="sw"></span>
+                  </div>
+                  <div class="s">
+                    <div><div class="t">Training target cleared</div><div class="d">No deficit, no catch-up owed tomorrow</div></div>
+                    <span class="sw"></span>
+                  </div>
+                </div>
+
+                <div class="card flat">
+                  <div class="klabel">Other contexts n=1 re-baselines for</div>
+                  <div class="modes">
+                    <span class="chip sel">Illness</span>
+                    <span class="chip">Travel &middot; 3+ tz</span>
+                    <span class="chip">Cycle phase</span>
+                    <span class="chip">Altitude</span>
+                    <span class="chip">Deload week</span>
+                  </div>
+                </div>
+              </div>
+
+              <nav class="tabs">
+                <div class="t on"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>Today</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-7M4 20h16"/></svg><span>Why</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-5-9V3"/></svg><span>Trials</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Labs</span></div>
+              </nav>
+              <div class="homebar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annot">
+          <p class="eyebrow">Screen 05</p>
+          <h3>Life is a covariate, not a failure</h3>
+          <p class="abstract">
+            Illness, travel, altitude and cycle phase are the reason most people abandon
+            trackers in month three: the numbers go red for reasons the app refuses to
+            acknowledge. Here, detected context suspends the scoring and removes the day
+            from the model rather than logging it as a loss.
+          </p>
+          <ul>
+            <li><span>Tone</span><b>The alert is statistical, not scolding &mdash; it states what changed and what was suspended.</b></li>
+            <li><span>Statistics</span><b>Excluding sick days is a modeling decision surfaced to the user, not hidden in a footnote.</b></li>
+            <li><span>Reversible</span><b>A single control returns you to normal scoring if the detection is wrong.</b></li>
+            <li><span>No debt</span><b>Nothing is owed on return. Missed targets vanish rather than accumulating.</b></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ============ 06 SOURCES ============ -->
+      <article class="screen flip">
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="viewport">
+              <div class="statusbar">
+                <span class="num">7:24</span>
+                <span class="icons">
+                  <span class="bar" style="height:5px"></span>
+                  <span class="bar" style="height:7px"></span>
+                  <span class="bar" style="height:9px"></span>
+                  <span class="bar" style="height:11px;opacity:.3"></span>
+                  <span class="batt" style="margin-left:4px"><i></i></span>
+                </span>
+              </div>
+
+              <div class="appbar">
+                <div>
+                  <div class="date">Last merge 07:02</div>
+                  <div class="title">One record</div>
+                </div>
+                <span class="chip good"><span class="dot"></span>Reconciled</span>
+              </div>
+
+              <div class="body">
+                <div class="card merge">
+                  <div class="klabel">Conflict resolved</div>
+                  <p>
+                    Two devices reported last night's sleep &mdash; 6h12m and 7h04m. We kept the
+                    ring: across 140 nights it has agreed with your own bedtime logs 22
+                    minutes more closely than the watch.
+                  </p>
+                  <div style="display:flex;gap:6px;margin-top:11px;flex-wrap:wrap">
+                    <span class="chip key">Kept: ring</span>
+                    <span class="chip">Change this &rsaquo;</span>
+                  </div>
+                </div>
+
+                <div class="card src">
+                  <div class="s">
+                    <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3.4"/></svg></div>
+                    <div><div class="nm">Ring</div><div class="fd">Sleep &middot; HRV &middot; temp</div></div>
+                    <span class="st chip good"><span class="dot"></span>Live</span>
+                  </div>
+                  <div class="s">
+                    <div class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="5" width="10" height="14" rx="3"/><path d="M9 3h6M9 21h6"/></svg></div>
+                    <div><div class="nm">Watch</div><div class="fd">Workouts &middot; heart rate</div></div>
+                    <span class="st chip good"><span class="dot"></span>Live</span>
+                  </div>
+                  <div class="s">
+                    <div class="ic"><svg viewBox="0 0 24 24"><path d="M10 3v6l-4 8a3 3 0 0 0 3 4h6a3 3 0 0 0 3-4l-4-8V3M9 3h6"/></svg></div>
+                    <div><div class="nm">Lab portal</div><div class="fd">4 panels &middot; 61 markers</div></div>
+                    <span class="st chip good"><span class="dot"></span>Live</span>
+                  </div>
+                  <div class="s">
+                    <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 15c3 0 3-6 6-6s3 6 6 6 3-4 6-4"/></svg></div>
+                    <div><div class="nm">Glucose sensor</div><div class="fd">Ended 4 Mar &middot; 28 days</div></div>
+                    <span class="st chip"><span class="dot mut"></span>Archived</span>
+                  </div>
+                  <div class="s">
+                    <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 9v6M9 12h6"/></svg></div>
+                    <div><div class="nm">Pharmacy</div><div class="fd">Meds &middot; supplements</div></div>
+                    <span class="st chip warn"><span class="dot"></span>Reauth</span>
+                  </div>
+                  <div class="s">
+                    <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M9 10h6M9 14h4"/></svg></div>
+                    <div><div class="nm">Your own logs</div><div class="fd">Meals &middot; alcohol &middot; mood</div></div>
+                    <span class="st chip good"><span class="dot"></span>Live</span>
+                  </div>
+                </div>
+
+                <div class="card flat">
+                  <p class="footnote">
+                    Everything is stored on device and encrypted. Export the whole record as
+                    CSV, or delete a source and every estimate it fed, at any time.
+                  </p>
+                </div>
+              </div>
+
+              <nav class="tabs">
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>Today</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-7M4 20h16"/></svg><span>Why</span></div>
+                <div class="t"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-5-9V3"/></svg><span>Trials</span></div>
+                <div class="t on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Labs</span></div>
+              </nav>
+              <div class="homebar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annot">
+          <p class="eyebrow">Screen 06</p>
+          <h3>Six partial copies of you, reconciled</h3>
+          <p class="abstract">
+            Merging health sources is not a settings screen &mdash; it is where trust is won or
+            lost. When two devices disagree about last night, n=1 says which one it kept, on
+            what evidence, and lets you overrule it.
+          </p>
+          <ul>
+            <li><span>Arbitration</span><b>Conflicts are surfaced with the reasoning, not silently resolved by priority order.</b></li>
+            <li><span>Provenance</span><b>Every number on every screen traces back to the source and device that produced it.</b></li>
+            <li><span>Lifecycle</span><b>Ended sources are archived, not deleted &mdash; their history still feeds past estimates.</b></li>
+            <li><span>Exit</span><b>Full export and per-source deletion, stated plainly on the screen that collects the data.</b></li>
+          </ul>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>System</h2>
+      <p class="eyebrow">Tokens</p>
+    </div>
+
+    <div class="system">
+      <div>
+        <p class="eyebrow" style="margin-bottom:12px">Palette</p>
+        <div class="swatches">
+          <div class="sw-item"><i style="background:#EDEAE3"></i><b>Ground</b><em>#EDEAE3</em></div>
+          <div class="sw-item"><i style="background:#17161A"></i><b>Ink</b><em>#17161A</em></div>
+          <div class="sw-item"><i style="background:#0E6E8C"></i><b>Accent</b><em>#0E6E8C</em></div>
+          <div class="sw-item"><i style="background:#4C7A34"></i><b>Moss</b><em>#4C7A34</em></div>
+          <div class="sw-item"><i style="background:#B0761A"></i><b>Ochre</b><em>#B0761A</em></div>
+          <div class="sw-item"><i style="background:#A8342A"></i><b>Brick</b><em>#A8342A</em></div>
+        </div>
+        <p style="color:var(--ink-2);margin-top:16px;max-width:44ch">
+          Bone ground and mineral inks, drawn from chart paper and lab instrumentation.
+          Petrol is the only interactive color; moss, ochre and brick are reserved for
+          clinical status and never used for decoration.
+        </p>
+      </div>
+
+      <div class="typespec">
+        <p class="eyebrow" style="margin-bottom:12px">Type</p>
+        <p class="t1">68 &middot; &minus;41 min &middot; n = 23<small>Mono &mdash; display, labels, all numerals</small></p>
+        <p class="t2">An interval crossing zero cannot be told apart from noise.<small>Serif &mdash; findings and abstracts</small></p>
+        <p class="t3">Last coffee before 11:40 &middot; Book a draw<small>Sans &mdash; interface and controls</small></p>
+        <p style="color:var(--ink-2);margin-top:4px">
+          Numerals are tabular everywhere they stack. Monospace does the display work so the
+          screens read as instrumentation rather than lifestyle.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="eyebrow">n=1 &middot; concept mockups &middot; not a medical device</span>
+    <span class="eyebrow">6 screens &middot; light + dark</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
