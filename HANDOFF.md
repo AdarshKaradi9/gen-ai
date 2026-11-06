@@ -134,3 +134,14 @@ Fix bad ids by hand or send the agent a message.
 - Do not run batch 12 unless the user asks.
 - Do not use the WebFetch tool (blocked); use fetch_text.py if a page must be read.
 - Do not start agents or any work until the user says "continue" (they stopped work twice because agents launched before they were ready).
+
+---
+
+## STATUS UPDATE: COMPLETE (2026-11-06)
+
+All steps in section 5 are done. Nothing is pending.
+- Six chapters written to `research/chapters/`, citations validated.
+- Front matter, methodology and applied playbook written by the main agent.
+- Assembled document: `research/viral-apps-playbook.md` (~22,000 words, 102 of 110 videos cited, numbered sources).
+- Published page: https://claude.ai/artifact/YJtdvnbwvnDr89uT9wL8Dh (source: `research/spread-stick-sell.html`).
+- Batch 12 was skipped by user decision.

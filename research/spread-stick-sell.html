@@ -1,0 +1,1077 @@
+<title>Spread, Stick, Sell</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: field-guide report. Sticky chapter rail on the left, one reading column at ~66ch, numbered citations as small jade tags. */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --fg:#17211d; --muted:#5b6a64; --rule:#dbe3df;
+  --accent:#0d7a5f; --accent-soft:#e2f2ec; --amber:#b86a0b;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#151d1a; --fg:#e4ece8; --muted:#97a8a0; --rule:#26332e;
+  --accent:#4cc9a0; --accent-soft:#163229; --amber:#e3a24b; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#151d1a; --fg:#e4ece8; --muted:#97a8a0; --rule:#26332e;
+  --accent:#4cc9a0; --accent-soft:#163229; --amber:#e3a24b; color-scheme:dark }
+
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{background:var(--bg); color:var(--fg); font-family:var(--body); font-size:18px; line-height:1.62;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+
+.wrap{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:240px minmax(0,1fr); gap:56px; padding-block:48px 96px}
+@media (max-width: 900px){ .wrap{grid-template-columns:minmax(0,1fr); gap:24px; padding-block:24px 64px} }
+
+/* Masthead */
+.mast{grid-column:1/-1; display:grid; gap:14px; padding-bottom:32px; border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent)}
+.mast h1{font-family:var(--display); font-weight:800; font-size:clamp(38px, 6vw, 68px); line-height:1.02; letter-spacing:-.02em; margin:0; text-wrap:balance; max-width:16ch}
+.mast h1 span{color:var(--accent)}
+.mast p{margin:0; max-width:62ch; color:var(--muted); font-size:19px}
+.stats{display:flex; flex-wrap:wrap; gap:10px 28px; margin-top:6px; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.stats b{font-family:var(--display); font-size:22px; color:var(--fg); margin-right:6px; font-variant-numeric:tabular-nums}
+
+/* Rail */
+nav.rail{position:sticky; top:calc(env(safe-area-inset-top,0px) + 24px); align-self:start; font-family:var(--display)}
+nav.rail h2{font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 12px}
+nav.rail ol{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+nav.rail a{display:grid; grid-template-columns:22px 1fr; gap:6px; padding:7px 10px; border-radius:6px; color:var(--fg); text-decoration:none; font-size:15px; line-height:1.3}
+nav.rail a:hover, nav.rail a:focus-visible{background:var(--accent-soft); outline:none}
+nav.rail a.on{background:var(--accent-soft); color:var(--accent); font-weight:700}
+nav.rail .n{font-family:var(--mono); font-size:12px; color:var(--accent); padding-top:2px}
+@media (max-width: 900px){
+  nav.rail{position:static; border:1px solid var(--rule); border-radius:10px; background:var(--surface); padding:14px}
+  nav.rail ol{grid-template-columns:repeat(auto-fill, minmax(200px,1fr))}
+}
+
+/* Article */
+article{min-width:0; max-width:68ch}
+article h2{font-family:var(--display); font-weight:800; font-size:clamp(28px, 3.6vw, 40px); line-height:1.1; letter-spacing:-.015em; margin:88px 0 20px; text-wrap:balance; scroll-margin-top:24px}
+article h2:first-child{margin-top:0}
+article h3{font-family:var(--display); font-weight:700; font-size:22px; line-height:1.25; margin:44px 0 10px; text-wrap:balance; scroll-margin-top:24px}
+article h4{font-family:var(--display); font-weight:700; font-size:18px; margin:28px 0 8px}
+article p, article li{margin:0 0 14px}
+article ul, article ol{padding-left:1.3em; margin:0 0 18px}
+article li::marker{color:var(--accent); font-family:var(--mono); font-size:.85em}
+article strong{font-weight:600}
+article a{color:var(--accent); text-underline-offset:3px}
+article hr{border:0; border-top:1px solid var(--rule); margin:56px 0}
+article code{font-family:var(--mono); font-size:.85em; background:var(--accent-soft); padding:1px 5px; border-radius:4px}
+article blockquote{margin:20px 0; padding:4px 0 4px 18px; border-left:3px solid var(--amber); color:var(--muted); font-style:italic}
+
+/* chapter checklists and disagreement sections get a quiet panel */
+article h3.panel-h{margin-top:52px}
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:10px; padding:18px 22px 6px; margin:0 0 18px}
+.panel.disagree{border-left:3px solid var(--amber)}
+.panel.check{border-left:3px solid var(--accent)}
+
+a.cite{display:inline-block; font-family:var(--mono); font-size:11px; line-height:1; font-weight:500; text-decoration:none; color:var(--accent); background:var(--accent-soft); border-radius:4px; padding:3px 4px 2px; margin:0 1px; vertical-align:2px; font-variant-numeric:tabular-nums}
+a.cite:hover, a.cite:focus-visible{background:var(--accent); color:var(--bg); outline:none}
+
+.tbl{overflow-x:auto; margin:8px 0 22px; border:1px solid var(--rule); border-radius:8px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:15px; line-height:1.45}
+th, td{text-align:left; vertical-align:top; padding:9px 12px; border-bottom:1px solid var(--rule)}
+th{font-family:var(--display); font-weight:700; font-size:14px; background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+
+/* sources */
+#sources ~ ol li, #sources ~ ul li{font-size:15px; line-height:1.45; margin-bottom:8px}
+li:target{background:var(--accent-soft); border-radius:4px; outline:4px solid var(--accent-soft)}
+
+.foot{grid-column:1/-1; border-top:1px solid var(--rule); padding-top:20px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">Research report · 110 videos · November 2026</div>
+    <h1>What makes apps <span>spread, stick and sell</span></h1>
+    <p>A synthesis of 110 YouTube videos from founders, growth teams and designers on virality, onboarding, gamification, retention and paywalls. It ends with an applied playbook for a nutrient habit tracker.</p>
+    <div class="stats"><span><b>604</b>videos found</span><span><b>110</b>researched</span><span><b>60</b>high-confidence sources</span><span><b>6</b>chapters</span><span><b>60</b>named patterns</span></div>
+  </header>
+
+  <nav class="rail" aria-label="Chapters">
+    <h2>Contents</h2>
+    <ol id="toc"><li><a href="#executive-summary"><span class="n"></span>Executive summary</a></li>
+<li><a href="#how-this-research-was-done"><span class="n"></span>Method</a></li>
+<li><a href="#how-apps-spread-virality-creators-communities-and-the-app-store"><span class="n">1</span>How Apps Spread</a></li>
+<li><a href="#the-first-ninety-seconds-onboarding-activation-and-the-aha-moment"><span class="n">2</span>The First Ninety Seconds</a></li>
+<li><a href="#what-brings-people-back-progression-reward-systems-hooks-and-retention"><span class="n">3</span>What Brings People Back</a></li>
+<li><a href="#what-makes-them-pay-paywalls-pricing-and-conversion"><span class="n">4</span>What Makes Them Pay</a></li>
+<li><a href="#feel-delight-and-shareable-moments-ui-ux-and-social-mechanics"><span class="n">5</span>Feel, Delight and Shareable Moments</a></li>
+<li><a href="#building-fast-and-not-failing-ai-built-apps-mvp-rules-founder-lessons-and-anti-patterns"><span class="n">6</span>Building Fast and Not Failing</a></li>
+<li><a href="#applied-playbook-the-nutrient-habit-tracker"><span class="n">★</span>Playbook: nutrient app</a></li>
+<li><a href="#sources"><span class="n"></span>Sources</a></li></ol>
+  </nav>
+
+  <article id="doc"><h2 id="executive-summary">Executive summary</h2>
+<p>Across 110 videos from founders, growth teams, designers and researchers, the same dozen ideas keep showing up. These are the ones that matter most for a consumer habit app.</p>
+<ol>
+<li><strong>One aha, shown in seconds.</strong> The apps that spread cut down to a single feature whose value is visible in a two-second clip, and then remove every screen between first open and that moment <a class="cite" href="#ref-1">1</a><a class="cite" href="#ref-2">2</a><a class="cite" href="#ref-3">3</a>.</li>
+<li><strong>Distribution is designed, not bolted on.</strong> Short-form demo videos convert roughly ten times better than memes, and winners post daily for about eight weeks before the hits come <a class="cite" href="#ref-4">4</a><a class="cite" href="#ref-5">5</a>. Plan the channel before the code <a class="cite" href="#ref-6">6</a>.</li>
+<li><strong>Buy installs only below what an install earns.</strong> Realized lifetime value per install is the ceiling on every acquisition channel, and organic content earns far better margins than paid ads <a class="cite" href="#ref-7">7</a><a class="cite" href="#ref-8">8</a>.</li>
+<li><strong>Onboarding questions must visibly pay back.</strong> Ask a handful of personalisation questions, then show a plan that obviously used the answers. Let users do one real action before asking for an account <a class="cite" href="#ref-9">9</a><a class="cite" href="#ref-10">10</a><a class="cite" href="#ref-11">11</a>.</li>
+<li><strong>Commitment beats defaults.</strong> A "Commit to my goal" button with an easy opt-out outperformed a pre-selected goal at Duolingo <a class="cite" href="#ref-12">12</a>.</li>
+<li><strong>Win days zero to seven.</strong> Retention is decided in the first week, so experiments and new mechanics belong there, and extra features wait until after it <a class="cite" href="#ref-12">12</a><a class="cite" href="#ref-13">13</a>.</li>
+<li><strong>Streaks that bend, not break.</strong> Two freezes beat one or three, an earn-back path keeps people from quitting after a miss, and the reminder lands about 23.5 hours after the last session <a class="cite" href="#ref-12">12</a>.</li>
+<li><strong>The scoreboard is not the game.</strong> Points, badges and global leaderboards alone do not retain. Small winnable groups, one central progress measure and an emotional stake such as a character do <a class="cite" href="#ref-14">14</a><a class="cite" href="#ref-15">15</a><a class="cite" href="#ref-4">4</a>.</li>
+<li><strong>The paywall is the last onboarding screen.</strong> Most trials start on install day, so the paywall sits right after the plan reveal, framed outcome first and price last <a class="cite" href="#ref-16">16</a><a class="cite" href="#ref-17">17</a><a class="cite" href="#ref-18">18</a>.</li>
+<li><strong>Honest pricing converts.</strong> Saying exactly when the charge happens and "cancel anytime" raised conversion and cut complaints. Two plans, annual preselected, is the default layout <a class="cite" href="#ref-19">19</a><a class="cite" href="#ref-20">20</a>.</li>
+<li><strong>Design the screenshot.</strong> Track which screens users already capture, then turn those into watermarked share cards. The shareable moment is product, not marketing <a class="cite" href="#ref-21">21</a><a class="cite" href="#ref-22">22</a>.</li>
+<li><strong>Read the title last.</strong> Many revenue claims in this genre are self-reported, gross, lifetime, or attached to a course funnel. Ask whose revenue, gross or net, monthly or lifetime, before copying a tactic <a class="cite" href="#ref-23">23</a><a class="cite" href="#ref-24">24</a>.</li>
+</ol>
+<p>The six chapters that follow expand each idea into named patterns with evidence and caveats. Each chapter ends with where sources disagree and a checklist. The final section applies all of it to the nutrient habit app.</p>
+<hr />
+<h2 id="how-this-research-was-done">How this research was done</h2>
+<p><strong>Finding the videos.</strong> Fifty YouTube searches covered viral app growth, onboarding, gamification, hooks and retention, paywalls and pricing, FOMO and shareability, AI-built and vibe-coded apps, and founder case studies. That returned 604 unique videos. Shorts under four minutes, streams over four hours and off-topic results were removed, leaving 442. These were ranked by reach, relevance and how many separate searches surfaced each one. The top 100 were researched in depth, plus 10 more from the next tier. The full list of 442 is published alongside this document.</p>
+<p><strong>Getting the content.</strong> YouTube blocks transcript downloads from the cloud machine used for this research, so no transcripts were pulled from YouTube directly. Instead, each video was researched through its written record. That meant full caption transcripts hosted by third-party transcript sites, podcast show notes, the creator's own newsletter or blog version of the same material, structured summaries, and press coverage. Each video got a structured note: core claims, specific tactics, named examples, numbers, contradictions and quotable lines.</p>
+<p><strong>Confidence.</strong> Every note carries a confidence level based on how complete its written record was.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Confidence</th>
+<th>Videos</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High or medium-high</td>
+<td>60</td>
+<td>A full transcript or detailed notes were read</td>
+</tr>
+<tr>
+<td>Medium or low-medium</td>
+<td>27</td>
+<td>A solid summary or show notes were read</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>23</td>
+<td>Only a description, chapter list or snippets were found</td>
+</tr>
+</tbody>
+</table></div>
+<p>Low-confidence videos are cited sparingly and flagged where used.</p>
+<p><strong>How to read the numbers.</strong> Most numbers in this genre are self-reported by founders or by vendors selling the method. The chapters label these as self-reported. Results from studies of many apps, such as Mobbin's review of 1,460 onboarding flows and 2,995 paywalls, and Superwall's review of 4,000 paywalls, carry more weight than any single founder's story. Third-party reporting, such as CNBC's look at Cal AI's finances, is the firmest evidence available.</p>
+<p><strong>Limits.</strong> These are YouTube videos, not peer-reviewed research. Academic studies quoted inside videos, such as the jam study, are cited secondhand. A planned batch of ten further videos was skipped to save time. Some build tutorials were only available as secondhand summaries, so tool names in them may be garbled.</p>
+<hr />
+<h2 id="how-apps-spread-virality-creators-communities-and-the-app-store">How Apps Spread: virality, creators, communities and the app store</h2>
+<p>Across this corpus, almost every founder who reports real revenue says the same thing in different words: building is now the easy part and distribution is the job. That claim is opinion, not data ("marketing is 90%" <a class="cite" href="#ref-18">18</a>, "95%" <a class="cite" href="#ref-6">6</a>). But the operating details underneath it are specific and repeat from one video to the next. Most numbers below are self-reported by founders or by agencies selling the method. Where a figure comes from a third party (CNBC documents, Sensor Tower estimates, an A/B test), the text says so.</p>
+<h3 id="1-the-3-second-aha">1. The 3-Second Aha</h3>
+<p><strong>What it is.</strong> The core value has to show up within seconds of opening the app, and the whole product is built around that one moment. Nikita Bier's rule is to "invert the time to value" and prove the value in about three seconds <a class="cite" href="#ref-2">2</a>. Dupe.com does it with a URL trick: prefix a shopping link and you see the cheapest look-alike. Nikita says it reached millions in ARR within about 60 days (self-reported via Nikita) <a class="cite" href="#ref-2">2</a>.</p>
+<p><strong>Why it works.</strong> A fast aha keeps the user, and it also gives you the content. When the value fits in one shot, that shot becomes the video. Cal AI's founders call this "marketing first": they picked one eye-catching feature (photograph food, get the calories) and marketed only that <a class="cite" href="#ref-1">1</a>. NGL's onboarding takes 15-20 seconds, with "one flow, one funnel" and one north-star metric <a class="cite" href="#ref-25">25</a>.</p>
+<p><strong>How to apply.</strong> Cut features until the aha fits in a 2-second screen recording. Blake Anderson's test is whether the value can be said in three to four words (his written framework, not confirmed in the episode) <a class="cite" href="#ref-26">26</a>.</p>
+<p><strong>Caveats.</strong> Nikita says virality can be learned but durable retention in consumer social is a "black swan" that happens maybe once a decade <a class="cite" href="#ref-2">2</a>. An instant aha gets you spread, not stickiness.</p>
+<h3 id="2-invites-decay-with-age">2. Invites Decay With Age</h3>
+<p><strong>What it is.</strong> Invite loops work best with young, densely connected groups, and you seed them one dense group at a time. Nikita's data point: invitations per user fall about 20% for every year of age from 13 to 18, and adults "basically require paid acquisition" (self-reported) <a class="cite" href="#ref-2">2</a>. TBH seeded one school at a time with a dedicated Instagram account and targeted ads, citing a leaked memo that people need to see a message about three times before downloading. He reports 40% of a school downloaded within 24 hours and peak installs of about 360K a day (self-reported) <a class="cite" href="#ref-2">2</a>.</p>
+<p><strong>Why it works.</strong> Adoption has to be synchronous inside one group, and every invite is a peer endorsement. Hunter Isaacson says a friend texting you an app "lowers effective CPI" <a class="cite" href="#ref-25">25</a>.</p>
+<p><strong>Examples.</strong>
+- NGL piggybacked on Instagram the day story links opened to everyone. The CTA on received messages is "get your own messages," not "download this app" <a class="cite" href="#ref-25">25</a>.
+- NGL's north-star metric was users who post the link <em>and</em> at least two replies. Hunter says the tight loop produced a high redownload rate that offset churn (self-reported 150M MAU) <a class="cite" href="#ref-25">25</a>.
+- Smaller-scale versions: Adam Lyttle's achievement images carry a logo watermark <a class="cite" href="#ref-22">22</a>. Macaron uses share codes that let a viewer import the exact mini-app from a video <a class="cite" href="#ref-27">27</a>. Duolingo temporarily tracked screenshots to find moments users already shared, then improved those moments, which Albert Cheng says can 5-10x sharing <a class="cite" href="#ref-21">21</a>.</p>
+<p><strong>How to apply.</strong> Add an invite or share screen at the point of delight. Make the CTA sell the result, and make the shared asset carry the path back into the app.</p>
+<p><strong>Caveats.</strong>
+- Social apps have a cold-start problem. Two founders moved to utilities after failed social apps <a class="cite" href="#ref-1">1</a><a class="cite" href="#ref-28">28</a>.
+- iOS 18 partial contact access makes friend-finding harder <a class="cite" href="#ref-2">2</a>.
+- Spammy invite SMS is unethical and now regulated. TBH never sent SMS on votes, and Gas had to rebuild its growth systems under new SMS rules <a class="cite" href="#ref-2">2</a>.</p>
+<h3 id="3-hook-demo-then-the-comments">3. Hook, Demo, Then the Comments</h3>
+<p><strong>What it is.</strong> The winning short-form unit is a hook about the viewer's problem followed by a fast demo. It should not look like an ad, and the sale often closes in the comments.</p>
+<p><strong>Examples.</strong>
+- Steven Cravotta's best Puff Count video was a vape teardown that showed the app for about 2 seconds. It got 476K likes (self-reported) <a class="cite" href="#ref-7">7</a>.
+- Kelechi Onyeama's Social Wizard clip opens on a "pause" image and shows the app generating a reply line. "They don't even need to finish the clip" <a class="cite" href="#ref-29">29</a>.
+- Playkit's "long text" format often never names the app. Playkit calls it the highest-converting format because the reveal happens when people ask "what app is this?" <a class="cite" href="#ref-5">5</a><a class="cite" href="#ref-30">30</a>.
+- Format conversion to install, as reported by the Flamme founder (self-reported): memes 0.05-0.2%, question slideshows 0.2-0.5%, straight demos 0.5-1%. A 100K-view demo beat a 2M-view meme <a class="cite" href="#ref-4">4</a>.
+- Nomadtable judges hooks by whether 75-80% of viewers watch past 3 seconds. Its "view trap" example got 300K views and 174 likes because the hook was clickbait <a class="cite" href="#ref-31">31</a>.</p>
+<p><strong>How to apply.</strong>
+- Sell the transformation, not features <a class="cite" href="#ref-7">7</a>.
+- Give the video one job: send people to the store listing <a class="cite" href="#ref-7">7</a>.
+- Reply to top comments with product-heavy reply videos <a class="cite" href="#ref-30">30</a><a class="cite" href="#ref-32">32</a>.
+- Match the store screenshots to the exact words in the video <a class="cite" href="#ref-30">30</a>.</p>
+<p><strong>Caveats.</strong> Formats die as audiences learn to spot them. Playkit's Julia says plain hook-and-demo is fading in favour of stories, series and slideshows <a class="cite" href="#ref-30">30</a>.</p>
+<h3 id="4-volume-is-the-strategy">4. Volume Is the Strategy</h3>
+<p><strong>What it is.</strong> Hits come from posting at high volume with fixed rules, not from genius.</p>
+<p><strong>Examples and cadence.</strong>
+- Playkit's ritual: warm a fresh account for 2-3 days by searching what your user searches. Scroll and engage for about 2 minutes before each post. Post 2-3 times a day, at least 2 hours apart <a class="cite" href="#ref-5">5</a>.
+- Playkit's typical curve (self-reported): low thousands of views in weeks 1-2, the first 10K+ video in week 3, multiple 1M+ videos by week 8 <a class="cite" href="#ref-5">5</a>.
+- In one Playkit campaign, 1% of videos drove about 70% of views <a class="cite" href="#ref-5">5</a>.
+- Cal AI (Sebastian Stef's analysis of public data): about 1,000 posts in 12 months, 2.6 reels a day, most under 2M views <a class="cite" href="#ref-33">33</a>.
+- Kelechi starts at 3 videos a day across 2 TikTok accounts and scales to 20 a day <a class="cite" href="#ref-29">29</a>.
+- Lyttle's floor math: about 200 targeted viewers per video at 1% conversion is 2 downloads per video <a class="cite" href="#ref-22">22</a>.</p>
+<p><strong>Why it works.</strong> TikTok tests every post on a small cohort, so each post is a cheap experiment. Flamme's founder puts it as 1 video a day being 30 data points a month versus 6,000 at 200 a day <a class="cite" href="#ref-4">4</a>.</p>
+<p><strong>Caveats.</strong> The extreme version is a phone farm: 20-30 accounts on separate iPhones with their own Apple IDs and proxies <a class="cite" href="#ref-4">4</a>. It breaks the spirit of the platform's rules. Playkit's own newsletter reports account-level restrictions since about March/April 2026 <a class="cite" href="#ref-5">5</a>. Adam Lyttle admits he tried daily posting, quit in the zero-traction phase, and it "hasn't worked for me" <a class="cite" href="#ref-34">34</a>.</p>
+<h3 id="5-pay-for-views-not-followers">5. Pay for Views, Not Followers</h3>
+<p><strong>What it is.</strong> Pay small, audience-matched creators on terms tied to views, and copy proven formats across many of them.</p>
+<p><strong>Pay rates in the notes (all self-reported).</strong>
+- Playkit: $125-175 a week for 15 posts, plus bonuses of $100 at 100K views, $500 at 500K and $1,000 at 1M <a class="cite" href="#ref-30">30</a>.
+- Nomadtable: $1-2 CPM across 60-70 creators. One creator earned $8,000 for an 8M-view video <a class="cite" href="#ref-31">31</a>.
+- Kelechi: about $120 to a micro-streamer for one video that hit 2M views <a class="cite" href="#ref-29">29</a>.
+- RizzGPT: two creator promos at about $50 each, credited with 200K downloads. This is disputed and best treated as anecdote <a class="cite" href="#ref-35">35</a>.
+- Cal AI's approach differs: flat upfront fees, judged by RPM against CPM. RPM is $5-20 per 1,000 views, with 250+ influencers and six figures a month <a class="cite" href="#ref-1">1</a>.</p>
+<p><strong>How to apply.</strong>
+- "Followers don't matter at all. It's only the views they get" <a class="cite" href="#ref-1">1</a>.
+- Test with your single ideal-fit creator first. Zach's rule: spend $100, make $1,000, keep going. If it fails with that creator, "it's not going to work with anyone" <a class="cite" href="#ref-1">1</a>.
+- Recruit creators who reach your audience, not your topic. Kelechi used Fortnite streamers for a dating app <a class="cite" href="#ref-29">29</a>.
+- Expect about 100 outreach messages per yes <a class="cite" href="#ref-29">29</a>. Zach describes about 100 DMs a day for weeks <a class="cite" href="#ref-1">1</a>.
+- Make content yourself first. Then hand only validated formats to creators <a class="cite" href="#ref-31">31</a><a class="cite" href="#ref-29">29</a>.</p>
+<p><strong>Caveats.</strong> Zach says some 10K-follower creators ask "absurd" rates, such as $10K for 1,000 views, and that most influencers refuse CPM-only deals <a class="cite" href="#ref-1">1</a>.</p>
+<h3 id="6-the-margin-ladder-ugc-influencers-paid">6. The Margin Ladder: UGC, Influencers, Paid</h3>
+<p><strong>What it is.</strong> Each channel keeps a different share of the revenue it brings in. Blake Anderson's estimates (opinion, from running three apps) are internal UGC 50-80% margin, influencer marketing 25-70% and paid ads 0-30% <a class="cite" href="#ref-8">8</a>.</p>
+<p><strong>Supporting numbers (all self-reported).</strong> Playkit reports its average CPM at $3.87, against about $20 on Meta and about $119 for micro-influencers <a class="cite" href="#ref-5">5</a>. It also cites paid Meta installs at $2-5 each at the early stage <a class="cite" href="#ref-30">30</a>.</p>
+<p><strong>The usual sequence.</strong> Find winners organically, then put paid spend behind them. Start ads only after about 20 good organic pieces exist, and optimise for trial or subscription events rather than installs <a class="cite" href="#ref-32">32</a>. Flamme's founder: "Organic first, then UGC, then paid. Most founders run it backwards" <a class="cite" href="#ref-4">4</a>.</p>
+<p><strong>The third-party picture.</strong> CNBC-reviewed documents put Cal AI at about $1.4M a month gross profit, about $770K a month on marketing and about $274K a month net operating income <a class="cite" href="#ref-36">36</a>. Scale is real, and so is the cost of buying it.</p>
+<h3 id="7-cpi-below-ltv-or-nothing">7. CPI Below LTV, or Nothing</h3>
+<p><strong>What it is.</strong> Every paid channel reduces to one inequality: cost per install below lifetime value per install. Cravotta reads "realized LTV per customer" in RevenueCat with an unbounded lifetime. For Puff Count that comes to about $1.00-1.50 per install, so any CPI under about $1 is profitable (self-reported) <a class="cite" href="#ref-7">7</a><a class="cite" href="#ref-32">32</a>.</p>
+<p><strong>Why monetisation decides marketing.</strong> "The higher your LTV, the more you can spend on paid ads" <a class="cite" href="#ref-18">18</a>. Paywall split tests can raise revenue per download 1.5-2x <a class="cite" href="#ref-8">8</a>. Cal AI chose a hard paywall after the freemium Grind Clock got downloads but little revenue <a class="cite" href="#ref-33">33</a>.</p>
+<p><strong>What fails (all self-reported).</strong>
+- Lyttle spent $500 on a UGC rewards test: 131K views, about 100 downloads and 8 trials. Much of the budget went to a bot-driven account <a class="cite" href="#ref-37">37</a>.
+- Flamme got 50M organic views and about 150K users. Its true paid conversion was only 0.3-0.5%, and the founder says more than half the views were "wasted" <a class="cite" href="#ref-4">4</a>.
+- Yorby reached 10K users and about $4K in revenue <a class="cite" href="#ref-38">38</a>.
+- Nomadtable says paid ads do not work for low-ARPU social apps <a class="cite" href="#ref-31">31</a>.
+- At the top end, Nikita estimates reaching #1 in the US now takes about 80K-300K installs a day <a class="cite" href="#ref-2">2</a>.</p>
+<p><strong>How to apply.</strong> Measure realized LTV per install before you buy a single install. Treat views as an "ego metric" <a class="cite" href="#ref-4">4</a>.</p>
+<h3 id="8-reddit-story-first-link-last">8. Reddit: Story First, Link Last</h3>
+<p><strong>What it is.</strong> Value-first story posts in niche subreddits, with the product mentioned in passing.</p>
+<p><strong>Examples (all self-reported).</strong>
+- Diego Roshardt took AppAlchemy to $17K MRR in about 4 months from Reddit alone, with under 100 X followers. He found about 30 subreddits using Reddit's ads targeting tool without spending anything, and cross-posted to 10+ of them. He posted 2-3 times a week to stay under spam thresholds <a class="cite" href="#ref-39">39</a>.
+- Roman (Goji Berry) warms a new account for 7-14 days with comments only. His post "I paid five influencers... here's what $1,250 got me" drew 160K views, about 2,000 visitors and 10-15 customers <a class="cite" href="#ref-40">40</a>.
+- One YC founder got about 1,000 waitlist signups in 24 hours from a Reddit post <a class="cite" href="#ref-41">41</a>.</p>
+<p><strong>Caveats.</strong>
+- Pat Walls caps Reddit at the first 10-100 customers, not scale <a class="cite" href="#ref-40">40</a>.
+- Both Reddit case studies are web SaaS, not consumer mobile <a class="cite" href="#ref-39">39</a><a class="cite" href="#ref-40">40</a>.
+- Roman's 15-person upvote group is vote manipulation and a ban risk <a class="cite" href="#ref-40">40</a>.
+- Lyttle's GIF-repost scheme ended with "getting found out" <a class="cite" href="#ref-22">22</a>.</p>
+<h3 id="9-the-name-is-the-keyword">9. The Name Is the Keyword</h3>
+<p><strong>What it is.</strong> App Store Optimisation (ASO), done as a slow, compounding search channel.</p>
+<p><strong>Example.</strong> HabitKit's founder says about 98% of his users come from store search, at $50K+ a month across four apps (self-reported) <a class="cite" href="#ref-42">42</a>. His rules:
+- Name and subtitle matter most, "nothing else comes close." Put the primary keyword first ("Habit Tracker - Habit Kit").
+- Use the 30-character subtitle for secondary keywords and never repeat a word between name and subtitle.
+- Fill all 100 keyword characters, with no spaces and no competitor names.
+- Make the first screenshot your most striking real UI. His designer-made screenshots lost an Apple Product Page Optimization test to his own originals.
+- Ask for a review at a happy moment, such as right after the first habit is completed, never during onboarding <a class="cite" href="#ref-42">42</a>.</p>
+<p><strong>More examples (all self-reported).</strong>
+- Lyttle renamed a fasting app to target the easier "fast tracker" keyword, and downloads went from about 50 to 861 a month <a class="cite" href="#ref-22">22</a>.
+- Rootd's founder reuses the words users write in reviews as keywords <a class="cite" href="#ref-43">43</a>.
+- Kaching says about 95% of its reviews come from customer support (Shopify App Store, not iOS) <a class="cite" href="#ref-44">44</a>.
+- About half of Umax downloads came from App Store featuring or algorithmic promotion (secondary recap) <a class="cite" href="#ref-8">8</a>.</p>
+<p><strong>How to apply.</strong> Do keyword research before you name the app <a class="cite" href="#ref-42">42</a>. Have the listing ready for Apple's roughly two-week launch boost <a class="cite" href="#ref-45">45</a>.</p>
+<p><strong>Caveats.</strong>
+- ASO is slow: HabitKit took about 6 months to reach the UK/German top 10 and nearly 3 years to hold the US top 5 <a class="cite" href="#ref-42">42</a>.
+- Lyttle now says the "golden age" of ASO is over <a class="cite" href="#ref-34">34</a>.
+- Cal AI's rating prompt before the paywall is a gray area under Apple's guidelines <a class="cite" href="#ref-18">18</a>.</p>
+<h3 id="10-distribution-before-code">10. Distribution Before Code</h3>
+<p><strong>What it is.</strong> Line up an audience or a working channel before, or while, you build.</p>
+<p><strong>Examples (all self-reported).</strong>
+- Nomadtable built a waitlist of 12-15K, which produced about 6,000 day-one downloads <a class="cite" href="#ref-31">31</a>.
+- Cal AI ran a $2,000 social test before the founders committed (CNBC article) <a class="cite" href="#ref-36">36</a>.
+- Kaching posted an unbuilt design screenshot in merchant groups and got 100+ asks for a download link <a class="cite" href="#ref-44">44</a>.
+- Ben Guez launched a concept page that did not feature him, to test demand separately from his ~1M personal followers <a class="cite" href="#ref-24">24</a>.
+- Build in public: Andrew Codesmith suggests spending 20-30% of build time on content <a class="cite" href="#ref-46">46</a>. Peek's founder replied to a viral tweet with a joke feature, then built it overnight <a class="cite" href="#ref-47">47</a>.
+- Nikita geofenced TBH's launch to keep growth controlled and servers up <a class="cite" href="#ref-2">2</a>.</p>
+<p><strong>Caveats.</strong>
+- Zach warns that a friend's mock-up TikToks got millions of views, then lost the hype and spawned competitors before the app shipped. If you pre-validate, be ready to ship immediately <a class="cite" href="#ref-1">1</a>.
+- Product Hunt is "a bit meh" for downloads <a class="cite" href="#ref-22">22</a>, although Peek reports reaching #1 there <a class="cite" href="#ref-47">47</a>.
+- Most YC founders' first customers came from their own network <a class="cite" href="#ref-41">41</a>.</p>
+<h3 id="11-fish-where-money-already-swims">11. Fish Where Money Already Swims</h3>
+<p><strong>What it is.</strong> Pick niches where people already spend money and already make content.</p>
+<p><strong>Examples.</strong>
+- Blake Anderson: "When you find a niche that's heavily monetized with physical products, that's a good indicator that the niche converts." Looksmaxxing became Umax <a class="cite" href="#ref-8">8</a>.
+- Cravotta only studies apps above $50K a month in Sensor Tower <a class="cite" href="#ref-32">32</a>. He treats paying competitors as a green flag and controversial topics like vaping as a content advantage <a class="cite" href="#ref-6">6</a>.
+- Nikita reduces downloads to a few motives (a mate, money, escape) and looks for "latent demand" in clunky existing behaviour <a class="cite" href="#ref-2">2</a>.
+- Kelechi's first check: does the niche already have a large volume of content <a class="cite" href="#ref-29">29</a>?</p>
+<p><strong>Caveats.</strong> Julia says organic UGC "does not work" for B2B SaaS or crypto, and men over 50 are hard to reach with creators <a class="cite" href="#ref-30">30</a>. Playkit also says UGC needs a visual hook (scanning, swiping, transformation) <a class="cite" href="#ref-5">5</a>.</p>
+<h3 id="where-sources-disagree">Where sources disagree</h3>
+<ul>
+<li><strong>Organic only, or organic then paid.</strong> Lyttle's 2026 view is that indie growth is daily organic content with no ads <a class="cite" href="#ref-34">34</a>, and Nomadtable rejects paid for social apps <a class="cite" href="#ref-31">31</a>. Cravotta says paid ads on organic winners are where scale comes from <a class="cite" href="#ref-7">7</a>. Blake rates paid as the lowest-margin channel <a class="cite" href="#ref-8">8</a>.</li>
+<li><strong>Is ASO dead?</strong> Lyttle says its golden age is over <a class="cite" href="#ref-34">34</a>. HabitKit reports 98% search traffic <a class="cite" href="#ref-42">42</a>.</li>
+<li><strong>Flat fee or CPM.</strong> Cal AI pays upfront and says creators refuse CPM-only deals <a class="cite" href="#ref-1">1</a>. Nomadtable and Macaron pay on performance <a class="cite" href="#ref-31">31</a><a class="cite" href="#ref-27">27</a>.</li>
+<li><strong>Is hook-and-demo still alive?</strong> Playkit says it is fading <a class="cite" href="#ref-30">30</a>. Flamme's data ranks demos as the best-converting format <a class="cite" href="#ref-4">4</a>.</li>
+<li><strong>AI faces versus authenticity.</strong> Yorby says the algorithm does not care whether content is AI-made <a class="cite" href="#ref-38">38</a>. Playkit insists viewers must not detect an ad <a class="cite" href="#ref-30">30</a>.</li>
+<li><strong>Skill or luck.</strong> Kelechi calls distribution "deterministic" <a class="cite" href="#ref-29">29</a>, and Nikita says virality can be learned <a class="cite" href="#ref-2">2</a>. YC founders describe viral launches as "lightning in a bottle" <a class="cite" href="#ref-41">41</a>.</li>
+</ul>
+<h3 id="checklist">Checklist</h3>
+<ol>
+<li>Cut the app to one feature whose aha fits in a 2-second clip <a class="cite" href="#ref-1">1</a>.</li>
+<li>Add a share or invite screen whose CTA sells the result ("get your own messages") <a class="cite" href="#ref-25">25</a>.</li>
+<li>Do keyword research before naming the app, and put the primary keyword first in the name <a class="cite" href="#ref-42">42</a>.</li>
+<li>Ask for reviews at a happy moment, never in onboarding <a class="cite" href="#ref-42">42</a>.</li>
+<li>Warm a fresh TikTok account for 2-3 days, then post 2-3 times a day, 2+ hours apart, for 8 weeks <a class="cite" href="#ref-5">5</a>.</li>
+<li>Track watch-past-3-seconds (target 75-80%) and installs, not views <a class="cite" href="#ref-31">31</a>.</li>
+<li>Prefer demo formats, which convert 0.5-1% versus 0.05-0.2% for memes <a class="cite" href="#ref-4">4</a>.</li>
+<li>Test one ideal-fit creator with $100 and continue only if it returns $1,000 <a class="cite" href="#ref-1">1</a>.</li>
+<li>Pay small creators a weekly base plus view bonuses, or $1-2 CPM <a class="cite" href="#ref-30">30</a><a class="cite" href="#ref-31">31</a>.</li>
+<li>Read realized LTV per install in RevenueCat and buy installs only below it <a class="cite" href="#ref-7">7</a>.</li>
+<li>Turn on paid ads only after about 20 proven organic videos, optimised for trials <a class="cite" href="#ref-32">32</a>.</li>
+<li>Write value-first Reddit posts for your first 10-100 users, 2-3 times a week <a class="cite" href="#ref-39">39</a><a class="cite" href="#ref-40">40</a>.</li>
+</ol>
+<h2 id="the-first-ninety-seconds-onboarding-activation-and-the-aha-moment">The First Ninety Seconds: onboarding, activation and the aha moment</h2>
+<p>Most of what happens to a new user happens before they have really used your app. The widely repeated industry figure is that the average app loses 77% of new users within three days of install <a class="cite" href="#ref-48">48</a><a class="cite" href="#ref-3">3</a>. That number traces back to an older third-party Android analysis, so treat it as a direction, not a benchmark <a class="cite" href="#ref-48">48</a>. Platform data on subscriptions points the same way: RevenueCat reports 82% of trial starts happen on install day and Adapty reports 89.4% on day 0 <a class="cite" href="#ref-16">16</a>. For a habit app, the first session is where you win the subscription and where you set up the habit. The patterns below cover how to spend it.</p>
+<h3 id="pattern-1-perceived-length-not-screen-count">Pattern 1: Perceived Length, Not Screen Count</h3>
+<p><strong>What it is.</strong> The rule "keep onboarding short" is not what successful apps do. What matters is whether each screen feels like progress toward something the user wants.</p>
+<p><strong>The evidence.</strong> Mobbin's review of 1,460 onboarding flows from 986 apps found the average app has 25 onboarding screens, and the longest flows sit in finance, health and fitness, and education <a class="cite" href="#ref-9">9</a>. Duolingo shows roughly 60 screens before signup, BitePal 61 <a class="cite" href="#ref-9">9</a>, and Noom is cited at 113 <a class="cite" href="#ref-3">3</a>. An independent teardown of Cal AI counted 29 screens, 16 questions and 3 iOS permission prompts, taking about 2.25 minutes <a class="cite" href="#ref-33">33</a>. At the other end, AI utility flows average about 3 screens <a class="cite" href="#ref-9">9</a>, Granola uses two (Google sign-in, then microphone access) <a class="cite" href="#ref-3">3</a>, and NGL's onboarding takes 15-20 seconds (self-reported) <a class="cite" href="#ref-25">25</a>.</p>
+<p><strong>Why it works.</strong> Long flows win when "they don't feel like onboarding" because the user is already doing the thing <a class="cite" href="#ref-9">9</a>. Duolingo's 60 screens include a first lesson before account creation <a class="cite" href="#ref-9">9</a>.</p>
+<p><strong>How to apply it.</strong> Use Tim Gabe's test for every screen: does it buy (1) a personalised first experience that would be impossible without the data, or (2) a filter that self-selects paying users? If neither, delete it <a class="cite" href="#ref-3">3</a>. Users who quit a 20-step quiz "were less likely to convert anyway" in his view, which is an argument, not a measured result <a class="cite" href="#ref-3">3</a>. For a habit app, personalisation usually passes the test, so a medium-length flow is defensible.</p>
+<p><strong>Caveats.</strong> Adam Lyttle dissected Cal AI's 20+ step flow and concluded "Do you need that many? Probably not," pointing to a 6-8 screen version (Gen Z Bible) that captures most of the value <a class="cite" href="#ref-49">49</a><a class="cite" href="#ref-50">50</a>. Google's own guidance is the opposite pole: fast, minimal input, register later <a class="cite" href="#ref-48">48</a>. Products where the first action is the value (AI chat, Granola) may need almost no onboarding at all <a class="cite" href="#ref-9">9</a><a class="cite" href="#ref-3">3</a>.</p>
+<h3 id="pattern-2-the-3-second-aha">Pattern 2: The 3-Second Aha</h3>
+<p><strong>What it is.</strong> Pick one core action that proves your value and get the user to it as early as possible, ideally within seconds.</p>
+<p><strong>The evidence.</strong> Nikita Bier argues the core value should land within roughly three seconds of opening, and that you should "invert the time to value" <a class="cite" href="#ref-2">2</a>. His example is Dupe.com, where prefixing a shopping URL delivers the cheapest look-alike product in seconds; he reports it reached millions in ARR within about 60 days (self-reported) <a class="cite" href="#ref-2">2</a>. Cal AI was built around "that one aha moment feature": take a photo of your food and get calories and macros. Its first version was two screens and one camera button <a class="cite" href="#ref-1">1</a>. Apple Fitness steers a new user to one action, pressing "Let's Go" and moving, not to a menu of 30 workouts <a class="cite" href="#ref-51">51</a>.</p>
+<p><strong>Why it works.</strong> Mobile has near-zero tolerance for friction because users switch apps instantly <a class="cite" href="#ref-2">2</a>. Mobbin describes the best structure as sign up, set up, then hit the aha moment (Airbnb's first booking, Netflix's first show) <a class="cite" href="#ref-9">9</a>.</p>
+<p><strong>How to apply it.</strong> Name your aha in one sentence. For a habit app it is usually "I completed my first check-in and saw it count." Then move account creation behind it. Duolingo asks for email only after the first lesson, framed as saving progress "so you don't lose your streak" <a class="cite" href="#ref-11">11</a>. In a Google case study, Freeletics deferred registration and saw +58% user activity in the first 7 days (developer-reported, from Google's written guidance rather than the video itself) <a class="cite" href="#ref-48">48</a>. eBay lets users browse until checkout <a class="cite" href="#ref-52">52</a>. Lyssna's Triply redesign moved email signup from step 1 to the moment a user saves an activity <a class="cite" href="#ref-11">11</a>.</p>
+<p><strong>Caveats.</strong> Making the aha "easier" has a floor. Duolingo found a streak extended by a single exercise moved DAUs "not one bit" and was shut down <a class="cite" href="#ref-12">12</a>. Also, Cal AI's aha feature is the same one users complain about for accuracy, so the aha has to work reliably, not just quickly <a class="cite" href="#ref-36">36</a>.</p>
+<h3 id="pattern-3-questions-that-pay-back-visibly">Pattern 3: Questions That Pay Back Visibly</h3>
+<p><strong>What it is.</strong> Ask personalisation questions, then show the user exactly what their answers changed.</p>
+<p><strong>The evidence.</strong> Only 23% of apps personalise onboarding (7% of AI apps) <a class="cite" href="#ref-9">9</a>. The company-reported lifts Mobbin collected are consistent: Headspace letting users pick more than one goal raised free-trial conversion 10%; Dollar Shave Club's conversational quiz copy alone added 5% to subscriptions; Grammarly recommending a plan from quiz answers lifted plan upgrades about 20% <a class="cite" href="#ref-9">9</a>. These are third-party company results quoted secondhand, not Mobbin's own tests. Opal framed onboarding around "getting 8 years of your life back," and showing users how many years they could save moved trial sign-ups from 7% to 17% <a class="cite" href="#ref-20">20</a>.</p>
+<p><strong>Why it works.</strong> "You can't onboard someone you do not understand" <a class="cite" href="#ref-53">53</a>. Lyssna's usability testing found a fast flow producing generic results left users unconfident; adding questions (trip length, travel companions, interests) with a one-line explanation of why each was asked "flipped" confidence (qualitative, self-reported) <a class="cite" href="#ref-11">11</a>.</p>
+<p><strong>How to apply it.</strong>
+- Close the loop on screen. BitePal names the exact date you will hit your goal; Brilliant pre-populates the home screen with only your courses; Speak tells you what you will be able to do in two months <a class="cite" href="#ref-9">9</a>.
+- Open broad. Cal AI's first question is "how often do you work out," not "how much weight do you want to lose," because some users want to bulk <a class="cite" href="#ref-49">49</a>.
+- Use limited options, not empty fields, as Notion does with team, personal or school <a class="cite" href="#ref-53">53</a>.
+- Route by skill. Chess.com found under a third of beginners win their first game and losing cuts retention about 10%, so it tests sending self-declared beginners to a learn-to-play flow and hiding ratings for five games (self-reported) <a class="cite" href="#ref-21">21</a>.
+- Add "Where did you hear about us?" It is free attribution and market research, even from non-payers <a class="cite" href="#ref-49">49</a><a class="cite" href="#ref-33">33</a>.</p>
+<p><strong>Caveats.</strong> Lyttle suspects Cal AI's multi-minute "generating your custom plan" animation is performative <a class="cite" href="#ref-49">49</a>. If the plan does not actually change the product, users will notice when they reach the home screen.</p>
+<h3 id="pattern-4-choosing-is-committing">Pattern 4: Choosing Is Committing</h3>
+<p><strong>What it is.</strong> Small deliberate choices during onboarding create investment. Friction that asks the user to decide can outperform a frictionless funnel.</p>
+<p><strong>The evidence.</strong> Duolingo's streak-goal screen is the cleanest results-backed case in the notes. Changing the button from "Continue" to "Commit to my goal" was "a massive win." Adding an opt-out ("no, I don't think I can hit it") was almost as big as offering an easier goal. Pre-selecting a harder goal to speed people through lost significantly: "the act of choosing is where the engagement comes from" (internal A/B tests, self-reported) <a class="cite" href="#ref-12">12</a>. The outcome-framed hook "you're 7x more likely to finish the course with a 30-day streak" was also a large win <a class="cite" href="#ref-12">12</a>. Cal AI reportedly added "dumb" questions such as "Why do you want to lose weight?" purely to raise commitment (self-reported, from a different interview) <a class="cite" href="#ref-36">36</a>.</p>
+<p><strong>Why it works.</strong> Steven Cravotta wants users to feel they are "building value for themselves" and to "walk through their own problems" before the paywall <a class="cite" href="#ref-10">10</a>. Progress bars and partially complete states exploit the Zeigarnik effect, the pull to finish incomplete tasks <a class="cite" href="#ref-54">54</a>.</p>
+<p><strong>How to apply it.</strong>
+- Put the hardest, most personal questions at the end of the quiz, after time is invested <a class="cite" href="#ref-10">10</a>.
+- Let users make something theirs before using it, like Focus Flight's map-style choice <a class="cite" href="#ref-9">9</a> or BitePal's raccoon you name <a class="cite" href="#ref-9">9</a>.
+- Split long forms across screens. House did this and saw +15% signup conversion (company-reported): "friction we add in one place removes friction in another" <a class="cite" href="#ref-9">9</a>.
+- Replace popups with a persistent checklist. Mural's six-step checklist lifted one-week retention 10% relative (company-reported) <a class="cite" href="#ref-9">9</a>.
+- Add a goal screen with a commitment-worded CTA and an easier fallback, modelled on Duolingo <a class="cite" href="#ref-12">12</a>.</p>
+<p><strong>Caveats.</strong> Cravotta frames this as sunk cost and priming to pay; Mobbin frames it as reaching the aha <a class="cite" href="#ref-10">10</a>. Those are different goals, and a habit app needs both.</p>
+<h3 id="pattern-5-activation-is-one-action-measured-against-retention">Pattern 5: Activation Is One Action, Measured Against Retention</h3>
+<p><strong>What it is.</strong> Activation means the user has done the core action enough to get it. "Onboarding educates users about your app; activation is making sure they got it!" <a class="cite" href="#ref-48">48</a></p>
+<p><strong>The evidence.</strong> Google Play frames the journey as onboarding, then activation, then commitment, with the core action as the pivot <a class="cite" href="#ref-48">48</a>. YC's retention talk says to define "active" by picturing a user getting real value and choosing the action that proves it, not app opens or notification taps, and to judge by whether the cohort curve flattens <a class="cite" href="#ref-13">13</a>. Duolingo sees large retention jumps on each day from 1 to 7, after which the curve flattens, so it runs a disproportionate share of experiments on days 0-7 (self-reported) <a class="cite" href="#ref-12">12</a>. Cal AI reportedly found users with 10,000+ calories tracked showed 80%+ retention, so it gamified milestones toward that point (self-reported) <a class="cite" href="#ref-36">36</a>. NGL's north star is users who post the link and at least two replies (self-reported) <a class="cite" href="#ref-25">25</a>. As a rough benchmark, Albert Cheng calls D1 retention of 30-40% "quite solid" for a consumer app (opinion from experience) <a class="cite" href="#ref-21">21</a>.</p>
+<p><strong>How to apply it.</strong> Look in your data for the behaviour that separates retained users from churned ones, like Cal AI's calorie threshold, then design onboarding to push new users toward it. Track a funnel per screen (Cravotta uses Mixpanel and treats about 7% drop-off on a step as normal) <a class="cite" href="#ref-10">10</a>. Lyssna argues you should also measure user confidence, not just completion rate or time <a class="cite" href="#ref-11">11</a>. Prefer changes whose D14 effect is larger than their D1 effect <a class="cite" href="#ref-12">12</a>. Hold back extra concepts until after the first week; Duolingo found introducing them earlier "pretty universally" loses <a class="cite" href="#ref-12">12</a>.</p>
+<p><strong>Caveats.</strong> The notes have few published activation thresholds for habit apps. Most numbers are single-company and self-reported. Bier also warns that durable retention in consumer social is closer to luck than to a repeatable process <a class="cite" href="#ref-2">2</a>.</p>
+<h3 id="pattern-6-the-paywall-is-the-last-onboarding-screen">Pattern 6: The Paywall Is The Last Onboarding Screen</h3>
+<p>This section covers placement only; paywall design belongs to the pricing chapter.</p>
+<p><strong>What it is.</strong> In subscription utilities, the paywall goes at the end of onboarding, right after "your plan is ready."</p>
+<p><strong>The evidence.</strong> 22% of apps in Mobbin's set show a paywall during onboarding <a class="cite" href="#ref-9">9</a>. Because 82-89% of trial starts happen on day 0 (vendor data) <a class="cite" href="#ref-16">16</a>, Gabe argues "you have one session, that's it" <a class="cite" href="#ref-16">16</a>. Lyttle says most users start the free trial right after onboarding, before using any features <a class="cite" href="#ref-55">55</a>, and in a later video puts it at 70%+ of trial signups (self-reported) <a class="cite" href="#ref-56">56</a>. Connor Burd claims "90% of users will probably only ever see your onboarding if you have a paywalled section" (opinion) <a class="cite" href="#ref-28">28</a>. Per a teardown citing Superwall, 87% of Cal AI's new users see a paywall and 57% of those start a transaction; the onboarding paywall alone had 61 experiments <a class="cite" href="#ref-33">33</a>.</p>
+<p><strong>How to apply it.</strong> End the quiz with a plan reveal, then an emotional outcome line, then price, so it reads as "a natural segue to finish the onboarding" <a class="cite" href="#ref-20">20</a>. Cravotta's order is affirmation, short sign-in, value screens, social proof, survey, more social proof, hard paywall <a class="cite" href="#ref-10">10</a>. Never open with the paywall: "If you show your paywall before doing all this... the user is simply going to bounce" <a class="cite" href="#ref-18">18</a>. Lyttle's other high-converting spots are the core-action tap and app relaunch <a class="cite" href="#ref-55">55</a>.</p>
+<p><strong>Caveats.</strong> DesignerUp calls VSCO's immediate post-signup paywall "catfishing" and prefers Acorns, which reveals tiers only after the success moment <a class="cite" href="#ref-53">53</a>. Lyttle worries that demoing premium features then locking them is "a bit bait and switchy" <a class="cite" href="#ref-49">49</a>. Duolingo, a habit app, is the counter-model: its streak works because people want to use the core app <a class="cite" href="#ref-12">12</a>, and NGL monetises a tiny share of free users <a class="cite" href="#ref-25">25</a>.</p>
+<h3 id="pattern-7-earn-every-permission">Pattern 7: Earn Every Permission</h3>
+<p><strong>What it is.</strong> Never fire an OS prompt cold. Precede each ask with a screen that says what the user gets.</p>
+<p><strong>The evidence.</strong> Brilliant shows a custom screen ("I'll remind you to learn so it becomes a long-term habit") before the notification prompt, and Center previews the exact notification you will receive; Mobbin says this "improves accept rates significantly" but gives no number <a class="cite" href="#ref-9">9</a>. Cal AI uses mock iOS dialogs with a pointing hand on "Allow," and places a social-proof screen ("10M+ users") right before the notification ask <a class="cite" href="#ref-33">33</a>. In a Google case study, Aftenposten explained its notifications during onboarding and let users set preferences, cutting uninstalls 9.2% over 60 days and full muting by 28% (developer-reported) <a class="cite" href="#ref-48">48</a>. Web onboarding runs 21% shorter than iOS, largely because mobile bakes in permission and paywall screens <a class="cite" href="#ref-9">9</a>.</p>
+<p><strong>Why it works.</strong> Asks without context trigger "Why do you need my location?... what do I as the user get in return?" <a class="cite" href="#ref-11">11</a>. The fix is to "go from, give us your info to, here's how this helps you": Yelp explains location as nearby places, Depop explains notifications as price-drop alerts <a class="cite" href="#ref-11">11</a>.</p>
+<p><strong>How to apply it.</strong> For a habit app, notifications are the one ask that matters, so tie the pre-prompt to the habit. Duolingo's reminders work because the streak gives them a reason; its best timing was 23.5 hours after the last practice, which beat letting users pick a time <a class="cite" href="#ref-12">12</a>. Ask for anything else (health data, contacts, motion) at the moment it is needed <a class="cite" href="#ref-57">57</a>. Do not count on contact sync for friend-finding; iOS 18's partial address-book access makes that harder <a class="cite" href="#ref-2">2</a>.</p>
+<p><strong>Caveats.</strong> Rating prompts inside onboarding split the sources. Cravotta credits Cal AI's pre-paywall rating ask for its 4.8 stars but calls it "cheeky," and notes Apple expects prompts after meaningful use <a class="cite" href="#ref-18">18</a>. Lyttle warns it can produce one-star reviews <a class="cite" href="#ref-49">49</a>. HabitKit's founder never prompts during onboarding, only after the first completed habit <a class="cite" href="#ref-42">42</a>.</p>
+<h3 id="pattern-8-dont-onboard-like-a-government-form">Pattern 8: Don't Onboard Like A Government Form</h3>
+<p><strong>What it is.</strong> The common failure modes, collected.</p>
+<ul>
+<li><strong>Forms instead of value.</strong> "Most apps out there onboard like government forms": sign-up, permissions and walkthroughs unrelated to value <a class="cite" href="#ref-3">3</a>.</li>
+<li><strong>Features instead of outcomes.</strong> Winning screens "are not listing features. They're selling the outcome" <a class="cite" href="#ref-9">9</a>; Lyttle's version is "benefits, benefits, benefits" <a class="cite" href="#ref-49">49</a>.</li>
+<li><strong>Too many steps, walls of text, no escape.</strong> DesignerUp's three named mistakes, with the fix of always offering a skip <a class="cite" href="#ref-53">53</a>. A preset-options screen needs a search box and a skip for users who fit none of them <a class="cite" href="#ref-58">58</a>.</li>
+<li><strong>Front-loaded tours.</strong> Prefer just-in-time guidance and empty-state nudges <a class="cite" href="#ref-53">53</a><a class="cite" href="#ref-9">9</a>.</li>
+<li><strong>Guessing instead of testing.</strong> Change one variable at a time <a class="cite" href="#ref-53">53</a>. Duolingo would "rather test it than debate it" <a class="cite" href="#ref-12">12</a>.</li>
+<li><strong>Underestimating confusion.</strong> If a screen confuses you for a split second, assume the average user is 5-10x more confused <a class="cite" href="#ref-1">1</a>.</li>
+<li><strong>No personality.</strong> Kevin Hale treats signup, login and empty states as first-date moments worth delighting in (Wufoo's "RAWR" dinosaur) <a class="cite" href="#ref-59">59</a><a class="cite" href="#ref-60">60</a>.</li>
+</ul>
+<p>Uncited industry stats ("up to 80%" abandon over bad onboarding) circulate too; do not plan around them <a class="cite" href="#ref-53">53</a>.</p>
+<h3 id="where-sources-disagree_1">Where sources disagree</h3>
+<ul>
+<li><strong>Long vs short.</strong> Burd says every app should build an extensive, emotional onboarding <a class="cite" href="#ref-28">28</a>. Gabe says long only when it buys personalisation or filters buyers <a class="cite" href="#ref-3">3</a>. Google says minimal input <a class="cite" href="#ref-48">48</a>. Mobbin's data shows long is common among winners but self-evident products skip it <a class="cite" href="#ref-9">9</a>. Category decides: long quizzes cluster in health, fitness and finance.</li>
+<li><strong>Paywall before or after value.</strong> Cravotta, Lyttle and Burd put it before first use <a class="cite" href="#ref-10">10</a><a class="cite" href="#ref-55">55</a><a class="cite" href="#ref-28">28</a>. DesignerUp and Acorns put it after the success moment <a class="cite" href="#ref-53">53</a>. Burd's model is explicitly built for conversion, not retention <a class="cite" href="#ref-28">28</a>.</li>
+<li><strong>Is friction good?</strong> Duolingo's goal opt-out and NGL's multi-step tutorials (fine once the value is sold) say yes <a class="cite" href="#ref-12">12</a><a class="cite" href="#ref-25">25</a>. Bier says design every tap to be valuable <a class="cite" href="#ref-2">2</a>. The reconciliation is that friction which makes the user choose helps, and friction which makes them wait or decode does not.</li>
+<li><strong>Plan-generation theatre.</strong> Cal AI uses a long loader; Lyttle thinks it is performative <a class="cite" href="#ref-49">49</a><a class="cite" href="#ref-33">33</a>. No test result in the notes settles it.</li>
+</ul>
+<p>Note how thin the evidence is: almost every lift figure here is one company's self-reported test, and only Mobbin's screen counts come from a cross-app dataset.</p>
+<h3 id="checklist_1">Checklist</h3>
+<ol>
+<li>Write your aha in one sentence and remove every screen between first open and that action that fails the personalisation or buyer-filter test <a class="cite" href="#ref-3">3</a><a class="cite" href="#ref-2">2</a>.</li>
+<li>Let the user complete one real check-in before you ask for an account, and frame signup as saving their progress <a class="cite" href="#ref-11">11</a><a class="cite" href="#ref-9">9</a>.</li>
+<li>Ask 5-10 personalisation questions, open broad, put the hardest last, and show a plan that visibly uses the answers <a class="cite" href="#ref-49">49</a><a class="cite" href="#ref-10">10</a><a class="cite" href="#ref-9">9</a>.</li>
+<li>Add a goal screen with a "Commit to my goal" button and an easier opt-out instead of a pre-selected default <a class="cite" href="#ref-12">12</a>.</li>
+<li>Precede the notification prompt with a custom screen tied to the habit, and preview the reminder <a class="cite" href="#ref-9">9</a><a class="cite" href="#ref-48">48</a>.</li>
+<li>Ask for every other permission in context, at the moment it is needed <a class="cite" href="#ref-11">11</a><a class="cite" href="#ref-57">57</a>.</li>
+<li>If you use a trial, place the paywall right after the plan reveal, never as the first screen <a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-18">18</a>.</li>
+<li>Add "Where did you hear about us?" to the quiz <a class="cite" href="#ref-33">33</a>.</li>
+<li>Define "active" as completing the core action, and chart weekly cohort curves to see if they flatten <a class="cite" href="#ref-13">13</a>.</li>
+<li>Find the usage threshold that predicts retention and steer the first week toward it <a class="cite" href="#ref-36">36</a><a class="cite" href="#ref-12">12</a>.</li>
+<li>Instrument a per-screen funnel and change one variable at a time <a class="cite" href="#ref-10">10</a><a class="cite" href="#ref-53">53</a>.</li>
+<li>Save rating prompts for the first success moment, not onboarding <a class="cite" href="#ref-42">42</a>.</li>
+</ol>
+<h2 id="what-brings-people-back-progression-reward-systems-hooks-and-retention">What Brings People Back: progression, reward systems, hooks and retention</h2>
+<p>Getting someone to install a habit app is the easy half. The notes in this corpus agree on one uncomfortable baseline: most apps lose most users fast. AppsFlyer puts average day-30 retention at 3-4%, with over 40% uninstalling within 30 days and half of those on day one <a class="cite" href="#ref-61">61</a>. A Google Play video cites a loss of 77% of new users within three days, a figure that traces to an older (around 2015) Android analysis <a class="cite" href="#ref-48">48</a>.</p>
+<p>This chapter collects the patterns the sources use to bend that curve. The strongest evidence comes from Duolingo's retention team, which reports 600+ experiments on the streak alone <a class="cite" href="#ref-12">12</a>. Much of the rest is framework and opinion, flagged as such.</p>
+<h3 id="pattern-1-load-the-next-trigger">Pattern 1: Load The Next Trigger</h3>
+<p><strong>What it is.</strong> Nir Eyal's Hook Model: Trigger, Action, Variable Reward, Investment, repeated until the user stops needing your external prompts and starts returning on an internal one, such as boredom, loneliness or uncertainty <a class="cite" href="#ref-62">62</a><a class="cite" href="#ref-63">63</a>. The external trigger (push, email, app icon) gets paired with a specific feeling ("I'm bored" leads to Facebook) <a class="cite" href="#ref-64">64</a>.</p>
+<p><strong>Why it works.</strong> Behaviour needs motivation, ability and a trigger at the same moment (Fogg's B = MAT) <a class="cite" href="#ref-63">63</a>. When a trigger fails, Eyal's advice is to make the action easier rather than to push motivation <a class="cite" href="#ref-65">65</a>. The last step, investment, is the one founders skip. A small piece of work after the reward (stating preferences, building something, following someone) stores value and "loads the next trigger", so the product gets better with use <a class="cite" href="#ref-62">62</a><a class="cite" href="#ref-64">64</a>.</p>
+<p><strong>Examples.</strong> Eyal's standard walkthrough: Barbra sees a relative's photo on Facebook, clicks through to Pinterest, scrolls a mix of relevant and surprising images for 45 minutes, then pins and follows, which feeds her future feed <a class="cite" href="#ref-62">62</a>. Eyal says "I don't do original research", and no product metrics appear in any of the four Hook-Model notes <a class="cite" href="#ref-64">64</a><a class="cite" href="#ref-62">62</a>.</p>
+<p><strong>How to apply.</strong> Answer Eyal's five questions for your app: which internal trigger, which external trigger, what is the simplest action, does the reward satisfy yet leave the user wanting more, and what investment loads the next pass <a class="cite" href="#ref-65">65</a>. </p>
+<p><strong>Caveat.</strong> The model is a lens, not a proven result, and it is contested: critics in the Tristan Harris and Yu-kai Chou camps see the same mechanics as manipulation, with Chou quoted as saying the Hook model "creates addicts" <a class="cite" href="#ref-65">65</a>.</p>
+<h3 id="pattern-2-win-days-zero-to-seven">Pattern 2: Win Days Zero To Seven</h3>
+<p><strong>What it is.</strong> Concentrate retention work on the first week.</p>
+<p><strong>Why it works.</strong> Duolingo's retention lead reports that each day from day 1 to day 7 brings a big jump in retention, and "once you hit day seven, it flattens out" because loss aversion has kicked in. The team runs a disproportionate share of experiments in that window (self-reported) <a class="cite" href="#ref-12">12</a>. WSJ reports that over 70% of Duolingo's DAU hold a streak of 7 days or more (company figures) <a class="cite" href="#ref-66">66</a>.</p>
+<p><strong>Examples.</strong> Perfect Streak, a gold streak for seven days without a freeze, is held back until after day 7. Introducing extra concepts earlier "pretty universally" loses <a class="cite" href="#ref-12">12</a>. Albert Cheng gives a benchmark of 30-40% D1 retention as "quite solid" for a consumer app (self-reported heuristic) <a class="cite" href="#ref-21">21</a>.</p>
+<p><strong>How to apply.</strong> Keep the first week simple and single-minded. Measure D1, D7 and D14 together, and prefer changes whose D14 effect is larger than their D1 effect, because those compound <a class="cite" href="#ref-12">12</a>.</p>
+<h3 id="pattern-3-the-bend-not-break-streak">Pattern 3: The Bend-Not-Break Streak</h3>
+<p><strong>What it is.</strong> A daily counter built on loss aversion, softened by forgiveness and sharpened by celebration. Duolingo calls the streak its "biggest growth lever for driving DAUs", with over 9 million users on a streak of a year or longer (self-reported) <a class="cite" href="#ref-12">12</a>.</p>
+<p><strong>Why it works.</strong> Losses feel roughly twice as strong as equal gains <a class="cite" href="#ref-67">67</a><a class="cite" href="#ref-15">15</a>. A streak turns each day into something you can lose. But a streak that breaks too easily ends the habit, so forgiveness matters as much as the counter.</p>
+<p><strong>Examples, all self-reported by Duolingo unless noted</strong> <a class="cite" href="#ref-12">12</a>:
+- Count the natural unit of use. Moving from an XP goal to "one lesson a day" was a large DAU win. Going down to "one exercise" moved DAUs "not one bit" and was shut down.
+- Freezes: going from 1 allowed freeze to 2 was a big win. 3 was no better than 2, because people trained to take three days off tend not to come back. Giving new users 2 free freezes at streak start was one of the biggest wins.
+- Earn Back: instead of paying gems to repair a lost streak, users do a few lessons within a window to win it back. It was "such a retention winner" because it feels earned.
+- Celebration: an odometer animation that ticks the number up, haptics, milestone animations, and a post-lesson streak screen users are deliberately made to pause on.
+- Goals: "Commit to my goal" instead of "Continue" was "a massive win". Offering an opt-out to an easier goal almost matched the easier goal itself. Pre-selecting a goal to speed people through lost.</p>
+<p>Flamme, a couples app, reports going from 0.8% to about 50% day-30 retention after adding a daily question with a carrot notification and a streak "stick" (self-reported, and the guest's own telling elsewhere starts at 1.2%) <a class="cite" href="#ref-4">4</a>. Cal AI sends streak notifications such as "You've logged 70 days straight!" and reports 80%+ retention among users who logged 10,000+ calories (self-reported, from a separate interview) <a class="cite" href="#ref-36">36</a>.</p>
+<p><strong>How to apply.</strong> Define the streak around your app's real unit and frequency. Peloton uses weekly streaks <a class="cite" href="#ref-12">12</a>. Give 2 freezes early, less flexibility later. Let users earn back a broken streak with real activity rather than money.</p>
+<p><strong>Caveats.</strong> Streaks "work best when they're sitting on top of an app that users care about"; otherwise they distract from fixing the core loop <a class="cite" href="#ref-12">12</a>. Decide on day one whether the streak serves retention or monetization, because gem-bought freezes made Duolingo money it now partly wants to give up <a class="cite" href="#ref-12">12</a>. Tim Gabe calls a single counter "decoration" next to streaks that compound into something, such as the diamond tiers his agency built for Freecash at days 7 and 42 (self-reported agency work) <a class="cite" href="#ref-15">15</a>.</p>
+<h3 id="pattern-4-the-scoreboard-is-not-the-game">Pattern 4: The Scoreboard Is Not The Game</h3>
+<p><strong>What it is.</strong> Points, badges and leaderboards (PBL) are what most apps add first, and they are the weakest layer. Yu-kai Chou: "Good gamification does not start with game elements but really starts with how it motivates our core drives" <a class="cite" href="#ref-68">68</a>. Tim Gabe calls PBL "the three most documented failures in product history" <a class="cite" href="#ref-14">14</a>.</p>
+<p><strong>Examples.</strong> LinkedIn retired its Top Voice gold badges in 2024 because they rewarded quantity over quality. Foursquare scrapped mayorships and badges in 2014 because they drove check-ins, not the discovery the business needed <a class="cite" href="#ref-14">14</a>. A peer-reviewed study of Habitica is cited as finding counterproductive effects in 100% of participants, as managing the game buried real work <a class="cite" href="#ref-14">14</a>. In contrast, Apple Watch rings are cited at a 49.5% behaviour change across 160,000 people through completion drive alone <a class="cite" href="#ref-14">14</a>. These figures are third-party studies as quoted by a YouTuber; I could not check the originals.</p>
+<p><strong>Leaderboards done right.</strong> The problem is size, not ranking. "Winnability is the strongest predictor of competitive motivation" (a 2022 study as cited) <a class="cite" href="#ref-14">14</a>. Strava's segments create "thousands of hyper-local micro-competitions" sorted by age and gender, and members who use its social and output features work out 15% more often <a class="cite" href="#ref-14">14</a>.</p>
+<p><strong>How to apply.</strong> Count your mechanics. Feature richness follows an S-curve, and if you already have points, badges, challenges and leaderboards, "you're past the peak" <a class="cite" href="#ref-14">14</a>. Track one system users can obsess over: "one visible measure of total progress creates more engagement than 20 scattered badges" <a class="cite" href="#ref-15">15</a>. Signal mastery, not attendance <a class="cite" href="#ref-14">14</a>.</p>
+<p><strong>Caveat.</strong> Gamification evidence is mixed. A 2024 meta-analysis as cited found it helps autonomy and relatedness but barely moves perceived competence <a class="cite" href="#ref-14">14</a>.</p>
+<h3 id="pattern-5-progress-that-never-starts-at-zero">Pattern 5: Progress That Never Starts At Zero</h3>
+<p><strong>What it is.</strong> Levels, XP and progress bars that make momentum visible and keep the next step close.</p>
+<p><strong>Why it works.</strong> The goal-gradient effect: a car-wash loyalty card with two stamps pre-filled was completed at nearly double the rate (academic study cited secondhand) <a class="cite" href="#ref-67">67</a>. The Zeigarnik effect: unfinished tasks stay in mind, so partly complete profiles and progress percentages pull users forward <a class="cite" href="#ref-54">54</a>.</p>
+<p><strong>Examples.</strong> LinkedIn's profile meter never starts at zero <a class="cite" href="#ref-67">67</a>. Peloton's totals never cap ("a user at 500 classes isn't stopping when 600, 700, 1,000 are all theoretically reachable") <a class="cite" href="#ref-15">15</a>.</p>
+<p><strong>How to apply.</strong> Pre-fill the first step. Keep thresholds close and make the next level feel reachable <a class="cite" href="#ref-51">51</a>. Audit for "done" states: "if a user can complete your app, you have a ceiling on retention" <a class="cite" href="#ref-15">15</a>.</p>
+<p><strong>Caveat.</strong> Duolingo shipped an in-lesson XP counter that won on engagement, then reverted it to keep the lesson a "learning sanctuary" <a class="cite" href="#ref-12">12</a>. Progress UI can crowd out the actual thing. None of the notes give a tested XP or level curve formula; the corpus is thin here.</p>
+<h3 id="pattern-6-surprise-as-seasoning">Pattern 6: Surprise As Seasoning</h3>
+<p><strong>What it is.</strong> Variable reward: the user knows a reward is coming but not its size or timing.</p>
+<p><strong>Why it works.</strong> Eyal: predictable feedback is "the fridge light"; variability creates a hunting state <a class="cite" href="#ref-63">63</a>. He names three kinds: rewards of the tribe (social), the hunt (material or information) and the self (mastery) <a class="cite" href="#ref-62">62</a>. Dopamine rises in anticipation, and further when the reward is unpredictable (Sapolsky, as cited) <a class="cite" href="#ref-69">69</a>.</p>
+<p><strong>Examples.</strong> Finch lets you send your bird to a destination; each location has 15-20 possible discoveries, and some days bring nothing <a class="cite" href="#ref-15">15</a>.</p>
+<p><strong>The casino comparison.</strong> The critics describe the same mechanic as a slot machine. Vox: "if it wasn't random... you would not get addicted", and pull-to-refresh is a slot lever <a class="cite" href="#ref-70">70</a>. Slot machines are said to addict people 3-4x faster than other gambling <a class="cite" href="#ref-70">70</a>. Free-to-play games pair variable reward with virtual currencies and loss-timed purchase prompts, and about half of mobile game revenue comes from under 0.5% of players (Swrve estimate) <a class="cite" href="#ref-71">71</a>.</p>
+<p><strong>How to apply.</strong> Keep most of the system predictable and transparent, then add controlled surprise: an unexpected bonus, a milestone that arrives early <a class="cite" href="#ref-15">15</a>. AppsFlyer says to use unexpected rewards "sparingly" <a class="cite" href="#ref-61">61</a>. Tie surprise to the user's real progress, never to payment.</p>
+<p><strong>Counter-evidence.</strong> Variable reward is not required for retention. At Chess.com, switching the post-loss Game Review to show your best moves with encouraging copy gave +25% reviews and +20% subscriptions, a predictable positive reward (self-reported) <a class="cite" href="#ref-21">21</a><a class="cite" href="#ref-64">64</a>.</p>
+<h3 id="pattern-7-white-hat-first">Pattern 7: White Hat First</h3>
+<p><strong>What it is.</strong> Yu-kai Chou's Octalysis framework: eight core drives (Epic Meaning, Accomplishment, Creativity, Ownership, Social Influence, Scarcity, Unpredictability, Loss and Avoidance). Top drives are "white hat": they feel good and are sustainable. Bottom drives are "black hat": powerful, but they "leave a bad taste" and do not last <a class="cite" href="#ref-68">68</a>.</p>
+<p><strong>Examples.</strong> White hat: Pain Squad turns a child's pain journal into a detective mission; Opower shows your bill next to "efficient neighbors" and is cited at over $250M saved in a year <a class="cite" href="#ref-68">68</a>. Black hat: countdown timers, lotteries, "a zombie right behind you" <a class="cite" href="#ref-68">68</a>.</p>
+<p><strong>How to apply.</strong> Map each mechanic to a drive. Make sure the core reason to return is white hat (meaning, progress, ownership, connection). Use scarcity and loss as short-term nudges, not the engine. Note that the Hook Model's core engine, unpredictability, sits on the black-hat side <a class="cite" href="#ref-62">62</a>.</p>
+<h3 id="pattern-8-a-character-worth-missing">Pattern 8: A Character Worth Missing</h3>
+<p><strong>What it is.</strong> A mascot or relationship that carries emotion, so missing a day feels like letting someone down rather than losing a number.</p>
+<p><strong>Examples.</strong> Finch: 14M+ downloads and 675,000 ratings at 4.9 stars, with a bird whose personality evolves partly outside your control (App Store figures as quoted) <a class="cite" href="#ref-15">15</a>. Duolingo's character animation system shipped in 2022; one video says DAU rose from 14.2M to over 34M in two years afterwards, but that is a correlation the video presents as cause <a class="cite" href="#ref-72">72</a>. Duo's owl personality also runs across push and TikTok, bringing 20-30% of new users on some days (self-reported) <a class="cite" href="#ref-21">21</a>. Flamme's stick was emotional: "Your streak is about to expire - your partner will miss out." "The carrot wasn't just a badge. It was your partner's happiness" <a class="cite" href="#ref-4">4</a>.</p>
+<p><strong>How to apply.</strong> Give the mascot reactions to success and failure, not just a logo pose <a class="cite" href="#ref-72">72</a>. Find the screenshot moments: Duolingo tracked screenshots and found streak milestones and top-3 leaderboard finishes, then staffed those moments with animators <a class="cite" href="#ref-21">21</a>.</p>
+<p><strong>Caveat.</strong> Tim Gabe's agency pitches this, and he also designs progress that can be lost "in a very visually demoralizing way" <a class="cite" href="#ref-73">73</a>. Guilt is a tool with a cost; see Pattern 11.</p>
+<h3 id="pattern-9-235-hours-later">Pattern 9: 23.5 Hours Later</h3>
+<p><strong>What it is.</strong> Time reminders to the user's own rhythm, not to a time they picked.</p>
+<p><strong>Examples.</strong> Duolingo sends two streak notifications a day. A practice reminder 23.5 hours after yesterday's session beat every more complex timing model and beat user-chosen reminder times. A "streak saver" at 10pm goes out only if the streak is not yet extended (self-reported) <a class="cite" href="#ref-12">12</a>. Sensor Tower data shows over 25% of Duolingo usage falls between 9 and 11pm, consistent with streak saving (third-party) <a class="cite" href="#ref-66">66</a>. A bandit algorithm picks which message each lapsing user gets, and the "passive-aggressive" "It looks like reminders aren't working. We'll stop sending them" lifted retention about 3% (company-reported) <a class="cite" href="#ref-66">66</a>.</p>
+<p><strong>How to apply.</strong> Ask for push permission with a pre-permission screen that says what you will send (Brilliant: "I'll remind you to learn so it becomes a long-term habit") <a class="cite" href="#ref-9">9</a>. Let users manage notification types: Aftenposten cut uninstalls 9.2% over 60 days this way (Google written guidance, not the video itself) <a class="cite" href="#ref-48">48</a>. Back off when reminders are ignored. Consider a home-screen widget as a persistent, quiet trigger; Flamme used one, and a Freecash widget redesign is said to have lifted D7 retention by several points (agency claim) <a class="cite" href="#ref-4">4</a><a class="cite" href="#ref-16">16</a>.</p>
+<p><strong>Caveat.</strong> A 10pm push is normally spam. It works only because users value what it protects <a class="cite" href="#ref-12">12</a>.</p>
+<h3 id="pattern-10-read-the-shape-not-the-height">Pattern 10: Read The Shape, Not The Height</h3>
+<p><strong>What it is.</strong> Cohort retention is "the best quantitative way to determine if you've made something people want" <a class="cite" href="#ref-13">13</a>.</p>
+<p><strong>How it works.</strong> Group users by first-use week or month. Define "active" as an action that proves value, not an app open. Pick a time window that matches natural frequency: weekly for a daily habit app, much longer for travel <a class="cite" href="#ref-13">13</a>. Then look for flattening. A lower curve that flattens beats a higher one that keeps sliding. Google Photos' early cohorts dropped sharply but plateaued at 20-40%, which gave the team confidence (self-reported) <a class="cite" href="#ref-13">13</a>.</p>
+<p><strong>Pitfalls.</strong> Wide windows inflate numbers. Notification taps are fake activity (Google+). Paying-but-inactive subscribers are not retained users <a class="cite" href="#ref-13">13</a>. Build your first curves by hand from logs and check the analytics tool against them <a class="cite" href="#ref-13">13</a>.</p>
+<p><strong>How to apply.</strong> If curves do not flatten, segment by channel, country or user type, find the cohort that retains and acquire more of it <a class="cite" href="#ref-13">13</a>. Test features by retention: ship to a cohort and check a week later whether those users stayed longer <a class="cite" href="#ref-1">1</a>.</p>
+<h3 id="pattern-11-the-wellbeing-line">Pattern 11: The Wellbeing Line</h3>
+<p><strong>What it is.</strong> The same mechanics that retain users can harm them. A habit app should sit on the right side of that line.</p>
+<p><strong>Evidence.</strong> A 2023 Belgian study of about 2,500 adolescents linked Snapchat streak frequency to FOMO, problematic phone use and lower self-control, and Nevada's Attorney General cited streaks in 2024 litigation (as cited) <a class="cite" href="#ref-14">14</a>. Critics of Duolingo say streak obsession can displace learning <a class="cite" href="#ref-66">66</a>. Tristan Harris argues apps remove stopping cues and use red badges and random rewards to keep people hooked <a class="cite" href="#ref-70">70</a>, and TikTok's "recapture" notifications follow the same logic <a class="cite" href="#ref-69">69</a>. Strava deleted 3.9 million activities after users logged e-bike rides as regular rides to climb leaderboards <a class="cite" href="#ref-15">15</a>.</p>
+<p><strong>How to apply.</strong> Use Tim Gabe's test: build mechanics that signal "you got better at the actual thing", not "you opened the app a lot" <a class="cite" href="#ref-14">14</a>. Strava is the model: one hour of real activity for every two minutes in the app <a class="cite" href="#ref-14">14</a>. Keep natural endpoints. Protect the core experience from metrics, as Duolingo did with the "learning sanctuary" <a class="cite" href="#ref-12">12</a>. Eyal's own rule: the tools are a "super power" and should be used for products that improve lives <a class="cite" href="#ref-63">63</a>.</p>
+<h3 id="where-sources-disagree_2">Where sources disagree</h3>
+<ul>
+<li><strong>Streaks: engine or liability.</strong> Duolingo calls the streak its top DAU lever <a class="cite" href="#ref-12">12</a>. Tim Gabe says streaks run on fear and draw regulatory scrutiny, and prefers variable reward <a class="cite" href="#ref-14">14</a>. In another video he calls the Duolingo streak mere "decoration" and pushes harder loss mechanics <a class="cite" href="#ref-15">15</a>.</li>
+<li><strong>Variable reward: essential or optional.</strong> Eyal makes it the core of a hook <a class="cite" href="#ref-64">64</a>. Chou classes unpredictability as black hat <a class="cite" href="#ref-68">68</a>. Chess.com's results came from predictable positive feedback <a class="cite" href="#ref-21">21</a>.</li>
+<li><strong>Friction.</strong> Flamme's retention jump came from adding a daily obligation, not removing steps <a class="cite" href="#ref-4">4</a>, and Duolingo's goal screen lost when friction was removed <a class="cite" href="#ref-12">12</a>. Most onboarding advice says to cut friction.</li>
+<li><strong>Is retention repeatable?</strong> Nikita Bier says virality is learnable but durable consumer-social retention is a "black swan" that happens maybe once a decade <a class="cite" href="#ref-2">2</a>. The gamification videos promise retention by design.</li>
+<li><strong>What drove Duolingo.</strong> One video credits character animation <a class="cite" href="#ref-72">72</a>. Duolingo's own team credits hundreds of streak, notification and league experiments <a class="cite" href="#ref-12">12</a>.</li>
+</ul>
+<h3 id="checklist_2">Checklist</h3>
+<ol>
+<li>Define the streak around your app's natural unit of use and frequency, daily or weekly <a class="cite" href="#ref-12">12</a>.</li>
+<li>Give new users 2 streak freezes, not 3, and add an earn-back path that requires real activity <a class="cite" href="#ref-12">12</a>.</li>
+<li>Explain the streak in one short sentence and use "Commit to my goal" style copy on the goal screen <a class="cite" href="#ref-12">12</a>.</li>
+<li>Hold new mechanics until after day 7, and focus experiments on days 0-7 <a class="cite" href="#ref-12">12</a>.</li>
+<li>Send the daily reminder about 23.5 hours after the last session, plus one late-evening saver only when the streak is at risk <a class="cite" href="#ref-12">12</a>.</li>
+<li>Stop or slow reminders for users who ignore them <a class="cite" href="#ref-66">66</a>.</li>
+<li>Replace global leaderboards with small, winnable groups <a class="cite" href="#ref-14">14</a>.</li>
+<li>Track one central progress measure instead of many badges <a class="cite" href="#ref-15">15</a>.</li>
+<li>Make the emotional stake a character or person, not just a number <a class="cite" href="#ref-4">4</a><a class="cite" href="#ref-15">15</a>.</li>
+<li>Build weekly cohort curves by hand, with "active" defined as a value action, and watch for flattening <a class="cite" href="#ref-13">13</a>.</li>
+<li>Map every mechanic to an Octalysis drive and keep the core loop white hat <a class="cite" href="#ref-68">68</a>.</li>
+<li>Check each mechanic against "did the user get better at the real thing?" <a class="cite" href="#ref-14">14</a>.</li>
+</ol>
+<h2 id="what-makes-them-pay-paywalls-pricing-and-conversion">What Makes Them Pay: paywalls, pricing and conversion</h2>
+<p>"Everybody that I know that makes a lot of money on apps uses subscriptions," says the founder behind RizzGPT, Umax and Cal AI <a class="cite" href="#ref-8">8</a>. A paywall consultant calls the paywall "the only part of the app that makes money" <a class="cite" href="#ref-20">20</a>.</p>
+<p>A warning about evidence. Most numbers here come from paywall tooling vendors (Superwall, RevenueCat, Adapty) or from founders describing their own apps. The big "studies" are pattern catalogues, not controlled research. Mobbin's 2,995-paywall video and Superwall's 4,000-paywall interview feature the same expert, Jonathan Parra <a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-19">19</a>. Tim Gabe's "10,000 paywall screens" video takes its headline statistics from RevenueCat and Adapty reports <a class="cite" href="#ref-16">16</a>. DesignerUp's 300-paywall review has no conversion data <a class="cite" href="#ref-74">74</a>.</p>
+<h3 id="1-pick-your-wall-on-purpose">1. Pick Your Wall On Purpose</h3>
+<p><strong>What it is.</strong> Nik Zechner reviewed 100+ top-grossing iOS apps and argues they all use one of three designs: freemium, hard paywall, or onboarding wall (a paywall at the end of onboarding) <a class="cite" href="#ref-75">75</a>. His verdict on which converts best did not survive in written sources, so treat the taxonomy as the useful part.</p>
+<p><strong>Why it matters.</strong> Cal AI moved to a hard paywall (billing before any use, no free tier) after the founders' earlier freemium app, Grind Clock, got downloads but little revenue. The hard wall filters for high-value users, which makes paid ads affordable <a class="cite" href="#ref-33">33</a>. Steven Cravotta's study of 100 viral AI apps sums up the winners as "extensive onboarding, hard paywall, one core feature" <a class="cite" href="#ref-18">18</a>.</p>
+<p><strong>The freemium counter-case.</strong> NGL kept a huge free user base and monetized "a very small percentage" with a $1 to $7 weekly subscription, priced by country GDP per capita, for multi-eight-figure revenue (self-reported) <a class="cite" href="#ref-25">25</a>. Duolingo keeps about 91% of users free; roughly 9% pay and subscriptions make about 80% of revenue (WSJ reporting) <a class="cite" href="#ref-66">66</a>. Albert Cheng reports that showing a capped sample of paid suggestions to free Grammarly users "nearly doubled" upgrades <a class="cite" href="#ref-21">21</a>. These products have huge audiences. A small utility with freemium can stall: one Chrome extension with verified revenue shows about 36 subscribers from 6,700 to 8,000 users, around 0.5% <a class="cite" href="#ref-76">76</a>.</p>
+<p><strong>How to apply.</strong> If you will grow through paid acquisition, use an onboarding wall or a hard paywall so revenue per install is high enough to buy installs. If you grow through word of mouth and daily use, keep the core free and sample premium inside it. Mobbin's onboarding study found only 22% of 986 apps show a paywall during onboarding, so the onboarding wall is common among top grossers but far from universal <a class="cite" href="#ref-9">9</a>.</p>
+<h3 id="2-you-have-one-session">2. You Have One Session</h3>
+<p><strong>What it is.</strong> Most paying decisions happen on install day. Gabe cites RevenueCat (82% of trial starts on install day) and Adapty (89.4% on day 0) <a class="cite" href="#ref-16">16</a>. Adam Lyttle says 70%+ of his trial signups happen right after onboarding <a class="cite" href="#ref-56">56</a>, and that "most users sign up for the free trial immediately after onboarding, before using any features" <a class="cite" href="#ref-55">55</a>. Connor Burd puts it this way: "90% of users will probably only ever see your onboarding if you have a paywalled section" <a class="cite" href="#ref-28">28</a>.</p>
+<p><strong>How to apply.</strong> Put a paywall at the end of onboarding, then cover the other moments too. Lyttle names three best-converting placements: after onboarding, when the user taps the core action, and on relaunch <a class="cite" href="#ref-55">55</a>. Vahe Baghdasaryan adds a once-per-day session-start offer, a paywall after every X actions (for example after 5 scans), near-limit reminders, and a transaction-abandonment paywall <a class="cite" href="#ref-17">17</a>. Cal AI reportedly runs 46 trigger points; 87% of new users see a paywall (Superwall case figures) <a class="cite" href="#ref-33">33</a>.</p>
+<p><strong>Caveats.</strong> "Even if you have a well-designed paywall, if it appears at the wrong moment, it's still a bad paywall" <a class="cite" href="#ref-20">20</a>. DesignerUp argues for contextual gates that appear exactly where the locked value would appear, and names the common failure as gating "before the user understands why the feature matters" <a class="cite" href="#ref-74">74</a>. Lyttle's "pattern interrupt" (a forced 3-second wait on free actions) produces subscribers <a class="cite" href="#ref-55">55</a>, but Vox calls the same mechanic in free games manipulation <a class="cite" href="#ref-71">71</a>. In a habit app, deliberate annoyance fights retention.</p>
+<h3 id="3-sell-the-future-first">3. Sell The Future First</h3>
+<p><strong>What it is.</strong> A paywall works best as the last step of a story, not a wall. "A paywall isn't just a screen. It's a flow" <a class="cite" href="#ref-20">20</a>.</p>
+<p><strong>Examples.</strong> Opal spent onboarding on "getting 8 years of your life back," and showing users the years they could save moved trial signups from 7% to 17% (company case relayed by Mobbin) <a class="cite" href="#ref-20">20</a>. Parra says multi-page paywalls "almost always do better" than single pages <a class="cite" href="#ref-20">20</a>; Baghdasaryan claims 20 to 40% higher conversion for 2 to 3 screen paywalls (self-reported) <a class="cite" href="#ref-17">17</a>. His three-screen paywall for the Claim app (visuals and "Try Claim for free," then a reminder promise, then a timeline with CTAs) hit a 34% trial start rate against a 15% benchmark (self-reported) <a class="cite" href="#ref-17">17</a>. Cal AI runs the same three steps: "We want you to try Cal AI for free" with "Try now for $0," then "We'll send you a reminder before your free trial ends," then the real paywall <a class="cite" href="#ref-18">18</a>.</p>
+<p><strong>Why it works.</strong> In Parra's "closed loop" idea, the best converters show who you are now and who you will become <a class="cite" href="#ref-19">19</a>. Habit apps have this material built in.</p>
+<p><strong>How to apply.</strong> End onboarding with "your plan is ready," one emotional outcome screen, then the price <a class="cite" href="#ref-20">20</a>.</p>
+<h3 id="4-say-exactly-when-you-charge">4. Say Exactly When You Charge</h3>
+<p><strong>What it is.</strong> Transparency about the trial raises conversion. "Your paywall is a trust screen as much as it is a pricing screen" <a class="cite" href="#ref-16">16</a>.</p>
+<p><strong>Examples.</strong> Blinkist added one front-and-center line on when and what users are charged: +23% conversion, -55% complaints, no change in churn (company-reported, relayed) <a class="cite" href="#ref-16">16</a>. Its trial-timeline paywall also raised push opt-ins <a class="cite" href="#ref-20">20</a>. Parra's cheapest reliable tweak is the subtitle "No commitment, cancel anytime" under the CTA; with simplified plan names it lifted conversion 10% (Superwall A/B, self-reported) <a class="cite" href="#ref-19">19</a>. Lyttle points to an honesty screen in Cal AI's onboarding ("it takes time to build momentum") that he says reduces refunds <a class="cite" href="#ref-49">49</a>.</p>
+<p><strong>The cost of hiding it.</strong> Real user reviews of a calorie app include being "charged a full year after cancelling a 3-day trial with no support reply" <a class="cite" href="#ref-23">23</a>.</p>
+<p><strong>Caveat.</strong> Baghdasaryan deliberately leaves "3-day" off the plan card, because it triggers "what if I forget to cancel?", while keeping the timeline visible elsewhere on the screen <a class="cite" href="#ref-17">17</a>. He also repeats "free trial" 5 to 7 times across screens as "risk reversal through repetition" <a class="cite" href="#ref-17">17</a>.</p>
+<h3 id="5-shape-the-trial-not-just-offer-one">5. Shape The Trial, Not Just Offer One</h3>
+<p><strong>What it is.</strong> The trial is often the biggest lever. Lyttle spent a year with almost no payers; "the free trial was the game-changer, not the subscription model or the pricing" (self-reported) <a class="cite" href="#ref-55">55</a>. Gabe cites vendor data putting a weekly plan's 12-month LTV at $7.40 without a trial versus $54.50 with one <a class="cite" href="#ref-16">16</a>.</p>
+<p><strong>Length and placement.</strong> Headspace tested 7, 14 and 30 days; the 14-day trial on the annual plan won <a class="cite" href="#ref-20">20</a>. Many winners put the trial only on the annual plan: Moonly <a class="cite" href="#ref-20">20</a>, Reframe at $99/year, Lazy Fit at $40/year and Cal AI at $30/year with a 3-day trial <a class="cite" href="#ref-18">18</a>. Short trials cancel fast: 55% of 3-day-trial cancellations happen on day 0 (Adapty, via Gabe) <a class="cite" href="#ref-16">16</a>.</p>
+<p><strong>Friction can help.</strong> Outsider required card details to start a trial: signups fell by more than half, conversion rose 5x, and paying customers more than doubled (company case via Mobbin) <a class="cite" href="#ref-20">20</a>. In the other direction, Slopes replaced its paywall with a single "redeem your free week" action and got +25% trial starts <a class="cite" href="#ref-20">20</a>.</p>
+<p><strong>The toggle.</strong> Baghdasaryan's trial toggle for Rizz offered $9.99/week with a 7-day trial or $6.99/week paid now; he says about 10% chose to pay upfront, helping ad payback (self-reported) <a class="cite" href="#ref-17">17</a>. That pattern is now a platform risk (see pattern 12).</p>
+<h3 id="6-weekly-is-the-new-monthly-except-when-it-isnt">6. Weekly Is The New Monthly (Except When It Isn't)</h3>
+<p><strong>What it is.</strong> Gabe's headline claim, from RevenueCat and Adapty data: weekly plans grew from 43% to 55.6% of subscription revenue in two years while monthly fell from 21.1% to 11.7%, and weekly converts 1.7 to 7.4x better than annual across price tiers <a class="cite" href="#ref-16">16</a>. "$7 a week feels like nothing," where $38 to $400 a year does not; upsell to annual later <a class="cite" href="#ref-16">16</a>.</p>
+<p><strong>Examples.</strong> Social Wizard priced about $10/week, $20/month, $80/year, so monthly is only 2x weekly (self-reported) <a class="cite" href="#ref-29">29</a>. Lyttle's portfolio used weekly plans around $4.99 to $7.99 or annual around $29.99 <a class="cite" href="#ref-77">77</a>. NGL's weekly plan is a "low impulse buy" <a class="cite" href="#ref-25">25</a>.</p>
+<p><strong>Counter-evidence.</strong> Many of the biggest apps push annual. Cal AI says 95% of its subscriptions are yearly; its A/B winner was $10/month or $30/year with a 3-day trial, and $70/year converted fewer people and made less per download (self-reported) <a class="cite" href="#ref-1">1</a>. Canary sells $10/month or $79/year and gets 60% on annual by promoting it <a class="cite" href="#ref-24">24</a>. Parra says default to yearly for the highest LTV <a class="cite" href="#ref-20">20</a>. The catch with annual: Cal AI could not measure churn at recording because no yearly subscriber had renewed yet <a class="cite" href="#ref-1">1</a>.</p>
+<p><strong>How to apply.</strong> Show two plans, annual preselected plus a weekly or monthly option, and hide the rest behind "view all plans" <a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-19">19</a>. Then test weekly-first against annual-first in your own category.</p>
+<h3 id="7-anchor-reframe-then-ask">7. Anchor, Reframe, Then Ask</h3>
+<p><strong>What it is.</strong> The same price presented differently converts differently. "The offer didn't change. The way it was presented did": Tipstop emphasized the trial, added a discount badge and simplified wording, and direct conversions almost tripled (company case via Mobbin) <a class="cite" href="#ref-20">20</a>.</p>
+<p><strong>Examples.</strong> Tide breaks price into weekly amounts; Ahead compares the subscription to coffee or therapy <a class="cite" href="#ref-20">20</a>. Parra reframes $39/year as "$0.76/week" <a class="cite" href="#ref-19">19</a>. Cal AI shows monthly at $10 ($120/year) so the annual plan reads as an 80 to 90% discount <a class="cite" href="#ref-33">33</a>. Quittr shows annual as $3.33/month, and Baghdasaryan argues "random" prices feel more authentic than .99 endings <a class="cite" href="#ref-17">17</a>. uxpeak's rule: never show a price in isolation, because "the first number seen becomes the ruler" <a class="cite" href="#ref-67">67</a>.</p>
+<p><strong>Structure beats the number.</strong> Adapty's ranking, via Gabe: localization (language and currency) +62.3% LTV, trial structure +59.6%, and plan-count changes drive 63% more conversion uplift than any price test <a class="cite" href="#ref-16">16</a>.</p>
+<p><strong>Price level is disputed.</strong> Gabe cites RevenueCat medians of 2.8% download-to-paid for high-price apps versus 2% for mid-price, with top-quartile high-price apps at 6.1%, and warns "the bottom is exactly where conversion goes to die" <a class="cite" href="#ref-16">16</a>. He admits this may be correlation. Blake Anderson deliberately chose low prices for more users and better word of mouth <a class="cite" href="#ref-8">8</a>. Krithika Shankarraman calls competing on cheapness a race to the bottom <a class="cite" href="#ref-78">78</a>.</p>
+<h3 id="8-the-polite-second-chance">8. The Polite Second Chance</h3>
+<p><strong>What it is.</strong> A follow-up offer when the user closes the paywall.</p>
+<p><strong>Examples.</strong> Parra's ladder: if the user closes an annual offer, show a drawer ("Not ready to commit for a year?") with the per-week reframe, then a one-time offer at 25 to 33% off. Save 50%+ for Black Friday so the brand is not cheapened. He calls this "gray hat" himself <a class="cite" href="#ref-19">19</a>. A simpler exit-intent sheet offers the monthly plan instead <a class="cite" href="#ref-20">20</a>. Cal AI offers decliners a one-time $20/year downsell <a class="cite" href="#ref-33">33</a>. Baghdasaryan discounts only the annual plan on abandonment, never weekly or monthly, with 80% off with trial or 90% off without <a class="cite" href="#ref-17">17</a>. His spin-the-wheel reveal reportedly beat a static "80% off" by double digits (self-reported) <a class="cite" href="#ref-17">17</a>.</p>
+<p><strong>Caveats.</strong> Users are learning the trick: "more and more users are getting comfortable closing paywalls because they know they're going to get some kind of offer afterwards" <a class="cite" href="#ref-20">20</a>. For Apple compliance he suggests a larger trial instead of a deeper discount <a class="cite" href="#ref-20">20</a>. Seibel's alternative is a time-boxed discount tied to a real reason, not discounting out of fear <a class="cite" href="#ref-79">79</a>.</p>
+<h3 id="9-ugly-can-win">9. Ugly Can Win</h3>
+<p><strong>What it is.</strong> Clean, familiar and simple often beats beautiful and detailed. "There is literally no universal best paywall, only better experiments" <a class="cite" href="#ref-20">20</a>.</p>
+<p><strong>Examples.</strong> A stripped-down paywall (big image, headline, Continue) beat a detailed comparison chart by 111%; native SwiftUI-style paywalls beat custom designs "by quite a long shot" at Photoroom (Superwall, self-reported) <a class="cite" href="#ref-19">19</a>. An unnamed AI girlfriend app's ugly, text-heavy squeeze page beat everything Parra designed <a class="cite" href="#ref-20">20</a>. His baseline: headline, 3 to 5 benefit bullets, social proof, one big CTA, which gets you "roughly 80% there" <a class="cite" href="#ref-19">19</a>.</p>
+<p>DesignerUp's six types (Access, Free Trial, Feature, Usage, Upgrade, Add-on) are a useful map for in-app gates, but they are design judgments without test data <a class="cite" href="#ref-74">74</a>.</p>
+<p><strong>Caveat.</strong> Parra praises comparison tables in one video <a class="cite" href="#ref-20">20</a> but says elsewhere they rarely beat bullets <a class="cite" href="#ref-19">19</a>. Baghdasaryan warns that copying a famous paywall fails because intent differs by category <a class="cite" href="#ref-17">17</a>.</p>
+<h3 id="10-fifteen-tests-a-year">10. Fifteen Tests A Year</h3>
+<p><strong>What it is.</strong> The apps that make the most run the most paywall experiments. Gabe cites a vendor figure that apps running 50+ paywall experiments a year earn 18.7x those running one, and top performers average about 15 a year <a class="cite" href="#ref-16">16</a>. Most founders, he says, only test $9.99 against $12.99 for three weeks <a class="cite" href="#ref-16">16</a>.</p>
+<p><strong>Results reported.</strong> Cal AI: 123 experiments, 424 variants, 61 on the onboarding paywall alone, trial-to-paid +31% (Superwall case figures) <a class="cite" href="#ref-33">33</a>; an onboarding-animation test lifted conversion about 10% <a class="cite" href="#ref-36">36</a>. An unnamed entertainment app went from 1.1% to about 4% install-to-paid in five months with no product or UA changes (self-reported) <a class="cite" href="#ref-17">17</a>. Puff Count went from $3K to $30K MRR through Superwall testing (third-party account) <a class="cite" href="#ref-80">80</a>. Lyttle copied the structure of an app making about $300K/month and saw +230% trial subscriptions; his portfolio went from about $10K to $50K a month (self-reported) <a class="cite" href="#ref-77">77</a>. Blake Anderson says split-testing offers and placements takes revenue per download to "1.5 or 2X" <a class="cite" href="#ref-8">8</a>.</p>
+<p><strong>Tooling.</strong> Superwall changes paywalls remotely without App Store updates <a class="cite" href="#ref-80">80</a>. RevenueCat handles cross-platform purchases and remotely managed offerings <a class="cite" href="#ref-81">81</a>; one solo founder pays about $260/month for it <a class="cite" href="#ref-24">24</a>.</p>
+<p><strong>Caveats.</strong> Expect most tests to lose: Cheng puts a healthy win rate at 30 to 50% <a class="cite" href="#ref-21">21</a>. Judge on retention and LTV, not trial starts <a class="cite" href="#ref-20">20</a>. One Superwall guest saw 15% apparent paid conversion that cleaned up to 0.3 to 0.5% once renewals were separated from new signups <a class="cite" href="#ref-4">4</a>. Nearly all success figures here come from vendors selling testing tools.</p>
+<h3 id="11-know-your-real-margin">11. Know Your Real Margin</h3>
+<p><strong>What it is.</strong> Gross revenue is not what you keep.</p>
+<p><strong>Apple's cut.</strong> Apple takes 15% up to the first $1M, then 30%, which Anderson says is effectively about 20% and 33% <a class="cite" href="#ref-8">8</a>. AI backend costs are "sub 3%" unless you do image generation or advanced voice <a class="cite" href="#ref-8">8</a>. Cal AI's CNBC-reviewed documents show about $1.4M/month gross profit after store fees, about $274K/month net operating income, and about $770K/month on marketing <a class="cite" href="#ref-36">36</a>; one teardown estimates about 50% margin <a class="cite" href="#ref-33">33</a>.</p>
+<p><strong>Margin by channel.</strong> Anderson's estimates: internal UGC 50 to 80%, influencer marketing 25 to 70%, paid ads 0 to 30% <a class="cite" href="#ref-8">8</a>. Organic-heavy founders report more: Kelechi Onyeama claims over 90% after Apple's cut (self-reported) <a class="cite" href="#ref-29">29</a>.</p>
+<p><strong>Unit math.</strong> Cravotta reads LTV per install from RevenueCat; Puff Count earned about $1.00 to $1.10 per install, so any CPI under about $1 was profitable <a class="cite" href="#ref-7">7</a>. "The higher your LTV is, the more you can spend on paid ads" <a class="cite" href="#ref-18">18</a>.</p>
+<p><strong>Platform.</strong> Several founders say Android users do not pay: under a tenth of Cal AI's revenue <a class="cite" href="#ref-1">1</a>, and Anderson says Android "notoriously" does not convert <a class="cite" href="#ref-35">35</a>.</p>
+<h3 id="12-refunds-reviews-and-the-rulebook">12. Refunds, Reviews And The Rulebook</h3>
+<p><strong>Refunds and reviews.</strong> Kaching gives full refunds with no questions because "the risk of getting one star review is just too big" <a class="cite" href="#ref-44">44</a>. Rootd treats its 4.8 rating as the most important metric <a class="cite" href="#ref-43">43</a>. Honest expectation-setting in onboarding reduces refunds, per Lyttle <a class="cite" href="#ref-49">49</a>. Cal AI asks for a rating inside onboarding before the paywall, which Cravotta calls "cheeky" and a gray area under Apple's guidance <a class="cite" href="#ref-18">18</a>.</p>
+<p><strong>What platform policy now rejects.</strong> In early 2026 Apple started rejecting paywalls with free-trial toggles judged confusing or misleading <a class="cite" href="#ref-20">20</a>, and began rejecting Lyttle's toggle pattern in January 2026 per a RevenueCat post <a class="cite" href="#ref-55">55</a>. A profile reports Lyttle's high-converting paywall style "started getting rejected by Apple" <a class="cite" href="#ref-77">77</a>. Parra recommends a bigger trial over a bigger discount to stay compliant <a class="cite" href="#ref-20">20</a>. The notes are thin on exact guideline numbers and on Google Play policy; check Apple's current review guidelines before you ship any toggle, wheel or close-triggered offer.</p>
+<h3 id="where-sources-disagree_3">Where sources disagree</h3>
+<ul>
+<li><strong>Hard wall or free first.</strong> Cal AI and Cravotta say paywall early <a class="cite" href="#ref-33">33</a><a class="cite" href="#ref-18">18</a>; NGL, Duolingo and Cheng say monetize a small share of a big free base <a class="cite" href="#ref-25">25</a><a class="cite" href="#ref-66">66</a><a class="cite" href="#ref-21">21</a>. Lyttle once advised "users first, revenue second," then reversed it <a class="cite" href="#ref-56">56</a>. Rootd reportedly raised revenue about 5x by moving the paywall to the start of onboarding (search snippet from a different interview) <a class="cite" href="#ref-43">43</a>.</li>
+<li><strong>Weekly or annual.</strong> Gabe says weekly first <a class="cite" href="#ref-16">16</a>; Cal AI, Parra and Canary push annual <a class="cite" href="#ref-1">1</a><a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-24">24</a>.</li>
+<li><strong>High or low price.</strong> Gabe ties higher prices to better conversion <a class="cite" href="#ref-16">16</a>; Anderson chose low prices for growth <a class="cite" href="#ref-8">8</a>; Cal AI found $70/year lost to $30 <a class="cite" href="#ref-1">1</a>.</li>
+<li><strong>Show the trial length or hide it.</strong> Gabe says state charge timing up front <a class="cite" href="#ref-16">16</a>; Baghdasaryan hides it from the plan card <a class="cite" href="#ref-17">17</a>.</li>
+<li><strong>Copy or don't.</strong> Lyttle's 230% jump came from copying a top app <a class="cite" href="#ref-77">77</a>; Baghdasaryan says copying fails <a class="cite" href="#ref-17">17</a>.</li>
+</ul>
+<h3 id="checklist_3">Checklist</h3>
+<ol>
+<li>Decide hard wall, onboarding wall or freemium based on whether you grow by paid ads or word of mouth <a class="cite" href="#ref-33">33</a><a class="cite" href="#ref-25">25</a>.</li>
+<li>Place a paywall at the end of onboarding, since most trials start on day 0 <a class="cite" href="#ref-16">16</a><a class="cite" href="#ref-56">56</a>.</li>
+<li>Build a 2 to 3 screen paywall: outcome, reminder promise, then price <a class="cite" href="#ref-17">17</a><a class="cite" href="#ref-18">18</a>.</li>
+<li>Add "No commitment, cancel anytime" and a one-line statement of when the charge happens <a class="cite" href="#ref-19">19</a><a class="cite" href="#ref-16">16</a>.</li>
+<li>Show two plans with annual preselected, others behind "view all plans" <a class="cite" href="#ref-20">20</a>.</li>
+<li>Test the trial on the annual plan and a longer trial before testing price <a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-16">16</a>.</li>
+<li>Localize paywall language and currency early <a class="cite" href="#ref-16">16</a>.</li>
+<li>Add one moderate close-triggered offer (25 to 33% off annual); save deep discounts for Black Friday <a class="cite" href="#ref-19">19</a>.</li>
+<li>Wire up Superwall or RevenueCat so you can change paywalls without an app update, and aim for about 15 tests a year <a class="cite" href="#ref-80">80</a><a class="cite" href="#ref-81">81</a><a class="cite" href="#ref-16">16</a>.</li>
+<li>Track realized LTV per install and keep CPI below it <a class="cite" href="#ref-7">7</a>.</li>
+<li>Budget for Apple's 15 to 30% cut and compare channel margins before scaling paid ads <a class="cite" href="#ref-8">8</a>.</li>
+<li>Drop trial toggles and refund generously to protect your rating <a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-44">44</a>.</li>
+</ol>
+<h2 id="feel-delight-and-shareable-moments-ui-ux-and-social-mechanics">Feel, Delight and Shareable Moments: UI, UX and social mechanics</h2>
+<p>Two founders can ship the same habit tracker and get very different results. What separates them is often how the app feels, which moments people want to show their friends, and how honestly it nudges them. This chapter collects what the notes say about all three. One warning first: most of the design advice here comes from practitioners' heuristics, not measured experiments. Where there is hard evidence (A/B tests, studies, platform data), it is called out.</p>
+<h3 id="pattern-1-a-hundred-small-touches">Pattern 1: A Hundred Small Touches</h3>
+<p><strong>What it is.</strong> A premium feel comes from stacking many small details, not from one big feature. Chris Raroque, who builds productivity apps, names five sources: animation and interaction, custom illustrations (especially in empty states), haptics, a consistent icon style, and taste you build by looking at good design every day <a class="cite" href="#ref-82">82</a>. "If you do this 100 times throughout your app, it's going to add up to this very premium experience" <a class="cite" href="#ref-82">82</a>.</p>
+<p><strong>Concrete rules from the notes.</strong>
+- <em>Haptics:</em> use a light haptic for frequent actions (logging a transaction) and a heavier one for significant ones (changing tabs). Well-placed haptics feel "like clicking a pen". Badly placed ones make the app worse <a class="cite" href="#ref-82">82</a>. Duolingo's streak team says celebration animations and haptics were "tested extensively" and "generally win" (self-reported) <a class="cite" href="#ref-12">12</a>.
+- <em>Icons:</em> pick one icon pack and one style (thin, filled or complex) and never mix them. Show the selected state by switching from thin to filled, not only by changing colour <a class="cite" href="#ref-82">82</a>. Size icons to the text's line-height (for example 24px), because most icons are too large <a class="cite" href="#ref-83">83</a>.
+- <em>Spacing and type:</em> use one sans-serif font and no more than about six sizes (dashboards rarely go above 24px). Tighten large headers by -2% to -3% letter-spacing with 110-120% line-height. Use a 4-point spacing system and around 32px between sections <a class="cite" href="#ref-83">83</a>. On mobile, "you'll need more space than you think" <a class="cite" href="#ref-58">58</a>.
+- <em>Radius and consistency:</em> give all small components one corner radius (Kole Jain uses 10px), make matching buttons identical, and turn harsh default shadows into a light-grey, high-blur shadow or remove them <a class="cite" href="#ref-58">58</a>.
+- <em>Empty states:</em> swap "No tasks for today" for an illustration. Raroque reuses a ghost mascot across every empty state (searching, sleeping, drinking coffee) by giving ChatGPT the base drawing and asking for variants <a class="cite" href="#ref-82">82</a>.</p>
+<p><strong>Why it works.</strong> The Aesthetic-Usability Effect: people judge attractive interfaces as easier to use (Kurosu and Kashimura's 1995 study of 26 ATM layouts) <a class="cite" href="#ref-54">54</a>. Tim Gabe's claim that people judge whether to trust an app within 50 milliseconds cites no source <a class="cite" href="#ref-73">73</a>.</p>
+<p><strong>How to apply.</strong> AI coding tools make this cheap now. Raroque's tab animation took 5 days to build before AI and "less than an hour" with Claude Code (self-reported). His tip is to prompt each sub-animation separately instead of asking the AI to "animate this" <a class="cite" href="#ref-82">82</a>.</p>
+<p><strong>Caveats.</strong> There is no retention or revenue data in any of these polish videos <a class="cite" href="#ref-82">82</a><a class="cite" href="#ref-83">83</a>. Apple holds back on motion partly for accessibility and motion-sickness reasons <a class="cite" href="#ref-82">82</a>, so respect reduced-motion settings <a class="cite" href="#ref-57">57</a>.</p>
+<h3 id="pattern-2-every-tap-gets-an-answer">Pattern 2: Every Tap Gets an Answer</h3>
+<p><strong>What it is.</strong> "When a user does anything, there should be a response" <a class="cite" href="#ref-83">83</a>. Buttons need at least four states (default, hover, pressed, disabled), plus a loading state where needed. Inputs need focus and error states. A copy button should slide up a small "copied" chip <a class="cite" href="#ref-83">83</a>. Grey out a button on tap while the next screen loads. After a save, fill the icon and badge the Saved tab <a class="cite" href="#ref-58">58</a>.</p>
+<p><strong>Why it works.</strong> The Doherty Threshold (IBM, 1982) says to keep system responses under 400ms, and to use loading indicators or optimistic UI when you can't <a class="cite" href="#ref-54">54</a>. Tim Gabe's version is "treat in-between moments as intentional, not empty." Perplexity's loader animation and voice dots that react in real time are his examples <a class="cite" href="#ref-51">51</a>.</p>
+<p><strong>How to apply.</strong> Every habit check-off is a confirmation moment. Give it a bounce, glow or haptic <a class="cite" href="#ref-72">72</a>. Duolingo goes further and deliberately makes users pause on the post-lesson streak screen instead of rushing them through <a class="cite" href="#ref-12">12</a>.</p>
+<p><strong>Caveat.</strong> Gabe says this kind of responsiveness polish usually comes later in an app's life. Getting new users to their first action simply comes first <a class="cite" href="#ref-51">51</a>.</p>
+<h3 id="pattern-3-restraint-reads-as-premium">Pattern 3: Restraint Reads as Premium</h3>
+<p><strong>What it is.</strong> Beginners give themselves away with overused gradients, glows and harsh shadows. "Less visual noise equals a better design" <a class="cite" href="#ref-58">58</a>. Animation must "add clarity or functionality". Buttons should almost always have a small animation, while scroll-jacking should be used "very sparingly, if ever" <a class="cite" href="#ref-84">84</a>. Follow layout conventions and make the app different through micro-interactions and features, not rearranged layouts <a class="cite" href="#ref-84">84</a>. That is also Jakob's Law: users expect your app to work like the others they know <a class="cite" href="#ref-54">54</a>.</p>
+<p><strong>Why it works.</strong> Emphasis is a budget. The Von Restorff effect only works if one thing stands out <a class="cite" href="#ref-54">54</a>. Tim Gabe says to save high-contrast colour for the elements that make money and let secondary actions fade <a class="cite" href="#ref-73">73</a>.</p>
+<p><strong>Evidence that polish is not always the lever.</strong> HabitKit's designer-made "beautiful" App Store screenshots lost an Apple A/B test to the founder's own homemade ones (self-reported) <a class="cite" href="#ref-42">42</a>. Mobbin's paywall expert reports that "the ugly paywall with a ton of text completely outperformed anything that I would do." A stripped-down paywall beat a detailed comparison chart by 111%, and native SwiftUI-style paywalls beat custom designs <a class="cite" href="#ref-20">20</a>. Trend roundups that push glassmorphism and effects are opinion pieces with no data <a class="cite" href="#ref-85">85</a>.</p>
+<h3 id="pattern-4-give-the-feedback-a-face">Pattern 4: Give the Feedback a Face</h3>
+<p><strong>What it is.</strong> Emotional design means products that feel "engaging, personal, and alive". Characters carry a lot of that because "emotions are contagious" <a class="cite" href="#ref-72">72</a>. Kevin Hale (Wufoo) separates taken-for-granted quality from "enchanting quality", the delight beyond function. Wufoo's login dinosaur said "RARRR!" on hover <a class="cite" href="#ref-60">60</a>.</p>
+<p><strong>Examples with numbers.</strong>
+- Duolingo shipped a character animation system in 2022. Tim Gabe's video says DAU rose from 14.2M to over 34M within two years. That is a correlation presented as cause <a class="cite" href="#ref-72">72</a>. Duolingo's own staff credit hundreds of experiments on streaks and notifications <a class="cite" href="#ref-12">12</a>.
+- Duolingo's owl, used across push notifications and TikTok, brought 20-30% of new users on some days, measured by the in-app "how did you hear about us" question (self-reported) <a class="cite" href="#ref-21">21</a>.
+- Tone counts as emotional design too. Chess.com changed its game-review screen so that after a loss the coach highlights your best moves and says losing is "part of learning". Game reviews rose 25% and subscriptions 20% (self-reported) <a class="cite" href="#ref-21">21</a>. Peek replaced scolding budget alerts with encouraging "money vibe checks" <a class="cite" href="#ref-47">47</a>.
+- BitePal's onboarding runs 61 screens and includes a raccoon you name <a class="cite" href="#ref-9">9</a>. Waterllama-style hydration apps lean on a character. One builder found that character motion coded by hand looked "puppet-like", so he used generated video for expressive actions and code for anything that must react to taps instantly <a class="cite" href="#ref-57">57</a>.
+- Headspace uses colour, animation and sound to set a calm mood before the first session <a class="cite" href="#ref-51">51</a>.</p>
+<p><strong>How to apply.</strong> You don't need Duolingo's budget. Pick the few moments where emotion changes a business outcome and design those <a class="cite" href="#ref-73">73</a>. For a habit app, that usually means the check-in, the milestone, the empty state and the missed day.</p>
+<p><strong>Caveat.</strong> Both emotional-design videos end with a pitch for the creator's agency <a class="cite" href="#ref-72">72</a><a class="cite" href="#ref-73">73</a>.</p>
+<h3 id="pattern-5-psychology-with-receipts">Pattern 5: Psychology With Receipts</h3>
+<p>These are the named effects the notes use most, with the strength of the evidence for each.</p>
+<ul>
+<li><strong>Hick's Law and choice overload.</strong> Decision time grows with the number of options <a class="cite" href="#ref-54">54</a>. In the jam study, 24 options led 3% of shoppers to buy and 6 options led 30%. That is an academic study, cited secondhand <a class="cite" href="#ref-67">67</a>. In practice: Apple Fitness gives new users one "Let's Go" action, not 30 workouts <a class="cite" href="#ref-51">51</a>, and paywall experts show at most two plans and hide the rest behind "view all plans" <a class="cite" href="#ref-20">20</a>.</li>
+<li><strong>Fitts's Law.</strong> Big targets close to the thumb are faster to hit. Waze's oversized buttons are designed for one-handed use while driving <a class="cite" href="#ref-51">51</a><a class="cite" href="#ref-54">54</a>.</li>
+<li><strong>Endowed progress / goal gradient.</strong> Never start at zero. Car-wash loyalty cards with two stamps already filled were completed at nearly double the rate (study cited secondhand). LinkedIn's profile meter never shows 0% <a class="cite" href="#ref-67">67</a>. Mural's persistent six-step checklist raised one-week retention by 10% relative (company-reported) <a class="cite" href="#ref-9">9</a>.</li>
+<li><strong>Anchoring.</strong> The first number a user sees becomes their ruler. A $50/month plan shown right after a $1,900 laptop reads as 2.6% <a class="cite" href="#ref-67">67</a>. Tide breaks its price into weekly amounts, and Ahead compares its price to coffee or therapy <a class="cite" href="#ref-20">20</a>.</li>
+<li><strong>Social proof.</strong> Show it, don't just claim it: live counts, avatars that light up, reaction counters <a class="cite" href="#ref-51">51</a>. Onboarding flows put "500,000+ users" <a class="cite" href="#ref-10">10</a> or "10M+ users" <a class="cite" href="#ref-33">33</a> before the notification or paywall ask. Note that the 500,000 figure appears before the user has seen any of the product and can't be checked <a class="cite" href="#ref-10">10</a>.</li>
+<li><strong>Loss aversion.</strong> Losses feel about twice as strong as gains (Kahneman, cited) <a class="cite" href="#ref-67">67</a>. At Duolingo, retention "flattens out" after day 7 "because loss aversion has kicked in" (self-reported) <a class="cite" href="#ref-12">12</a>.</li>
+<li><strong>Scarcity and FOMO.</strong> Yu-kai Chou files countdowns and "only $3,000 left" pushes under black-hat drives: powerful but unsustainable <a class="cite" href="#ref-68">68</a>.</li>
+</ul>
+<p><strong>Caveat on defaults.</strong> "Defaults feel like recommendations" <a class="cite" href="#ref-67">67</a>, but Duolingo found that pre-selecting a harder streak goal lost. The act of choosing was where the engagement came from <a class="cite" href="#ref-12">12</a>.</p>
+<h3 id="pattern-6-design-the-screenshot">Pattern 6: Design the Screenshot</h3>
+<p><strong>What it is.</strong> Find the moments people already want to share and make them worth sharing. Duolingo's former growth lead says to add screenshot tracking for a while, find the hotspots (streak milestones, funny challenges, a top-three leaderboard finish), then put illustrators and animators on those moments. "You can 5X or 10X" sharing that way (his claim, not a published result) <a class="cite" href="#ref-21">21</a>.</p>
+<p><strong>How to apply.</strong>
+- Generate a ready-made share asset. Adam Lyttle renders a 1:1 achievement image with the app logo and URL watermarked on it, so anyone who sees it can find the app <a class="cite" href="#ref-22">22</a><a class="cite" href="#ref-37">37</a>.
+- Remove every step between "I'm proud" and "posted". NGL auto-generates a story asset with the user's profile photo and shows animated GIFs explaining exactly which sticker to tap. Replies copy straight onto the user's story <a class="cite" href="#ref-25">25</a>.
+- Put the install path inside the shared object. Macaron's share codes let viewers import the same mini-app a creator showed <a class="cite" href="#ref-27">27</a>. Nomadtable was built as a loop: meet someone fast, then post the experience back to social. It says 10-15% of new users arrive through word of mouth (self-reported) <a class="cite" href="#ref-31">31</a>.
+- Make the call to action the outcome. "It's way easier to get a download by saying get your own messages than saying, hey, download this app" <a class="cite" href="#ref-25">25</a>.</p>
+<p><strong>Caveat.</strong> The notes contain no controlled test of share-card designs. Everything here is founder experience.</p>
+<h3 id="pattern-7-invites-are-product-not-a-button">Pattern 7: Invites Are Product, Not a Button</h3>
+<p><strong>What it is.</strong> Treat social spread as part of the core design. Hunter Isaacson's advice is to always add invite or share screens, because a friend sending you an app is an endorsement that lowers your effective cost per install <a class="cite" href="#ref-25">25</a>. NGL's north-star metric was the number of users who posted their link and at least two replies <a class="cite" href="#ref-25">25</a>.</p>
+<p><strong>Evidence and examples (all self-reported by founders).</strong>
+- Nikita Bier says invitations per user fall about 20% for every year of age from 13 to 18 <a class="cite" href="#ref-2">2</a>. If your audience is adults, expect invites to carry less of your growth.
+- Branding changed invite rates. "Crush" and "Melt" invited less than "Gas" with a black flame icon <a class="cite" href="#ref-2">2</a>.
+- Positive-only polls avoided the bullying dynamic of Sarahah-style apps <a class="cite" href="#ref-2">2</a>.
+- iOS 18's partial contact access makes contact-sync friend finding much harder, so plan another way for friends to find each other <a class="cite" href="#ref-2">2</a>.
+- Social features work best when competition is local and winnable. Strava segments rank you against your own cohort, and members who use social and output features work out 15% more often (third-party figure cited by Tim Gabe) <a class="cite" href="#ref-14">14</a>.
+- A no-code builder found 30-day referral contests with tiered prizes and unique invite codes delivered the most installs per dollar (vendor self-report) <a class="cite" href="#ref-86">86</a>.</p>
+<p><strong>Caveat.</strong> Social apps are hard to scale. Connor Burd's first app, a social app, failed after 6-8 months, and he moved to utilities <a class="cite" href="#ref-28">28</a>. Bier also calls lasting retention in consumer social a "black swan" <a class="cite" href="#ref-2">2</a>.</p>
+<h3 id="pattern-8-the-listing-is-screen-zero">Pattern 8: The Listing Is Screen Zero</h3>
+<p><strong>What it is.</strong> Your App Store page is the first screen of your UX. "You only have about 3 to 5 seconds to convince someone to download" <a class="cite" href="#ref-42">42</a>. Users decide based on the icon, the first two screenshots and the star rating, in that order <a class="cite" href="#ref-86">86</a>.</p>
+<p><strong>How to apply.</strong>
+- Make the first screenshot your most visually impressive feature. For HabitKit that is the habit grid. Never lead with a welcome screen. Show real UI, not lifestyle photos <a class="cite" href="#ref-42">42</a>.
+- Add captions and a 15-second preview video <a class="cite" href="#ref-86">86</a>. Spend 3-4 days on screenshots before launch, because Apple's initial boost lasts about two weeks (self-reported heuristic) <a class="cite" href="#ref-45">45</a>.
+- Echo the exact words from your viral videos in the listing so the funnel feels like one piece <a class="cite" href="#ref-30">30</a>.
+- Ask for reviews at a happy moment. HabitKit asks right after the first completed habit, never during onboarding or after an error <a class="cite" href="#ref-42">42</a>.
+- A/B test screenshots with Apple's Product Page Optimization. Fancy does not always win <a class="cite" href="#ref-42">42</a>, and Duolingo-trained growth teams test screenshots too <a class="cite" href="#ref-21">21</a>.</p>
+<h3 id="pattern-9-the-line-you-dont-cross">Pattern 9: The Line You Don't Cross</h3>
+<p><strong>What it is.</strong> The same mechanics that build habits can trap people. Vox and Tristan Harris describe variable-reward notifications, red badges, pull-to-refresh and infinite scroll as slot-machine design <a class="cite" href="#ref-70">70</a>. Mrwhosetheboss adds instant autoplay and TikTok's exit-swipe trap on Android <a class="cite" href="#ref-69">69</a>.</p>
+<p><strong>Where the line shows up in the notes.</strong>
+- <em>Streaks:</em> a 2023 Belgian study of about 2,500 adolescents linked Snapchat streak frequency to FOMO and problematic phone use, and the Nevada Attorney General cited streaks in 2024 litigation <a class="cite" href="#ref-14">14</a>.
+- <em>Engineered loss:</em> one agency designed progress that can be lost "in a very visually demoralizing way" <a class="cite" href="#ref-73">73</a>. Duolingo's "passive-aggressive" guilt notification lifted retention about 3% <a class="cite" href="#ref-66">66</a>. Both work, and both are what critics object to.
+- <em>Cancellation asymmetry:</em> ClassPass takes fewer than 5 screens to subscribe and 17 to cancel, by Mobbin's count <a class="cite" href="#ref-20">20</a>.
+- <em>Platform and user pushback:</em> in early 2026 Apple started rejecting paywalls with confusing free-trial toggles. Users are also learning to close paywalls because they expect a discount offer to follow <a class="cite" href="#ref-20">20</a>.</p>
+<p><strong>Honesty can also win.</strong> Blinkist's step-by-step trial timeline (today, reminder day, charge day) brought more trial sign-ups, fewer complaints and more push opt-ins <a class="cite" href="#ref-20">20</a>. Bier says TBH never sent SMS when someone voted, which he calls illegal and unethical, and that unethical tactics "come back around" <a class="cite" href="#ref-2">2</a>. Duolingo's 10pm "streak saver" push lands as helpful rather than spammy, because users value what it protects <a class="cite" href="#ref-12">12</a>.</p>
+<p><strong>A working test.</strong> Chou's white-hat drives (meaning, accomplishment, ownership) feel good and last. Black-hat drives (scarcity, unpredictability, loss) are powerful but "leave a bad taste" <a class="cite" href="#ref-68">68</a>. Use loss and scarcity only to protect something the user chose and values. Never use them to manufacture urgency the user would resent once they noticed it.</p>
+<h3 id="where-sources-disagree_4">Where sources disagree</h3>
+<ul>
+<li><strong>Polish vs. plain.</strong> The emotional-design camp treats polish and animation as a moat <a class="cite" href="#ref-72">72</a><a class="cite" href="#ref-20">20</a>. But ugly paywalls and homemade screenshots won real A/B tests <a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-42">42</a>. One way to reconcile them: polish matters most in the product's repeated moments, and clarity matters most on conversion screens.</li>
+<li><strong>Looks vs. function.</strong> Kole Jain says fonts and colours "do very little to change the functionality" <a class="cite" href="#ref-84">84</a>. The Aesthetic-Usability Effect says looks change how usable people think an app is <a class="cite" href="#ref-54">54</a>.</li>
+<li><strong>Icon rules.</strong> Raroque says never mix icon styles <a class="cite" href="#ref-82">82</a>. Jain allows mixing if the styles are kept to separate areas of the app <a class="cite" href="#ref-58">58</a>.</li>
+<li><strong>Streaks.</strong> Duolingo calls the streak its biggest DAU lever <a class="cite" href="#ref-12">12</a>. Tim Gabe calls streaks a liability now under regulatory scrutiny, and favours variable reward size instead <a class="cite" href="#ref-14">14</a>.</li>
+<li><strong>What drove Duolingo's growth.</strong> One video credits the character animation <a class="cite" href="#ref-72">72</a>. Duolingo's own staff credit hundreds of experiments <a class="cite" href="#ref-12">12</a>.</li>
+</ul>
+<h3 id="checklist_4">Checklist</h3>
+<ol>
+<li>Choose one icon pack and one style, and show selected states with a filled variant <a class="cite" href="#ref-82">82</a>.</li>
+<li>Set tokens before you design: one font, ≤6 sizes, 4-point spacing, one radius for small components <a class="cite" href="#ref-83">83</a><a class="cite" href="#ref-58">58</a>.</li>
+<li>Give every button default, pressed, disabled and loading states, and confirm every save <a class="cite" href="#ref-83">83</a><a class="cite" href="#ref-58">58</a>.</li>
+<li>Add a light haptic and a small animation to the daily check-in, and a heavier celebration at milestones <a class="cite" href="#ref-82">82</a><a class="cite" href="#ref-12">12</a>.</li>
+<li>Replace every text-only empty state with a mascot illustration <a class="cite" href="#ref-82">82</a>.</li>
+<li>Rewrite failure moments (missed day, wrong answer) in encouraging language <a class="cite" href="#ref-21">21</a>.</li>
+<li>Start progress above zero and show a visible checklist during onboarding <a class="cite" href="#ref-67">67</a><a class="cite" href="#ref-9">9</a>.</li>
+<li>Show no more than two plans on the paywall, and anchor the price to a per-week amount or a familiar comparison <a class="cite" href="#ref-20">20</a>.</li>
+<li>Track screenshots for a few weeks, then design a 1:1 watermarked share card for the top moments <a class="cite" href="#ref-21">21</a><a class="cite" href="#ref-22">22</a>.</li>
+<li>Make your first App Store screenshot your best real feature, and A/B test it against a plainer version <a class="cite" href="#ref-42">42</a>.</li>
+<li>Ask for reviews right after the first completed habit, never during onboarding <a class="cite" href="#ref-42">42</a>.</li>
+<li>Make cancelling as short as subscribing, and show the trial timeline up front <a class="cite" href="#ref-20">20</a>.</li>
+</ol>
+<h2 id="building-fast-and-not-failing-ai-built-apps-mvp-rules-founder-lessons-and-anti-patterns">Building Fast and Not Failing: AI-built apps, MVP rules, founder lessons and anti-patterns</h2>
+<p>Building an app is now cheap. This chapter covers how people build with Claude Code, Cursor and similar tools, where those builds break, how YC-style MVP advice compares with the indie playbook, and why apps die. It ends with a corpus-wide map of where creators contradict each other. Treat every headline revenue number as a claim until the video backs it up (see "Read The Title Last").</p>
+<h3 id="1-you-are-the-product-manager">1. You Are The Product Manager</h3>
+<p><strong>What it is.</strong> AI writes the code. Your job is to scope, sequence and check it. Fireship's three rules: pick a popular, simple stack; get good at Git, which he calls non-negotiable because AI "has the power to delete your working code"; and act as the product manager for your AI, breaking work into small, specific steps so the model stays "as deterministic as possible" <a class="cite" href="#ref-87">87</a>.</p>
+<p><strong>Why it works.</strong> LLMs are best at problems already solved many times on GitHub, so boring stacks get better output <a class="cite" href="#ref-87">87</a>. Diego Roshardt makes the same point: older, popular libraries get better AI code <a class="cite" href="#ref-39">39</a>. Andrew Codesmith adds a plan-mode step before any code is generated <a class="cite" href="#ref-46">46</a>.</p>
+<p><strong>The traps, with examples.</strong>
+- <em>Security.</em> Fireship's cautionary tale is a vibe-coded SaaS with paying customers that was hacked (maxed-out API keys, people bypassing the subscription) and shut down for good <a class="cite" href="#ref-87">87</a>. Blake Anderson's early apps reportedly shipped with exposed API keys and bugs <a class="cite" href="#ref-35">35</a>. Jason Lee proxies his OpenAI key through a small Node/Express backend so users cannot drain it, and references an 18-item App Store rejection checklist because vibe-coded apps get rejected for missing reliability and security layers <a class="cite" href="#ref-88">88</a>.
+- <em>The prompt treadmill.</em> Fireship describes spending 3 days and $500 in Claude credits to build "a crappier version" of a $10 app (satirical, self-reported). His fix is grounding the model with MCP servers (Figma, Stripe, Sentry, GitHub), with a warning that live write access risks "accidentally refunding 10,000 customers with a single prompt" <a class="cite" href="#ref-89">89</a>.
+- <em>Scale.</em> Yorby's backend was built for about 20 users and fell over at 10,000 (self-reported) <a class="cite" href="#ref-38">38</a>.
+- <em>Demo is not product.</em> Jason Lee's animated hydration clone has a mockup paywall that processes no money, and code-only character animation looked stiff until he generated video clips for it <a class="cite" href="#ref-57">57</a>. In Dave Ebbelaar's AI course, "the model proposes, code decides": plain code makes the final call, and a golden set of test cases checks every decision <a class="cite" href="#ref-90">90</a>.</p>
+<p><strong>How to apply.</strong> Use a mainstream stack (Expo/React Native plus Supabase or Firebase appears in most builds <a class="cite" href="#ref-88">88</a><a class="cite" href="#ref-46">46</a><a class="cite" href="#ref-91">91</a>). Commit after every working step. Keep API keys server-side. Write evals or checks for any AI decision.</p>
+<p><strong>Caveats.</strong> The DevForge "Vibe Coding is a Trap" video could not be summarized beyond its title, so it is not evidence either way <a class="cite" href="#ref-92">92</a>. Mikey No Code's "Claude Code (FREE)" video actually builds in Base44, a no-code wrapper, and Claude Code itself needs a paid plan <a class="cite" href="#ref-93">93</a>.</p>
+<h3 id="2-data-model-first-screenshot-wall-second">2. Data Model First, Screenshot Wall Second</h3>
+<p><strong>What it is.</strong> Two build methods recur among founders who report revenue. Connor Burd writes a text document describing the data model, with sample JSON and notes on each attribute, before prompting, so the AI "doesn't have to make any guesses." He builds core functionality first and onboarding later <a class="cite" href="#ref-28">28</a>. For onboarding, he downloads about 20 apps in the niche plus well-designed apps from other categories, screenshots every onboarding screen, lays them all out in one Figma line, and cherry-picks the questions, graphs and screens. Then he pastes Figma screenshots into Claude or Cursor to generate whole screens <a class="cite" href="#ref-28">28</a>.</p>
+<p><strong>Variants.</strong> Jason Lee gives Claude a competitor's App Store URL to generate a feature list, pulls reference screens from Mobbin, records the real app on a phone, and gives feedback as a narrated screen recording pointing at concrete failures <a class="cite" href="#ref-88">88</a><a class="cite" href="#ref-57">57</a>. Max, who runs 28 apps, keeps a personal library of settings, onboarding and paywall screens ("for some apps I basically copy like 90% of the code"). He asks ChatGPT or Gemini for a detailed implementation plan and has hit 2 hours from idea to App Store submission, with portfolio costs of about $295-310 a month (self-reported) <a class="cite" href="#ref-91">91</a>.</p>
+<p><strong>Why it works.</strong> A clear schema and visual references remove the ambiguity where agents drift, which matches Fireship's "product manager" rule <a class="cite" href="#ref-87">87</a>.</p>
+<p><strong>Caveats.</strong> Copying another app's character art and screens is fine for practice, but a commercial app needs original or licensed assets <a class="cite" href="#ref-57">57</a>. Codesmith says AI-generated designs "suck" and design was his real bottleneck <a class="cite" href="#ref-46">46</a>.</p>
+<h3 id="3-ship-something-bad-within-a-month">3. Ship Something Bad Within A Month</h3>
+<p><strong>What it is.</strong> Michael Seibel's whole talk compresses to "launch something bad quickly." Time-box the spec to about three weeks, write it down, cut it when you overrun ("if there's no non-important things, start cutting important things"), and don't fall in love with it. Hold the problem and customer tightly and the solution loosely <a class="cite" href="#ref-94">94</a>. Airbnb launched with no payments and no map, Twitch began as one low-res channel, and Stripe's founders integrated it for you by hand <a class="cite" href="#ref-94">94</a>. In his longer lecture he suggests about two weeks, to avoid "MVP drift" <a class="cite" href="#ref-79">79</a>.</p>
+<p><strong>Indie evidence (self-reported).</strong> Cal AI v1 took three weeks of coding plus a week of App Store review: two screens and a camera button. Zach Yadegari's rule is never to spend more than a month on an MVP <a class="cite" href="#ref-1">1</a>. Connor Burd built Payout in under two weeks <a class="cite" href="#ref-28">28</a>, and Diego Roshardt built his MVP in two weeks <a class="cite" href="#ref-39">39</a>. Kevin Hale's framing is that the values that win the first user are the ones that get you to scale <a class="cite" href="#ref-59">59</a>.</p>
+<p><strong>Caveats.</strong> "Lean" does not mean pre-hyped. Zach describes a friend whose Figma-mockup TikToks drew millions of views, but the outsourced app shipped months later, after the hype had died and competitors had appeared. If you pre-validate, be ready to ship immediately <a class="cite" href="#ref-1">1</a>. Michael Skok's bar is stricter: spend twice as long on the problem as on the solution, and require roughly a 10x gain-to-pain ratio before people will switch <a class="cite" href="#ref-95">95</a>. Chris Raroque launches only when beta analytics show users sticking for several days <a class="cite" href="#ref-45">45</a>.</p>
+<h3 id="4-make-them-pay-before-you-build-much">4. Make Them Pay Before You Build Much</h3>
+<p><strong>What it is.</strong> Validation means money or behaviour, not compliments. Ash Maurya's order is demo, then sell, then build. Swap "Would you use this?" for "Will you pre-order this?" and pivot only on feedback from paying customers <a class="cite" href="#ref-96">96</a>. His companion posts report about $35,000 from 209 customers in about 40 days using this method (self-reported) <a class="cite" href="#ref-96">96</a>. Seibel says starting with a price is "almost always better than starting free," and suggests making the product slightly harder to use to see whether people use it anyway <a class="cite" href="#ref-79">79</a>.</p>
+<p><strong>Examples.</strong> OpusClip emailed hand-polished clips to prospects before any UI existed. About 60% replied positively (self-reported). Next they ran a Discord bot, and the product-market-fit signal was users complaining about queue length and daily quota <a class="cite" href="#ref-97">97</a>. One YC founder sold a $250/month contract with no code and shipped a rough version in seven days <a class="cite" href="#ref-41">41</a>. Jen Abel's advice is to find 30 people by hand before buying tools <a class="cite" href="#ref-98">98</a>.</p>
+<p><strong>Caveats.</strong> Consumer subscription founders often skip this. Connor Burd tells you to skip the waitlist and just build <a class="cite" href="#ref-28">28</a>, while Raroque says to set up the waitlist before writing code <a class="cite" href="#ref-45">45</a>. Altman's bar is softer and harder at once: build something so good that people "spontaneously tell their friends" <a class="cite" href="#ref-99">99</a>.</p>
+<h3 id="5-proven-demand-beats-novelty">5. Proven Demand Beats Novelty</h3>
+<p><strong>What it is.</strong> Pick ideas where money is already changing hands.
+- Steven Cravotta works through evergreen categories (health, wealth, relationships, status, convenience, freedom), checks Google Trends for rising interest and Sensor Tower for competitor revenue, and treats competitors as a green flag <a class="cite" href="#ref-6">6</a>.
+- Blake Anderson looks for niches "heavily monetized with physical products" (looksmaxxing: skincare, gua sha) where no software exists. He validates by opening a fresh social account and consuming only that niche's content until he is "essentially becoming the target market" <a class="cite" href="#ref-8">8</a>.
+- Max requires keyword popularity of at least 20, difficulty of 60-70 or lower, and a top competitor earning at least $100-200 a month <a class="cite" href="#ref-91">91</a>.
+- Zach scrolls the top 200 in each category for anything that has been stagnant for years <a class="cite" href="#ref-1">1</a>.
+- Burd: "If you're creating a modified version of an existing app, then congrats, your app is already validated" <a class="cite" href="#ref-28">28</a>.</p>
+<p><strong>Review mining.</strong> Read competitors' bad reviews for repeated unmet needs <a class="cite" href="#ref-23">23</a><a class="cite" href="#ref-43">43</a>. Rootd's founder found "how do I get through one right now" in panic-app reviews, and its SOS button has not changed since the MVP (self-reported) <a class="cite" href="#ref-43">43</a>.</p>
+<p><strong>Why it works.</strong> Painful, already-paid-for problems convert, and they are easier to market <a class="cite" href="#ref-6">6</a>.</p>
+<p><strong>Counter-evidence.</strong> The OpusClip CEO warns against two idea types: features an incumbent can bundle (a note-taker against Zoom) and prompt wrappers the next model release makes redundant. He recommends owning a vertical workflow and running three filters: a niche you "cannot further segment," a boring industry, and work people already pay agencies or freelancers to do <a class="cite" href="#ref-97">97</a>. Adam Lyttle worried that iOS 18's ChatGPT integration would make his scanner apps obsolete <a class="cite" href="#ref-77">77</a>. For first-time founders, social apps are a trap. Burd's first app, a social app, took 6-8 months and failed <a class="cite" href="#ref-28">28</a>, and Zach notes that a utility needs only one person to get value <a class="cite" href="#ref-1">1</a>.</p>
+<h3 id="6-support-is-the-roadmap">6. Support Is The Roadmap</h3>
+<p><strong>What it is.</strong> Kevin Hale's Support Driven Development: everyone, engineers included, does customer support <a class="cite" href="#ref-59">59</a><a class="cite" href="#ref-60">60</a>.</p>
+<p><strong>Numbers (Wufoo, self-reported, 2014-era web SaaS).</strong>
+- Ten people supported about 500,000 users, with replies in 7-12 minutes during business hours.
+- Engineers spent 4-8 hours a week on support.
+- An "emotional state" dropdown on the support form was filled in 75.8% of the time.
+- An A/B-tested documentation redesign cut support load by 30% overnight <a class="cite" href="#ref-60">60</a>.</p>
+<p>Hale's argument is that stonewalling (ignoring tickets) drives churn, and that adding features widens the "knowledge gap" between what users know and what the app can do <a class="cite" href="#ref-59">59</a>.</p>
+<p><strong>Modern versions.</strong> Kaching says about 95% of its Shopify reviews come from customer support interactions, and it pays agents bonuses per review (self-reported) <a class="cite" href="#ref-44">44</a>. Raroque runs a Canny feedback board (his planner's list feature exists only because of user votes), PostHog analytics (30 minutes to set up), and a 5-email, 2-week onboarding sequence he calls a "huge unlock" for 14-day retention (self-reported, no figures) <a class="cite" href="#ref-45">45</a>.</p>
+<p><strong>How to apply.</strong> Answer support yourself. Mine tickets for the underlying problem rather than the literal feature request <a class="cite" href="#ref-59">59</a>. Fire abusive customers: Justin Kan refunded one four times and then banned them <a class="cite" href="#ref-79">79</a>.</p>
+<p><strong>Caveat.</strong> This conflicts with the Cal AI and TikTok-farm habit of outsourcing support and outreach to VAs <a class="cite" href="#ref-59">59</a>.</p>
+<h3 id="7-the-95-claim-audited">7. The 95% Claim, Audited</h3>
+<p><strong>The claim.</strong> Cravotta says marketing is about 95% of an app's success: a mediocre app with great marketing can win, a great app nobody can market will not <a class="cite" href="#ref-6">6</a>. Elsewhere he says 90% <a class="cite" href="#ref-18">18</a><a class="cite" href="#ref-80">80</a>. Codesmith: "Distribution is the issue now," so spend 20-30% of your time on content <a class="cite" href="#ref-46">46</a>. Zach ranks marketing the highest lever "if all else is equal" <a class="cite" href="#ref-1">1</a>.</p>
+<p><strong>What the evidence shows.</strong> None of these percentages is measured. Cravotta's own notes label it opinion <a class="cite" href="#ref-18">18</a>. The best third-party data point is about cost, not causation. CNBC-reviewed documents show Cal AI spending about $770k a month on marketing against about $1.4M gross profit and about $274k net operating income <a class="cite" href="#ref-36">36</a>. Marketing is the biggest line item. That does not make product irrelevant: Cal AI's reviews flag accuracy problems, so the "aha" feature is also its main complaint driver <a class="cite" href="#ref-36">36</a>.</p>
+<p><strong>Counter-voices.</strong> Hale calls marketing "the tax you pay for not making a remarkable product" <a class="cite" href="#ref-60">60</a>. Altman puts 80% of the work in building something people recommend unprompted <a class="cite" href="#ref-99">99</a>. A UGC agency founder says "marketing can't fix a bad product" <a class="cite" href="#ref-5">5</a>. Nikita Bier argues virality is learnable but retention is luck <a class="cite" href="#ref-2">2</a>.</p>
+<p><strong>Practical reading.</strong> Budget real time for distribution from day one. Do not read "95%" as permission to ship a weak core.</p>
+<h3 id="8-why-apps-die">8. Why Apps Die</h3>
+<p>The notes give these recurring causes. Most are founder opinion, not studies.
+- <strong>Never launching.</strong> "You'd be surprised at how many founders' journeys end before a single user has actually interacted with a product" <a class="cite" href="#ref-94">94</a>.
+- <strong>Unvalidated or low-pain idea.</strong> Cravotta <a class="cite" href="#ref-6">6</a> and Skok, who calls this the #1 cause <a class="cite" href="#ref-95">95</a>, both rank it first. Both are assertions.
+- <strong>Skipping research and optimization.</strong> Cravotta says research separated Puff Count from "failed apps dying at 100 downloads," and that paywall testing reportedly took it from $3K to $30K MRR (third-party claim) <a class="cite" href="#ref-80">80</a>.
+- <strong>Social-app cold start</strong> <a class="cite" href="#ref-28">28</a><a class="cite" href="#ref-1">1</a>. Hunter Isaacson calls games "double hard" for small founders <a class="cite" href="#ref-25">25</a>.
+- <strong>Security and infrastructure debt</strong> <a class="cite" href="#ref-87">87</a><a class="cite" href="#ref-38">38</a>.
+- <strong>Closing platform windows.</strong> Lyttle's 2026 content says the launch-day organic boost is gone, his paywall style started getting rejected by Apple, and keyword-chasing got developer accounts terminated <a class="cite" href="#ref-77">77</a>.
+- <strong>Quitting or pivoting too early.</strong> Seibel says to iterate on the solution, not the problem, and to judge progress over about 2 years, not 2 months <a class="cite" href="#ref-79">79</a>.
+- <strong>Co-founder breakups.</strong> Blake left RizzGPT after a power struggle <a class="cite" href="#ref-8">8</a>. Ash Maurya's advice is to "date before committing" <a class="cite" href="#ref-96">96</a>.</p>
+<h3 id="9-read-the-title-last">9. Read The Title Last</h3>
+<p>This genre's titles routinely overstate. Examples from the notes:
+- <strong>No revenue at all.</strong> "$10K/Month Mobile App Using AI in 15 Minutes": the app built on camera has zero users and zero revenue <a class="cite" href="#ref-23">23</a>.
+- <strong>Someone else's revenue.</strong> "$80K/Mo mobile app with Claude Code": the figure belongs to an unnamed reference app, not the creator's clone <a class="cite" href="#ref-100">100</a>. Waterllama's ~$100K/month is repeated without verification <a class="cite" href="#ref-57">57</a>, and ReciMe is $800k/month in one video but ~$500k in another <a class="cite" href="#ref-88">88</a><a class="cite" href="#ref-32">32</a>.
+- <strong>Compressed timelines.</strong> "$20K/month in 14 days": 14 days was the build. Revenue took about 50 days and an influencer push <a class="cite" href="#ref-28">28</a>.
+- <strong>Gross dressed as recurring.</strong> "$25K/month" is gross collections against about $14K MRR <a class="cite" href="#ref-24">24</a>. A "$34K/month" title sits over a dashboard showing $24k MRR <a class="cite" href="#ref-40">40</a>.
+- <strong>Profit that isn't profit.</strong> Cal AI's "$1.4M/month" is gross profit, not net <a class="cite" href="#ref-36">36</a>. Its revenue is pre-renewal, since 95% of subscriptions were yearly and none had renewed yet <a class="cite" href="#ref-1">1</a>.
+- <strong>Shifting user counts.</strong> OpusClip's user numbers range from 12M to 50M depending on who is speaking <a class="cite" href="#ref-97">97</a>. Blake's "$100 of marketing to $80K/month" story is disputed <a class="cite" href="#ref-35">35</a>.
+- <strong>The honest counterexample.</strong> The only third-party-verified figure among these indie claims is "$10k": lifetime revenue, currently about $105 a month <a class="cite" href="#ref-76">76</a>.</p>
+<p>Many of these videos are also funnels: Starter Story Build <a class="cite" href="#ref-91">91</a>, Cravotta's Posted <a class="cite" href="#ref-80">80</a>, Manus affiliate links <a class="cite" href="#ref-23">23</a>, Base44 affiliate links <a class="cite" href="#ref-101">101</a>. Ask whose revenue it is, gross or net, monthly or lifetime, and before or after renewals.</p>
+<h3 id="where-creators-contradict-each-other-whole-corpus">Where creators contradict each other (whole corpus)</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>One camp</th>
+<th>Other camp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onboarding length</td>
+<td>Long quiz-style flows sell. Cal AI runs 28-29 screens <a class="cite" href="#ref-33">33</a><a class="cite" href="#ref-10">10</a><a class="cite" href="#ref-28">28</a></td>
+<td>Minimal input, register later <a class="cite" href="#ref-48">48</a>. Long only if it buys personalization <a class="cite" href="#ref-3">3</a>. "Do you need that many? Probably not" <a class="cite" href="#ref-49">49</a>. Perceived length matters more than screen count <a class="cite" href="#ref-9">9</a></td>
+</tr>
+<tr>
+<td>Paywall timing</td>
+<td>Paywall before any feature use <a class="cite" href="#ref-55">55</a><a class="cite" href="#ref-18">18</a></td>
+<td>Give value first <a class="cite" href="#ref-67">67</a>. Immediate post-signup paywalls are "catfishing" <a class="cite" href="#ref-53">53</a>. Duolingo keeps 91% of users free <a class="cite" href="#ref-66">66</a></td>
+</tr>
+<tr>
+<td>Price level</td>
+<td>Higher prices convert <a class="cite" href="#ref-16">16</a><a class="cite" href="#ref-80">80</a></td>
+<td>Low prices on purpose <a class="cite" href="#ref-8">8</a><a class="cite" href="#ref-25">25</a>. Cal AI's $70/year made less per download than $30 <a class="cite" href="#ref-1">1</a></td>
+</tr>
+<tr>
+<td>Free vs charge early</td>
+<td>Charge from day one <a class="cite" href="#ref-79">79</a><a class="cite" href="#ref-96">96</a></td>
+<td>Launch free, monetize after reviews <a class="cite" href="#ref-44">44</a>. Lyttle later reversed his own users-first stance <a class="cite" href="#ref-56">56</a></td>
+</tr>
+<tr>
+<td>Paid ads</td>
+<td>Don't sleep on paid; scale winners <a class="cite" href="#ref-7">7</a><a class="cite" href="#ref-28">28</a></td>
+<td>Paid is the worst-margin channel at 0-30% <a class="cite" href="#ref-8">8</a>. 2026 growth is organic <a class="cite" href="#ref-34">34</a>. No paid for social apps <a class="cite" href="#ref-31">31</a></td>
+</tr>
+<tr>
+<td>Influencer pay</td>
+<td>Flat upfront fees, judged by RPM vs CPM <a class="cite" href="#ref-1">1</a></td>
+<td>Performance-only CPM <a class="cite" href="#ref-31">31</a></td>
+</tr>
+<tr>
+<td>Accounts and authenticity</td>
+<td>20-40 throwaway accounts; AI faces are fine <a class="cite" href="#ref-4">4</a><a class="cite" href="#ref-38">38</a></td>
+<td>Audiences must not detect an ad <a class="cite" href="#ref-30">30</a></td>
+</tr>
+<tr>
+<td>ASO</td>
+<td>ASO built a $50K/month app <a class="cite" href="#ref-42">42</a><a class="cite" href="#ref-43">43</a></td>
+<td>ASO is largely dead for new apps <a class="cite" href="#ref-34">34</a></td>
+</tr>
+<tr>
+<td>Portfolio vs focus</td>
+<td>28 tiny apps, let data decide <a class="cite" href="#ref-91">91</a></td>
+<td>Give one problem about 2 years <a class="cite" href="#ref-79">79</a>. Lyttle now favors feature-worthy apps <a class="cite" href="#ref-77">77</a></td>
+</tr>
+<tr>
+<td>Research depth</td>
+<td>Some conversations, then build <a class="cite" href="#ref-94">94</a>. Six interviews <a class="cite" href="#ref-47">47</a>. "Audience comes last" <a class="cite" href="#ref-102">102</a></td>
+<td>2-3 weeks of ICP work and 20-30 interviews per decision <a class="cite" href="#ref-97">97</a></td>
+</tr>
+<tr>
+<td>Streaks and gamification</td>
+<td>Streaks are a core retention engine <a class="cite" href="#ref-12">12</a><a class="cite" href="#ref-4">4</a></td>
+<td>Default streaks and PBL are a liability <a class="cite" href="#ref-14">14</a>. Black-hat drives are unsustainable <a class="cite" href="#ref-68">68</a></td>
+</tr>
+<tr>
+<td>Reward design</td>
+<td>Variable reward is essential <a class="cite" href="#ref-64">64</a></td>
+<td>Predictable encouragement lifted retention <a class="cite" href="#ref-21">21</a>. Most of the system should be transparent <a class="cite" href="#ref-15">15</a></td>
+</tr>
+<tr>
+<td>Polish</td>
+<td>Animation drove Duolingo's DAU <a class="cite" href="#ref-72">72</a></td>
+<td>Ugly, text-heavy paywalls win <a class="cite" href="#ref-20">20</a>. Prettier screenshots lost an A/B test <a class="cite" href="#ref-42">42</a></td>
+</tr>
+<tr>
+<td>Copying</td>
+<td>Copy proven formats and flows <a class="cite" href="#ref-32">32</a><a class="cite" href="#ref-28">28</a></td>
+<td>Copying fails for context reasons <a class="cite" href="#ref-17">17</a><a class="cite" href="#ref-78">78</a></td>
+</tr>
+<tr>
+<td>Trial disclosure</td>
+<td>Hide trial length on the plan card <a class="cite" href="#ref-17">17</a></td>
+<td>Put charge timing front and center <a class="cite" href="#ref-16">16</a></td>
+</tr>
+<tr>
+<td>Features</td>
+<td>Add gamification layers <a class="cite" href="#ref-4">4</a></td>
+<td>Every feature widens the knowledge gap <a class="cite" href="#ref-59">59</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Most of these splits come down to context. Subscription utilities on paid acquisition favor long onboarding, hard paywalls and influencers. Word-of-mouth, social and marketplace products favor value first, launching free and organic growth. Pick the camp that matches your acquisition model, not the one with the bigger title.</p>
+<h3 id="checklist_5">Checklist</h3>
+<ol>
+<li>Write the data model as sample JSON before your first prompt <a class="cite" href="#ref-28">28</a>.</li>
+<li>Use a popular stack and commit after every working step <a class="cite" href="#ref-87">87</a>.</li>
+<li>Keep AI API keys behind your own backend and check App Store rejection risks before submitting <a class="cite" href="#ref-88">88</a>.</li>
+<li>Build a Figma wall of about 20 competitor onboarding screens before you design your own <a class="cite" href="#ref-28">28</a>.</li>
+<li>Time-box the MVP to 3-4 weeks, write the spec down, and cut it when you slip <a class="cite" href="#ref-94">94</a><a class="cite" href="#ref-1">1</a>.</li>
+<li>Ask for a pre-order or payment, not "would you use this?" <a class="cite" href="#ref-96">96</a>.</li>
+<li>Check that competitors earn money and that search interest is rising before you commit <a class="cite" href="#ref-6">6</a><a class="cite" href="#ref-91">91</a>.</li>
+<li>Avoid ideas an incumbent can bundle or the next model release can absorb <a class="cite" href="#ref-97">97</a>.</li>
+<li>Set up analytics and a feedback board before launch, and launch only when beta users stick for several days <a class="cite" href="#ref-45">45</a>.</li>
+<li>Answer support yourself, and turn tickets into fixes for root causes <a class="cite" href="#ref-59">59</a>.</li>
+<li>Plan distribution from day one, but don't treat "marketing is 95%" as data <a class="cite" href="#ref-6">6</a><a class="cite" href="#ref-36">36</a>.</li>
+<li>Before trusting a revenue title, ask: whose revenue, gross or net, monthly or lifetime <a class="cite" href="#ref-23">23</a><a class="cite" href="#ref-24">24</a>.</li>
+</ol>
+<h2 id="applied-playbook-the-nutrient-habit-tracker">Applied Playbook: the nutrient habit tracker</h2>
+<p>This section applies the patterns above to one specific product. The app is a daily habit tracker where the habits are nutrients. The user declares which essential nutrients they paid attention to today and optionally tags the food they used. A body map lights up the organs and systems those nutrients support. It never measures, recommends or diagnoses. Fact cards quote published reference intakes with sources. A weekly heatmap shows which rows stay blank. Streaks are per nutrient, with freezes. Free covers the grid, tagging and seven days of history. A paid annual plan unlocks full history, the heatmap, export to a nutritionist, and themes.</p>
+<h3 id="1-the-aha-the-first-tap-lights-the-body">1. The aha: the first tap lights the body</h3>
+<p>The product's aha must fit in a two-second clip <a class="cite" href="#ref-1">1</a>. For this app, that clip is a finger tapping "Iron" and the blood glowing on the body map. Everything in onboarding exists to get the user to that tap fast.</p>
+<ul>
+<li>First screen after launch: "Which nutrients do you want to pay attention to?" with sensible defaults already on the grid. No account yet <a class="cite" href="#ref-11">11</a>.</li>
+<li>Second screen: "Tap one you covered today." The body lights up. This is the aha, inside thirty seconds <a class="cite" href="#ref-2">2</a><a class="cite" href="#ref-3">3</a>.</li>
+<li>Only then ask for an account, framed as saving today's map <a class="cite" href="#ref-9">9</a>.</li>
+</ul>
+<h3 id="2-onboarding-questions-that-visibly-pay-back">2. Onboarding questions that visibly pay back</h3>
+<p>Ask five to seven questions, broad first, hardest last <a class="cite" href="#ref-49">49</a><a class="cite" href="#ref-10">10</a>. Each one must change something the user can see.</p>
+<ul>
+<li>Diet pattern, such as vegetarian, vegan, or mixed. This reorders the grid so B12, iron and omega-3 surface first for plant-based eaters.</li>
+<li>Region. This picks the reference-intake source the fact cards quote.</li>
+<li>What made them start, such as low energy, a doctor's comment, or curiosity. This chooses which body region the first-week summary highlights.</li>
+<li>"Where did you hear about us?" This costs nothing and tells you which channel works <a class="cite" href="#ref-33">33</a>.</li>
+</ul>
+<p>End with a goal screen: "Commit to touching 5 nutrients a day," with a "Commit to my goal" button and an easy opt-out, not a preselected default <a class="cite" href="#ref-12">12</a>.</p>
+<p>The notification ask comes on its own custom screen that previews the actual reminder, before the system prompt <a class="cite" href="#ref-9">9</a><a class="cite" href="#ref-48">48</a>.</p>
+<h3 id="3-the-reward-loop-body-map-streaks-day-seven-insight">3. The reward loop: body map, streaks, day-seven insight</h3>
+<p><strong>Define the unit.</strong> A "day" counts when the user touches at least their goal number of nutrients. Per-nutrient streaks sit underneath as a second layer <a class="cite" href="#ref-12">12</a>.</p>
+<p><strong>Bend, don't break.</strong> Start every user with two streak freezes and an earn-back path that requires a real check-in <a class="cite" href="#ref-12">12</a>.</p>
+<p><strong>Reminder timing.</strong> Send the daily nudge about 23.5 hours after the last check-in, and one late-evening saver only when the streak is at risk. Slow down for users who ignore reminders <a class="cite" href="#ref-12">12</a><a class="cite" href="#ref-66">66</a>.</p>
+<p><strong>Win the first week.</strong> The day-seven summary is the single most important screen after the aha. "This week you lit up muscles six days and bones once." It turns novelty into insight before novelty fades <a class="cite" href="#ref-12">12</a><a class="cite" href="#ref-13">13</a>. Hold any new mechanics until after day seven.</p>
+<p><strong>One central measure.</strong> Do not add badges for everything. The body map is the one progress measure, and the heatmap is its history <a class="cite" href="#ref-15">15</a><a class="cite" href="#ref-14">14</a>.</p>
+<p><strong>A character worth missing.</strong> Consider a small companion that lives in the body map, brighter when attended to and quieter when ignored. Emotional stakes retain better than numbers <a class="cite" href="#ref-4">4</a><a class="cite" href="#ref-15">15</a>. Keep the copy encouraging on missed days, never shaming <a class="cite" href="#ref-21">21</a>.</p>
+<p><strong>Stay white hat.</strong> Every mechanic should pass one test: does it help the user actually pay attention to their food, or just keep them tapping <a class="cite" href="#ref-68">68</a><a class="cite" href="#ref-14">14</a>? For a health app, this line matters more than usual.</p>
+<h3 id="4-feel-the-tap-has-to-feel-good">4. Feel: the tap has to feel good</h3>
+<ul>
+<li>A light haptic and a short glow animation on every tap, and a heavier celebration at streak milestones <a class="cite" href="#ref-82">82</a><a class="cite" href="#ref-12">12</a>.</li>
+<li>Progress starts above zero. Pre-light one region from onboarding answers so the first map is never empty <a class="cite" href="#ref-67">67</a>.</li>
+<li>One font, at most six sizes, one icon style, consistent spacing <a class="cite" href="#ref-83">83</a><a class="cite" href="#ref-58">58</a>.</li>
+<li>Illustrated empty states, never blank text <a class="cite" href="#ref-82">82</a>.</li>
+</ul>
+<h3 id="5-the-paywall-soft-honest-after-value">5. The paywall: soft, honest, after value</h3>
+<p>This app grows by word of mouth and content, not paid ads, which points to freemium or a soft onboarding wall rather than a hard paywall <a class="cite" href="#ref-33">33</a><a class="cite" href="#ref-25">25</a>.</p>
+<ul>
+<li>Show the paywall at the end of onboarding, right after the first lit-up map, because most trials start on install day. Make it dismissible <a class="cite" href="#ref-16">16</a><a class="cite" href="#ref-20">20</a>.</li>
+<li>Show it again at the day-seven summary, which is the moment the heatmap and full history become obviously valuable.</li>
+<li>Two or three screens: what your month will look like, then "we'll remind you before the trial ends," then the price <a class="cite" href="#ref-17">17</a><a class="cite" href="#ref-18">18</a>.</li>
+<li>Two plans, annual preselected and framed per week, with others behind "view all plans" <a class="cite" href="#ref-20">20</a>.</li>
+<li>"No commitment, cancel anytime" and a one-line statement of exactly when the charge happens <a class="cite" href="#ref-19">19</a><a class="cite" href="#ref-16">16</a>.</li>
+<li>One moderate offer of 25 to 33 percent off when the user closes the paywall, nothing deeper <a class="cite" href="#ref-19">19</a>.</li>
+<li>No trial toggle, which Apple now rejects, and generous refunds to protect the rating <a class="cite" href="#ref-20">20</a><a class="cite" href="#ref-44">44</a>.</li>
+<li>Wire up RevenueCat or Superwall from the start so paywalls can change without an app update <a class="cite" href="#ref-80">80</a><a class="cite" href="#ref-81">81</a>.</li>
+</ul>
+<h3 id="6-the-shareable-moment">6. The shareable moment</h3>
+<p>The body map is the screenshot. Design for it on purpose.</p>
+<ul>
+<li>Watch which screens users capture in the first few weeks, then build a square, watermarked share card of the weekly body map <a class="cite" href="#ref-21">21</a><a class="cite" href="#ref-22">22</a>.</li>
+<li>The share card's call to action sells the result, not the app, such as "see your own body map" <a class="cite" href="#ref-25">25</a>.</li>
+<li>Ask for an App Store review right after the first completed week, never during onboarding <a class="cite" href="#ref-42">42</a>.</li>
+<li>The first App Store screenshot is the lit-up body, not a feature list <a class="cite" href="#ref-42">42</a>.</li>
+</ul>
+<h3 id="7-distribution-where-the-first-thousand-users-come-from">7. Distribution: where the first thousand users come from</h3>
+<ul>
+<li><strong>Name for search.</strong> Do keyword research before naming the app, and put the main keyword first <a class="cite" href="#ref-42">42</a>.</li>
+<li><strong>Short-form video.</strong> A fresh account, warmed for a few days, then two to three demo posts a day for eight weeks. Each post is a problem hook such as "I'm vegetarian and had no idea I never touch B12," followed by a fast demo of the map lighting up <a class="cite" href="#ref-5">5</a><a class="cite" href="#ref-4">4</a>. Track watch-past-three-seconds and installs, not views <a class="cite" href="#ref-31">31</a>.</li>
+<li><strong>Communities.</strong> Value-first posts in vegetarian, vegan, Indian home-cooking and fitness communities, two to three times a week, for the first hundred users <a class="cite" href="#ref-39">39</a><a class="cite" href="#ref-40">40</a>.</li>
+<li><strong>Creators.</strong> Test one well-matched creator with a small budget, and continue only if it returns many times that <a class="cite" href="#ref-1">1</a>. Pay small creators a weekly base plus view bonuses <a class="cite" href="#ref-30">30</a>.</li>
+<li><strong>Paid ads.</strong> Only after about twenty organic videos have proven which hooks work, and only while cost per install stays below realized value per install <a class="cite" href="#ref-32">32</a><a class="cite" href="#ref-7">7</a>.</li>
+<li><strong>Search pages.</strong> A fact page per nutrient with cited reference intakes is the same playbook as the comparison pages that grew your friend's exam-prep apps. This last point is our own extension, not something the videos tested.</li>
+</ul>
+<h3 id="8-build-plan">8. Build plan</h3>
+<ul>
+<li>Write the data model as sample JSON before the first prompt to any coding tool. Nutrients, tags, daily entries and streaks <a class="cite" href="#ref-28">28</a>.</li>
+<li>Build a wall of about twenty competitor onboarding screens before designing your own <a class="cite" href="#ref-28">28</a>.</li>
+<li>Popular stack, commit after every working step, API keys behind your own backend <a class="cite" href="#ref-87">87</a><a class="cite" href="#ref-88">88</a>.</li>
+<li>Time-box the first version to three or four weeks and cut scope when you slip <a class="cite" href="#ref-94">94</a><a class="cite" href="#ref-1">1</a>.</li>
+<li>Analytics and a feedback board before launch. Launch publicly only when beta users stick for several days <a class="cite" href="#ref-45">45</a>.</li>
+<li>Answer support yourself. Every ticket is a roadmap item <a class="cite" href="#ref-59">59</a>.</li>
+</ul>
+<h3 id="9-the-one-metric">9. The one metric</h3>
+<p>Define "active" as completing the daily check-in, then chart weekly cohort curves and watch for them to flatten <a class="cite" href="#ref-13">13</a>. Health and fitness apps typically keep only a few percent of users at day thirty, so the bar is low and the signal is clear.</p>
+<p>The success test from the original idea still holds. Are you, and twenty strangers, still opening it on day thirty? If the curve flattens there, the body map outlives its novelty and the app deserves real time and money. If it doesn't, the day-seven summary and the reward loop are the first places to change.</p>
+<h2 id="sources">Sources</h2>
+<p>Numbered in order of first citation. Confidence reflects how complete the written record of each video was: high means a full transcript or detailed notes were read, medium a solid summary, low only a description or snippets.</p>
+<ol>
+<li id="ref-1"><a href="https://www.youtube.com/watch?v=qDuzzrQKP_M">App Expert: How to Build Viral Apps in 30 Days, Make Millions at 17, and Retire Before College</a> — Jack Neel, high confidence</li>
+<li id="ref-2"><a href="https://www.youtube.com/watch?v=bhnfZhJWCWY">How to consistently go viral: Nikita Bier’s playbook for winning at consumer apps</a> — Lenny's Podcast, high confidence</li>
+<li id="ref-3"><a href="https://www.youtube.com/watch?v=Aa89MC8jX2c">How To Solve The App Onboarding Paradox</a> — Tim Gabe, high confidence</li>
+<li id="ref-4"><a href="https://www.youtube.com/watch?v=pb4JIH8FubE">Full App Growth Guide 2026 - How to Make Viral Content to Get Users &amp; Make Your App Retentive</a> — Superwall, high confidence</li>
+<li id="ref-5"><a href="https://www.youtube.com/watch?v=gUL6q-FndRE">How to Get 1,000 Downloads On Your App in 30 Days (From Scratch)</a> — Starter Story Build, high confidence</li>
+<li id="ref-6"><a href="https://www.youtube.com/watch?v=z_fARFqjLoY">How I Find App Ideas That Print ($90k/month Micro SaaS)</a> — Steven Cravotta, medium confidence</li>
+<li id="ref-7"><a href="https://www.youtube.com/watch?v=e_t1gYkvZkI">How To Reach 10,000 App Users (Beginner Marketing)</a> — Steven Cravotta, high confidence</li>
+<li id="ref-8"><a href="https://www.youtube.com/watch?v=5u9u8yzPEpA">He Made $10M with 3 iPhone Apps</a> — Starter Story, high confidence</li>
+<li id="ref-9"><a href="https://www.youtube.com/watch?v=Qsq-Sj_rojU">I Studied 1,460 Onboarding Flows. Here's What I Found.</a> — Mobbin, high confidence</li>
+<li id="ref-10"><a href="https://www.youtube.com/watch?v=MZDvGzxr3gY">How To Build an App Onboarding That PRINTS ($40K/Month SaaS)</a> — Steven Cravotta, high confidence</li>
+<li id="ref-11"><a href="https://www.youtube.com/watch?v=Ug_EMizZaGk">UX Design Tutorial: User Onboarding Best Practices That Actually Work (Notion Case Study) | Lyssna</a> — Lyssna, high confidence</li>
+<li id="ref-12"><a href="https://www.youtube.com/watch?v=_CCwoQZH5hI">Behind the product: Duolingo streaks | Jackson Shuttleworth (Group PM, Retention Team)</a> — Lenny's Podcast, high confidence</li>
+<li id="ref-13"><a href="https://www.youtube.com/watch?v=VNxBZ7ka5J0">How To Keep Your Users | Startup School</a> — Y Combinator, high confidence</li>
+<li id="ref-14"><a href="https://www.youtube.com/watch?v=LXX_qOA5D8E">I Studied 500+ Gamified Apps (Here's What Actually Works)</a> — Tim Gabe, high confidence</li>
+<li id="ref-15"><a href="https://www.youtube.com/watch?v=yBpv5rZoBjA">How To Scientifically Design Addictive Apps</a> — Tim Gabe, high confidence</li>
+<li id="ref-16"><a href="https://www.youtube.com/watch?v=sYRhXB_ZcLI">I Studied 10,000 Paywall Screens (THIS Makes People Pay)</a> — Tim Gabe, high confidence</li>
+<li id="ref-17"><a href="https://www.youtube.com/watch?v=24QMRDXck70">Our No-Code Apps Made $50M Using THIS Paywall</a> — Superwall, high confidence</li>
+<li id="ref-18"><a href="https://www.youtube.com/watch?v=PX30Fb8TlcE">I Studied 100 Viral AI Apps, Here’s How They’re Printing MILLIONS</a> — Steven Cravotta, high confidence</li>
+<li id="ref-19"><a href="https://www.youtube.com/watch?v=lkwX_kc0NS8">I made 4,000 app paywalls and learned this</a> — Superwall, high confidence</li>
+<li id="ref-20"><a href="https://www.youtube.com/watch?v=9ypqs_2fAl8">We Studied 2,995 Paywalls. Here’s What Actually Converts.</a> — Mobbin, high confidence</li>
+<li id="ref-21"><a href="https://www.youtube.com/watch?v=2BKmNmnEj9w">Finding hidden growth opportunities in your product | Albert Cheng (Duolingo, Grammarly, Chess.com)</a> — Lenny's Podcast, high confidence</li>
+<li id="ref-22"><a href="https://www.youtube.com/watch?v=o_T4jXZSS3Q">I grew my indie app to 30k+ downloads/month without spending $$$ on marketing (and so can you)</a> — Adam Lyttle, medium confidence</li>
+<li id="ref-23"><a href="https://www.youtube.com/watch?v=SI8T1yvmoRs">How I Built a $10K/Month Mobile App Using AI in 15 Minutes (Copy Me)</a> — Wealth Wisdom, medium confidence</li>
+<li id="ref-24"><a href="https://www.youtube.com/watch?v=KgS3hbpxTzE">I turned a viral idea into a $25K/month app</a> — Starter Story, high confidence</li>
+<li id="ref-25"><a href="https://www.youtube.com/watch?v=DTree0unT_0">Meet The Guy Who Solved Growing Apps (Hunter Isaacson Interview)</a> — Superwall, high confidence</li>
+<li id="ref-26"><a href="https://www.youtube.com/watch?v=d3FSoXHjEfs">The 23-Year-Old Genius Building Million Dollar Apps</a> — Omar Waseem, medium confidence</li>
+<li id="ref-27"><a href="https://www.youtube.com/watch?v=AagyxP9xoSw">I built a $70 Million app using this Easy Viral Strategy (copy me)</a> — Startup Strategy, low-medium confidence</li>
+<li id="ref-28"><a href="https://www.youtube.com/watch?v=CwHD6Fg-Mjs">I vibe coded a $20K/month mobile app in 14 days</a> — Starter Story, high confidence</li>
+<li id="ref-29"><a href="https://www.youtube.com/watch?v=9WWvLj-NqEE">My 2 apps made $1.5M</a> — Starter Story, high confidence</li>
+<li id="ref-30"><a href="https://www.youtube.com/watch?v=9r4kS9zZj9s">How to Market a Viral App (500K Downloads Playbook)</a> — Florian Darroman, high confidence</li>
+<li id="ref-31"><a href="https://www.youtube.com/watch?v=RVnnqTrSKZY">Copy This UGC Strategy, It'll Make Your App Go Viral</a> — Superwall, medium confidence</li>
+<li id="ref-32"><a href="https://www.youtube.com/watch?v=q4pSLc13OTs">I Studied 100 Viral AI Apps, Here's How They Market</a> — Steven Cravotta, high confidence</li>
+<li id="ref-33"><a href="https://www.youtube.com/watch?v=wMk_t8F1rOc">Exposing Cal AI: Strategy that Scaled them to $2M MRR in 2025</a> — Sebastian Stef, high confidence</li>
+<li id="ref-34"><a href="https://www.youtube.com/watch?v=HjnXnssrj4M">Why app marketing is changing for indie developers in 2026</a> — Adam Lyttle, high confidence</li>
+<li id="ref-35"><a href="https://www.youtube.com/watch?v=mGMDyPTR7QU">The 23-year-old That Made $2.4M with His FIRST App</a> — Brett Malinowski, medium confidence</li>
+<li id="ref-36"><a href="https://www.youtube.com/watch?v=OsN_MJopMxc">How I Built A $1.4 Million/Month AI App At Age 18</a> — CNBC Make It, medium confidence</li>
+<li id="ref-37"><a href="https://www.youtube.com/watch?v=QP4-qJQqER0">3 free ways to promote your app this afternoon</a> — Adam Lyttle, low confidence</li>
+<li id="ref-38"><a href="https://www.youtube.com/watch?v=PZylEWhBDqo">How I Grew My App From 0 to 10,000 Users in 30 Days</a> — Your Average Tech Bro, medium confidence</li>
+<li id="ref-39"><a href="https://www.youtube.com/watch?v=BaWUPamqWlA">How I Used Reddit to Hit $17K MRR (With ZERO Audience)</a> — Starter Story, high confidence</li>
+<li id="ref-40"><a href="https://www.youtube.com/watch?v=pvjalHFNM9Q">How I Used Reddit to Build a $34K/Month SaaS</a> — Starter Story, high confidence</li>
+<li id="ref-41"><a href="https://www.youtube.com/watch?v=NZp5j5hvn9I">50 Founders Share How They Got Their First Customers</a> — Y Combinator, high confidence</li>
+<li id="ref-42"><a href="https://www.youtube.com/watch?v=I2GG0lyb_RI">My App Makes $50K/Month: This Is My ASO Playbook</a> — Starter Story Build, high confidence</li>
+<li id="ref-43"><a href="https://www.youtube.com/watch?v=VfNRd5Rk0cM">This app made over $1M</a> — Starter Story, high confidence</li>
+<li id="ref-44"><a href="https://www.youtube.com/watch?v=vLLBzUZr6-s">My Apps Make $4.5M/Year With $0 Marketing</a> — Starter Story, high confidence</li>
+<li id="ref-45"><a href="https://www.youtube.com/watch?v=MnF-zJhyUtE">Things I ALWAYS Do Before Launching New Apps (4 Apps, 100% Profitable)</a> — Chris Raroque, high confidence</li>
+<li id="ref-46"><a href="https://www.youtube.com/watch?v=7u6b52RaQSc">How I Code Profitable Apps SOLO (Idea + Build + Marketing Guide)</a> — Andrew Codesmith, medium confidence</li>
+<li id="ref-47"><a href="https://www.youtube.com/watch?v=j2w4y7pDi8w">Building AI Apps: From Idea to Viral in 30 Days</a> — Greg Isenberg, medium confidence</li>
+<li id="ref-48"><a href="https://www.youtube.com/watch?v=Xvjxr0lkcjE">Boost user activation and commitment - App growth</a> — Android Developers, low confidence</li>
+<li id="ref-49"><a href="https://www.youtube.com/watch?v=QMo2T5apdYw">The app onboarding secrets that convert (proven strategies)</a> — Adam Lyttle, high confidence</li>
+<li id="ref-50"><a href="https://www.youtube.com/watch?v=Z0b4RN84uwc">You get one shot at app onboarding - most developers waste it</a> — Adam Lyttle, low confidence</li>
+<li id="ref-51"><a href="https://www.youtube.com/watch?v=D9SXaj6qQIQ">How Top 1% Apps Keep You Hooked</a> — Tim Gabe, high confidence</li>
+<li id="ref-52"><a href="https://www.youtube.com/watch?v=N7rhtHNXbr4">10 Proven App Marketing Strategies to Drive Installs &amp; Retention in 2024</a> — AppsFlyer, medium confidence</li>
+<li id="ref-53"><a href="https://www.youtube.com/watch?v=vAN7kmpTdy4">Onboarding Best Practices from 200+ Top Apps!</a> — Elizabeth Alli - DesignerUp, high confidence</li>
+<li id="ref-54"><a href="https://www.youtube.com/watch?v=fYs2Mdyasuc">The Laws of UX - 19 Psychological Design Principles</a> — Joseph Todaro, medium confidence</li>
+<li id="ref-55"><a href="https://www.youtube.com/watch?v=dKif3Eo3frk">How to get your first 100 PAID app users (my paywall strategy)</a> — Adam Lyttle, medium confidence</li>
+<li id="ref-56"><a href="https://www.youtube.com/watch?v=_Fiwx6lm5YU">My app growth strategy (users first, revenue second)</a> — Adam Lyttle, low confidence</li>
+<li id="ref-57"><a href="https://www.youtube.com/watch?v=Rk6t9Uq1y9M">Watch Me Vibe Code an Animated App with Claude Opus 5.5 (It's Super Smooth)</a> — Jason Lee, medium confidence</li>
+<li id="ref-58"><a href="https://www.youtube.com/watch?v=AH_ugxmLeUM">7 UI/UX mistakes that SCREAM you’re a beginner</a> — Kole Jain, high confidence</li>
+<li id="ref-59"><a href="https://www.youtube.com/watch?v=sz_LgBAGYyo">Lecture 7 - How to Build Products Users Love (Kevin Hale)</a> — YC Root Access, medium-high confidence</li>
+<li id="ref-60"><a href="https://www.youtube.com/watch?v=12D8zEdOPYo">How to Build Products Users Love with Kevin Hale (How to Start a Startup 2014: Lecture 7)</a> — Y Combinator, medium confidence</li>
+<li id="ref-61"><a href="https://www.youtube.com/watch?v=BJEHnGYj_8E">7 App Gamification Strategies To Boost Retention &amp; Revenue 🎮</a> — AppsFlyer, low confidence</li>
+<li id="ref-62"><a href="https://www.youtube.com/watch?v=yM4FBYH2mTM">#173 Hooked: How to Build Habit-Forming Products with Nir Eyal</a> — Product Hive, low confidence</li>
+<li id="ref-63"><a href="https://www.youtube.com/watch?v=-jXM4NymIcA">How to Build Habit-Forming Products - Nir Eyal</a> — Startup Grind, low-medium confidence</li>
+<li id="ref-64"><a href="https://www.youtube.com/watch?v=TDRQfGT6GtE">Hooked: The Psychology of How Products Engage Us</a> — Nir Eyal, low confidence</li>
+<li id="ref-65"><a href="https://www.youtube.com/watch?v=11dYx_rW_Ks">What makes some technology so habit-forming? | Nir Eyal | TED Institute</a> — TED Institute, low confidence</li>
+<li id="ref-66"><a href="https://www.youtube.com/watch?v=9KqrnBiyBQ8">How Duolingo Turned a Free Language App Into a $7.7B Business | WSJ The Economics Of</a> — The Wall Street Journal, medium confidence</li>
+<li id="ref-67"><a href="https://www.youtube.com/watch?v=2TlIg3VokY8">The UX Psychology Behind Apps People Can’t Stop Using</a> — uxpeak, medium confidence</li>
+<li id="ref-68"><a href="https://www.youtube.com/watch?v=v5Qjuegtiyc">Gamification to improve our world: Yu-kai Chou at TEDxLausanne</a> — TEDx Talks, high confidence</li>
+<li id="ref-69"><a href="https://www.youtube.com/watch?v=4maJty0vQjI">How Social Media is designed to ADDICT you</a> — Mrwhosetheboss, medium confidence</li>
+<li id="ref-70"><a href="https://www.youtube.com/watch?v=NUMa0QkPzns">It’s not you. Phones are designed to be addicting.</a> — Vox, high confidence</li>
+<li id="ref-71"><a href="https://www.youtube.com/watch?v=fKK9nVLvhGM">How free games are designed to make money</a> — Vox, high confidence</li>
+<li id="ref-72"><a href="https://www.youtube.com/watch?v=Du2lkZ_cux8">The Secret Behind Weirdly Addictive Apps</a> — Tim Gabe, medium confidence</li>
+<li id="ref-73"><a href="https://www.youtube.com/watch?v=AnL49w4yIOw">How Addictive Apps Are Made</a> — Tim Gabe, high confidence</li>
+<li id="ref-74"><a href="https://www.youtube.com/watch?v=WvOhpkAcHno">I Analyzed 300+ Paywall UI Designs | Here's What Actually Works</a> — Elizabeth Alli - DesignerUp, high confidence</li>
+<li id="ref-75"><a href="https://www.youtube.com/watch?v=qVRQIKFpkdQ">I’ve Analyzed the Top 100 iOS Apps. They All Use the Same Paywalls.</a> — Nik Zechner, low confidence</li>
+<li id="ref-76"><a href="https://www.youtube.com/watch?v=xLwgYzdOD4A">I Built an App People Actually Pay For! $10k</a> — SJCodes, low confidence</li>
+<li id="ref-77"><a href="https://www.youtube.com/watch?v=3sLP2bcD5Xg">I made $800k building silly apps (this is how)</a> — Adam Lyttle, medium confidence</li>
+<li id="ref-78"><a href="https://www.youtube.com/watch?v=QaDsk4iH1aw">Growth tactics from OpenAI and Stripe’s first marketer | Krithika Shankarraman</a> — Lenny's Podcast, high confidence</li>
+<li id="ref-79"><a href="https://www.youtube.com/watch?v=C27RVio2rOs">Michael Seibel - Building Product</a> — Y Combinator, high confidence</li>
+<li id="ref-80"><a href="https://www.youtube.com/watch?v=RGT7PX4TQ8w">My Tech Stack For Building Viral Apps ($40K/month SaaS)</a> — Steven Cravotta, medium confidence</li>
+<li id="ref-81"><a href="https://www.youtube.com/watch?v=i5UqNMZUUKM">In-app Subscriptions &amp; Paywalls with RevenueCat in React Native</a> — notJust․dev, low confidence</li>
+<li id="ref-82"><a href="https://www.youtube.com/watch?v=8mMH6Pq8qnE">How I Make Apps FEEL 10x Better (5 Design Secrets)</a> — Chris Raroque, high confidence</li>
+<li id="ref-83"><a href="https://www.youtube.com/watch?v=EcbgbKtOELY">Every UI/UX Concept Explained in Under 10 Minutes</a> — Kole Jain, high confidence</li>
+<li id="ref-84"><a href="https://www.youtube.com/watch?v=HE4rLEQpiXY">How to think like a GENIUS UI/UX designer</a> — Kole Jain, high confidence</li>
+<li id="ref-85"><a href="https://www.youtube.com/watch?v=VNDq1Q_W1Bs">Top 2026 App Design Trends</a> — Codex Community, low confidence</li>
+<li id="ref-86"><a href="https://www.youtube.com/watch?v=Uii4-2KK0-s">How to get 1 million downloads for your app? [5 Quick Hacks]  - Lesson 50</a> — Appy Pie, low confidence</li>
+<li id="ref-87"><a href="https://www.youtube.com/watch?v=Tw18-4U7mts">The "vibe coding" mind virus explained…</a> — Fireship, high confidence</li>
+<li id="ref-88"><a href="https://www.youtube.com/watch?v=9atd5lczG2k">How I Vibe Coded a Recipe App using Claude Code (Full Build + Marketing)</a> — Jason Lee, medium confidence</li>
+<li id="ref-89"><a href="https://www.youtube.com/watch?v=PLKrSVuT-Dg">How to make vibe coding not suck…</a> — Fireship, high confidence</li>
+<li id="ref-90"><a href="https://www.youtube.com/watch?v=XzjSx7u9mGw">AI Engineering Full Course - Build and Deploy a Real AI App</a> — Dave Ebbelaar, medium confidence</li>
+<li id="ref-91"><a href="https://www.youtube.com/watch?v=vw2Yc4Y1PsU">I make $10K/month from 28 apps</a> — Starter Story, high confidence</li>
+<li id="ref-92"><a href="https://www.youtube.com/watch?v=ya6520zh4pQ">Vibe Coding is a Trap (What Senior Devs See That You Don't)</a> — DevForge, low confidence</li>
+<li id="ref-93"><a href="https://www.youtube.com/watch?v=xfptZcCf484">How to Build Your First App with Claude Code (FREE)</a> — Mikey No Code, low confidence</li>
+<li id="ref-94"><a href="https://www.youtube.com/watch?v=1hHMwLxN6EM">Michael Seibel - How to Plan an MVP</a> — Y Combinator, high confidence</li>
+<li id="ref-95"><a href="https://www.youtube.com/watch?v=q8d9uuO1Cf4">Value Props: Create a Product People Will Actually Buy</a> — Harvard Innovation Labs, medium-high confidence</li>
+<li id="ref-96"><a href="https://www.youtube.com/watch?v=Pydut1BMlBw">How To Build a Startup in 2026 | 10 Lessons That Save You Years</a> — Ash Maurya, medium confidence</li>
+<li id="ref-97"><a href="https://www.youtube.com/watch?v=HQ3eVt2jgAY">$215M AI CEO: How I’d Build a Profitable AI Startup in 30 Days (2026 Playbook)</a> — Silicon Valley Girl, high confidence</li>
+<li id="ref-98"><a href="https://www.youtube.com/watch?v=969dwgu98qc">The ultimate guide to founder-led sales | Jen Abel (co-founder of JJELLYFISH)</a> — Lenny's Podcast, high confidence</li>
+<li id="ref-99"><a href="https://www.youtube.com/watch?v=0lJKucu6HJc">Sam Altman - How to Succeed with a Startup</a> — Y Combinator, high confidence</li>
+<li id="ref-100"><a href="https://www.youtube.com/watch?v=UMjeSU6C4qU">How I built an $80K/Mo mobile app with Claude Code (Full Vibe Code Tutorial)</a> — Jason Lee, low confidence</li>
+<li id="ref-101"><a href="https://www.youtube.com/watch?v=RQPVR6_WYoM">Do these 7 Things Immediately When Building Apps with AI</a> — Mikey No Code, low confidence</li>
+<li id="ref-102"><a href="https://www.youtube.com/watch?v=6V4y0AX69h4">the psychology of building a brand everyone loves</a> — Matt Gray, high confidence</li>
+</ol>
+<h3 id="also-researched-not-cited-above">Also researched, not cited above</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=iLxGvLTDv3s">Apps so simple you won’t believe they make money</a> — Starter Story Build, low confidence</li>
+<li><a href="https://www.youtube.com/watch?v=K0M1PuQaE8s">Designing Addiction: The Twisted Psychology Of Game Design</a> — goukigod, low confidence</li>
+<li><a href="https://www.youtube.com/watch?v=GMn9sxCWN0M">How I built a simple RPG game to track my life and skills</a> — Adrian Twarog, low confidence</li>
+<li><a href="https://www.youtube.com/watch?v=qJ4qYhTqAz0">How Top Apps Scientifically Design Paywalls That Convert</a> — Tim Gabe, low confidence</li>
+<li><a href="https://www.youtube.com/watch?v=Ft45pH3fYok">How to Build Products People Can’t Quit (Product Psychology Playbook)</a> — Think School, low confidence</li>
+<li><a href="https://www.youtube.com/watch?v=EW8uhqEsNKc">I built a real life RPG game to manage my life in Notion</a> — heyalbert, medium confidence</li>
+<li><a href="https://www.youtube.com/watch?v=6P_H9eDNBcA">My SaaS User Growth System: Get Your First 100 - 1,000+ Users</a> — Simon Høiberg, high confidence</li>
+<li><a href="https://www.youtube.com/watch?v=zr37ibqXl1U">Top 3 UX/UI Redesigns That Make You Design Like a Pro</a> — uxpeak, low confidence</li>
+</ul></article>
+
+  <div class="foot">Every claim links to its source video. Numbers marked self-reported come from the founders themselves and were not independently verified.</div>
+</div>
+
+<script>
+(function(){
+  // wrap "Where sources disagree" and "Checklist" sections in panels
+  const doc=document.getElementById('doc');
+  doc.querySelectorAll('h3').forEach(h=>{
+    const t=h.textContent.toLowerCase();
+    let cls=null;
+    if(t.startsWith('where ')&&(t.includes('disagree')||t.includes('contradict'))) cls='disagree';
+    else if(t==='checklist') cls='check';
+    if(!cls) return;
+    h.classList.add('panel-h');
+    const box=document.createElement('div'); box.className='panel '+cls;
+    let n=h.nextElementSibling;
+    while(n && !/^H[23]$/.test(n.tagName) && n.tagName!=='HR'){ const nx=n.nextElementSibling; box.appendChild(n); n=nx; }
+    h.after(box);
+  });
+  // highlight current chapter in rail
+  const links=[...document.querySelectorAll('#toc a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const heads=[...doc.querySelectorAll('h2[id]')].filter(h=>map.has(h.id));
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.remove('on')); map.get(e.target.id)?.classList.add('on'); } });
+    },{rootMargin:'0px 0px -70% 0px'});
+    heads.forEach(h=>io.observe(h));
+  }
+})();
+</script>
