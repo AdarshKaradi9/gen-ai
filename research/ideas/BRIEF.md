@@ -37,3 +37,8 @@ Write /tmp/claude-0/-home-user-gen-ai/6504a663-f93f-59d7-b0af-1cc144734ade/scrat
 ## Sources (bulleted URLs actually used)
 
 Keep each dossier 600-1,200 words. Plain prose, no em-dashes. Reply at the end with a 3-line summary per idea: total score, verdict, strongest evidence.
+
+## Round two notes
+- Productive sources from round one: whatsthe.app/<app> and trustmrr.com/startup/<name> (RevenueCat-verified small apps), appfigures.com/resources/insights, appgoblin.info, trends.vc/opportunities/<market>, adapty.io/paywall-library, screensdesign.com/showcase. Reddit blocks the fetch script; use search snippets for subreddit sizes.
+- Search budget about 12 per agent. Four ideas each, so keep each dossier 500-900 words.
+- Score honestly. Do not inflate. Most ideas in round one scored 18-23.
