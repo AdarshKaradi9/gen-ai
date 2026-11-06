@@ -1,0 +1,708 @@
+<title>Screen-Time Companion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: field-guide report. Sticky chapter rail on the left, one reading column at ~66ch, numbered citations as small jade tags. */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --fg:#17211d; --muted:#5b6a64; --rule:#dbe3df;
+  --accent:#0d7a5f; --accent-soft:#e2f2ec; --amber:#b86a0b;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#151d1a; --fg:#e4ece8; --muted:#97a8a0; --rule:#26332e;
+  --accent:#4cc9a0; --accent-soft:#163229; --amber:#e3a24b; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#151d1a; --fg:#e4ece8; --muted:#97a8a0; --rule:#26332e;
+  --accent:#4cc9a0; --accent-soft:#163229; --amber:#e3a24b; color-scheme:dark }
+
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{background:var(--bg); color:var(--fg); font-family:var(--body); font-size:18px; line-height:1.62;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+
+.wrap{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:240px minmax(0,1fr); gap:56px; padding-block:48px 96px}
+@media (max-width: 900px){ .wrap{grid-template-columns:minmax(0,1fr); gap:24px; padding-block:24px 64px} }
+
+/* Masthead */
+.mast{grid-column:1/-1; display:grid; gap:14px; padding-bottom:32px; border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent)}
+.mast h1{font-family:var(--display); font-weight:800; font-size:clamp(38px, 6vw, 68px); line-height:1.02; letter-spacing:-.02em; margin:0; text-wrap:balance; max-width:16ch}
+.mast h1 span{color:var(--accent)}
+.mast p{margin:0; max-width:62ch; color:var(--muted); font-size:19px}
+.stats{display:flex; flex-wrap:wrap; gap:10px 28px; margin-top:6px; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.stats b{font-family:var(--display); font-size:22px; color:var(--fg); margin-right:6px; font-variant-numeric:tabular-nums}
+
+/* Rail */
+nav.rail{position:sticky; top:calc(env(safe-area-inset-top,0px) + 24px); align-self:start; font-family:var(--display)}
+nav.rail h2{font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 12px}
+nav.rail ol{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+nav.rail a{display:grid; grid-template-columns:22px 1fr; gap:6px; padding:7px 10px; border-radius:6px; color:var(--fg); text-decoration:none; font-size:15px; line-height:1.3}
+nav.rail a:hover, nav.rail a:focus-visible{background:var(--accent-soft); outline:none}
+nav.rail a.on{background:var(--accent-soft); color:var(--accent); font-weight:700}
+nav.rail .n{font-family:var(--mono); font-size:12px; color:var(--accent); padding-top:2px}
+@media (max-width: 900px){
+  nav.rail{position:static; border:1px solid var(--rule); border-radius:10px; background:var(--surface); padding:14px}
+  nav.rail ol{grid-template-columns:repeat(auto-fill, minmax(200px,1fr))}
+}
+
+/* Article */
+article{min-width:0; max-width:68ch}
+article h2{font-family:var(--display); font-weight:800; font-size:clamp(28px, 3.6vw, 40px); line-height:1.1; letter-spacing:-.015em; margin:88px 0 20px; text-wrap:balance; scroll-margin-top:24px}
+article h2:first-child{margin-top:0}
+article h3{font-family:var(--display); font-weight:700; font-size:22px; line-height:1.25; margin:44px 0 10px; text-wrap:balance; scroll-margin-top:24px}
+article h4{font-family:var(--display); font-weight:700; font-size:18px; margin:28px 0 8px}
+article p, article li{margin:0 0 14px}
+article ul, article ol{padding-left:1.3em; margin:0 0 18px}
+article li::marker{color:var(--accent); font-family:var(--mono); font-size:.85em}
+article strong{font-weight:600}
+article a{color:var(--accent); text-underline-offset:3px}
+article hr{border:0; border-top:1px solid var(--rule); margin:56px 0}
+article code{font-family:var(--mono); font-size:.85em; background:var(--accent-soft); padding:1px 5px; border-radius:4px}
+article blockquote{margin:20px 0; padding:4px 0 4px 18px; border-left:3px solid var(--amber); color:var(--muted); font-style:italic}
+
+/* chapter checklists and disagreement sections get a quiet panel */
+article h3.panel-h{margin-top:52px}
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:10px; padding:18px 22px 6px; margin:0 0 18px}
+.panel.disagree{border-left:3px solid var(--amber)}
+.panel.check{border-left:3px solid var(--accent)}
+
+a.cite{display:inline-block; font-family:var(--mono); font-size:11px; line-height:1; font-weight:500; text-decoration:none; color:var(--accent); background:var(--accent-soft); border-radius:4px; padding:3px 4px 2px; margin:0 1px; vertical-align:2px; font-variant-numeric:tabular-nums}
+a.cite:hover, a.cite:focus-visible{background:var(--accent); color:var(--bg); outline:none}
+
+.tbl{overflow-x:auto; margin:8px 0 22px; border:1px solid var(--rule); border-radius:8px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:15px; line-height:1.45}
+th, td{text-align:left; vertical-align:top; padding:9px 12px; border-bottom:1px solid var(--rule)}
+th{font-family:var(--display); font-weight:700; font-size:14px; background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+
+/* sources */
+#sources ~ ol li, #sources ~ ul li{font-size:15px; line-height:1.45; margin-bottom:8px}
+li:target{background:var(--accent-soft); border-radius:4px; outline:4px solid var(--accent-soft)}
+
+.foot{grid-column:1/-1; border-top:1px solid var(--rule); padding-top:20px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">Deep dive · 5 research reports · November 2026</div>
+    <h1>Screen-time <span>companion</span></h1>
+    <p>The phone companion that heals when you do, and the two friends who notice if you cheat. Built for finals. A build-ready plan covering competitors, technology, audience, science, pricing, launch and the numbers.</p>
+    <div class="stats"><span><b>12</b>competitors torn down</span><span><b>8-12</b>weeks to build</span><span><b>$34.99</b>per year</span><span><b>Mar 2027</b>launch</span></div>
+  </header>
+
+  <nav class="rail" aria-label="Chapters">
+    <h2>Contents</h2>
+    <ol id="toc"><li><a href="#the-verdict"><span class="n"></span>The verdict</a></li>
+<li><a href="#1-the-market-in-one-table"><span class="n">1</span>The market in one table</a></li>
+<li><a href="#2-the-sharpened-angle"><span class="n">2</span>The sharpened angle</a></li>
+<li><a href="#3-who-its-for"><span class="n">3</span>Who it&#x27;s for</a></li>
+<li><a href="#4-what-the-science-supports"><span class="n">4</span>What the science supports</a></li>
+<li><a href="#5-product-spec-version-1"><span class="n">5</span>Product spec, version 1</a></li>
+<li><a href="#6-technical-plan"><span class="n">6</span>Technical plan</a></li>
+<li><a href="#7-pricing-and-paywall"><span class="n">7</span>Pricing and paywall</a></li>
+<li><a href="#8-launch-plan"><span class="n">8</span>Launch plan</a></li>
+<li><a href="#9-financial-scenarios"><span class="n">9</span>Financial scenarios</a></li>
+<li><a href="#10-risks-and-when-to-stop"><span class="n">10</span>Risks and when to stop</a></li>
+<li><a href="#11-the-next-seven-days"><span class="n">11</span>The next seven days</a></li>
+<li><a href="#sources"><span class="n"></span>Sources</a></li></ol>
+  </nav>
+
+  <article id="doc"><h2 id="the-verdict">The verdict</h2>
+<p><strong>Build it, but go in with clear eyes.</strong> One person can build this, the demand is real, and nobody ships the exact combination yet. But the category is crowded, the platform is fragile, and the economics only work if growth is organic.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Does anyone do exactly this?</td>
+<td>No. Every piece exists somewhere, but no app combines a healing character, friends alerted on bypass, and a student focus</td>
+</tr>
+<tr>
+<td>Biggest threat</td>
+<td><strong>BePresent</strong>, not Opal. It already has friends, group sessions, money stakes and the "years" framing, and it's growing fastest in the category</td>
+</tr>
+<tr>
+<td>Can one person build it?</td>
+<td>Yes, on iPhone only, in roughly <strong>8 to 12 weeks</strong></td>
+</tr>
+<tr>
+<td>Hardest part</td>
+<td>Making Apple's Screen Time API work reliably across iOS 26 versions</td>
+</tr>
+<tr>
+<td>Can paid ads drive growth?</td>
+<td><strong>No.</strong> At $34.99 a year, an install earns about $0.89 in year one but costs $3.50 to $8 to buy</td>
+</tr>
+<tr>
+<td>Year-one outcome, base case</td>
+<td>About 88K installs and about <strong>$7K a month</strong> in revenue by month 12. The range is $0.6K to $45K</td>
+</tr>
+<tr>
+<td>Launch timing</td>
+<td>Beta in February 2027 and public launch in March, ahead of spring finals in April and May</td>
+</tr>
+</tbody>
+</table></div>
+<p>The plan below is designed around those facts.</p>
+<hr />
+<h2 id="1-the-market-in-one-table">1. The market in one table</h2>
+<p>All ratings were read from App Store listings on 6 November 2026. Revenue figures are third-party estimates or founders' own claims, labelled as such.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>App</th>
+<th>Core mechanic</th>
+<th>Character</th>
+<th>Friends</th>
+<th>Annual price</th>
+<th>Ratings</th>
+<th>Revenue signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opal</td>
+<td>Scheduled blocks, focus score</td>
+<td>No</td>
+<td>Leaderboard</td>
+<td>$99.99</td>
+<td>203K</td>
+<td>$400K-600K/mo (est.)</td>
+</tr>
+<tr>
+<td>Brainrot</td>
+<td>Brain pet that decays</td>
+<td>Yes, only decays</td>
+<td>None found</td>
+<td>$19.99-59.99</td>
+<td>43K</td>
+<td>$260K-400K/mo (est. / self)</td>
+</tr>
+<tr>
+<td>BePresent</td>
+<td>Sessions, money stakes, rewards</td>
+<td>No</td>
+<td>Leaderboards, group sessions</td>
+<td>$24.99-59.99</td>
+<td>97K</td>
+<td>$150K-400K/mo (est.)</td>
+</tr>
+<tr>
+<td>one sec</td>
+<td>A pause before an app opens</td>
+<td>Mascot only</td>
+<td>None</td>
+<td>$19.99</td>
+<td>104K</td>
+<td>$80K-150K/mo (est.)</td>
+</tr>
+<tr>
+<td>ScreenZen</td>
+<td>Delays that grow, minimal mode</td>
+<td>No</td>
+<td>Accountability partner (Sept 2026)</td>
+<td>Free, tips</td>
+<td>109K</td>
+<td>Tips only</td>
+</tr>
+<tr>
+<td>Brick</td>
+<td>$59 NFC puck</td>
+<td>No</td>
+<td>None</td>
+<td>Hardware</td>
+<td>69K</td>
+<td>"Eight figures" (self)</td>
+</tr>
+<tr>
+<td>Focus Friend</td>
+<td>A bean knits while you focus</td>
+<td>Yes, sad if you quit</td>
+<td>None</td>
+<td>$19.99</td>
+<td>14K</td>
+<td>~$350K/mo (est.)</td>
+</tr>
+<tr>
+<td>Clearspace</td>
+<td>Friction plus an open count</td>
+<td>No</td>
+<td>"Teammates"</td>
+<td>$44.99</td>
+<td>12K</td>
+<td>~$60K/mo (est.)</td>
+</tr>
+<tr>
+<td>Friend Controls, Snitch, TimeBack</td>
+<td>Friends approve or see unlocks</td>
+<td>No</td>
+<td>Core feature</td>
+<td>$15-45</td>
+<td>Under 3K</td>
+<td>Under $10K/mo</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What's crowded:</strong>
+- plain scheduled blocking
+- a pause before apps open
+- "earn your screen time" mechanics
+- the "years of your life" shock statistic
+- long emotional onboarding that ends in a trial paywall</p>
+<p><strong>What's young:</strong> friend accountability. Several small apps launched in 2025 and 2026 (Friend Controls, Snitch, Narc, TimeBack), and none has broken out. ScreenZen and Clearspace have added it as a side feature.</p>
+<p><strong>What's still open:</strong>
+1. <strong>A character built around recovery.</strong> Brainrot's brain decays, Forest's tree dies, and Focus Friend's bean gets sad. None of them centres healing.
+2. <strong>A product designed for students.</strong> Opal's student plan is only a price point, not a product.
+3. <strong>Honest billing as a stated feature.</strong> Brainrot's own reviews call its exit discount "scammy".</p>
+<hr />
+<h2 id="2-the-sharpened-angle">2. The sharpened angle</h2>
+<p>The round-one idea led with "years of your life back". The research kills that as a differentiator, because Brainrot and BePresent both already use it. Keep the number in onboarding, but don't sell the app on it.</p>
+<p><strong>Positioning:</strong> <em>The phone companion that heals when you do, and the two friends who'll notice if you cheat. Built for finals.</em></p>
+<p>There are three pillars, in this order.</p>
+<ol>
+<li><strong>A companion that heals.</strong> The character responds to your day. It brightens on good days, dims on bad ones, and recovers when you recover. A broken streak can be earned back. Nothing dies.</li>
+<li><strong>Two friends, gentle visibility.</strong> When you bypass a block, one or two chosen friends get a gentle note, such as "Sam unlocked TikTok at 1:14am. Send a nudge?". This is the least-taken flavour of accountability: friends see, but they don't approve or deny.</li>
+<li><strong>Finals mode.</strong> A "lock in" session with a shareable count of study hours, campus groups, and content timed to the exam calendar.</li>
+</ol>
+<p><strong>Honest billing runs underneath all three.</strong> One price, a 7-day trial, a reminder on day 5, a visible charge date, and no exit-discount tricks.</p>
+<hr />
+<h2 id="3-who-its-for">3. Who it's for</h2>
+<p><strong>The first audience is US college students aged 18 to 24, sold around the exam calendar.</strong></p>
+<ul>
+<li><strong>They feel the problem.</strong> In Pew's 2026 survey, 70% of 18-to-29-year-olds say they spend too much time on their phone, and 42% say they're on it "almost constantly". About 58% of 18-to-49-year-olds tried to cut back in the past year.</li>
+<li><strong>They choose their own apps and live in dense friend groups</strong>, which is exactly what the friend feature needs.</li>
+<li><strong>They have fixed panic dates:</strong> fall finals in December, spring finals in April and May.</li>
+<li><strong>They spend less</strong>, so the annual price stays under $40.</li>
+<li><strong>The lane is contested.</strong> Opal says 70% of its 10 million users are students (self-reported). We win on the friend mechanic and finals content, not by calling ourselves a student blocker.</li>
+</ul>
+<p><strong>Second audience:</strong> young professionals, after the student loop is proven.</p>
+<p><strong>Not now:</strong>
+- <strong>High schoolers through their parents.</strong> That's a different buyer and a different product, with minors' privacy rules.
+- <strong>Marketing to ADHD adults.</strong> That invites scrutiny of medical claims. Keep ADHD-friendly design as a principle, not a label.</p>
+<hr />
+<h2 id="4-what-the-science-supports">4. What the science supports</h2>
+<p>These findings set both the design and the marketing claims.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Evidence</th>
+<th>Design consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-set limits work best</td>
+<td>Letting people set their own limits cut use of targeted apps by 22 minutes a day, or 17% (American Economic Review, 2022)</td>
+<td>Users set their own limits in onboarding</td>
+</tr>
+<tr>
+<td>A pause before opening an app works</td>
+<td>one sec's 2023 study cut target-app opens by 57%, with 36% of attempts abandoned at the pause (peer-reviewed)</td>
+<td>Use a pause, but vary the prompts and lengthen it after repeated bypasses, because users learn to tap through</td>
+</tr>
+<tr>
+<td>Friend accountability is unproven</td>
+<td>No trial found for phone use</td>
+<td>Treat it as an A/B test from day one, and never claim it's proven</td>
+</tr>
+<tr>
+<td>Guilt-only mechanics backfire</td>
+<td>Broken streaks lead people to quit (CHI 2016); reviews favour moderation over full detox</td>
+<td>The character heals, streaks can be repaired, and goals are moderation targets</td>
+</tr>
+<tr>
+<td>Cutting back helps mood and focus</td>
+<td>Blocking mobile internet for two weeks improved mental health and attention (PNAS Nexus, 2025). Capping social media at about 30 minutes a day reduced loneliness in undergraduates (2018)</td>
+<td>Say "linked to better mood, focus and sleep". Never say "raise your GPA" or "cures anxiety"</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The "years" number, done honestly.</strong> The formula is daily hours on the chosen apps ÷ 24 × remaining life expectancy. A 20-year-old has about 58 years left. At 5.5 hours a day, that's about 13 calendar years.</p>
+<ul>
+<li>Count only the apps the user picks.</li>
+<li>Say "at this pace".</li>
+<li>Show the formula.</li>
+<li>Never say "lost years of life".</li>
+</ul>
+<hr />
+<h2 id="5-product-spec-version-1">5. Product spec, version 1</h2>
+<h3 id="the-core-loop">The core loop</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Moment</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Onboarding, about 20 screens</strong></td>
+<td>Pick your three worst apps, enter daily hours, see "At this pace: 13 years on these apps", set your own limits, meet the companion, add one or two friends, and grant Screen Time access. The paywall comes last.</td>
+</tr>
+<tr>
+<td><strong>The first aha</strong></td>
+<td>The first block fires on a chosen app, and the companion reacts on the shield screen.</td>
+</tr>
+<tr>
+<td><strong>Daily</strong></td>
+<td>The companion's mood follows usage events through the day. Each unlock goes through a pause and an intention prompt. An evening check-in shows "today vs your limit".</td>
+</tr>
+<tr>
+<td><strong>On a bypass</strong></td>
+<td>The shield sends a notification. Tapping it opens our unlock screen, the unlock is logged, and the chosen friends get a gentle note.</td>
+</tr>
+<tr>
+<td><strong>Streak</strong></td>
+<td>Days under your limit, with two freezes. A missed day can be earned back with a good day.</td>
+</tr>
+<tr>
+<td><strong>Weekly</strong></td>
+<td>A share card with the companion, the hours reclaimed, and the streak, sized for Instagram stories.</td>
+</tr>
+<tr>
+<td><strong>Finals mode</strong></td>
+<td>A timed "lock in" session with all distracting apps shielded, a study-hours counter, and group sessions with friends.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="screens-for-version-1">Screens for version 1</h3>
+<ol>
+<li><strong>Onboarding flow</strong>, about 20 screens, ending in the paywall.</li>
+<li><strong>Home</strong>: the companion, today's status, and the streak.</li>
+<li><strong>Custom shield:</strong> the block screen shows the companion's reaction and an "I need it" button that sends a notification.</li>
+<li><strong>Unlock screen</strong>: pause, intention, then a 5, 15 or 30 minute pass, logged.</li>
+<li><strong>Friends</strong>: invite by link, see each other's streaks and companions, and send a nudge.</li>
+<li><strong>Finals mode</strong> session screen.</li>
+<li><strong>Weekly card</strong> and share sheet.</li>
+<li><strong>Settings</strong>: limits, schedules, apps, notifications, subscription, and the charge date.</li>
+</ol>
+<h3 id="cut-from-version-1">Cut from version 1</h3>
+<ul>
+<li>Android</li>
+<li>Mac</li>
+<li>money stakes</li>
+<li>real-world rewards</li>
+<li>leaderboards</li>
+<li>AI coaching</li>
+<li>a web dashboard</li>
+</ul>
+<hr />
+<h2 id="6-technical-plan">6. Technical plan</h2>
+<p><strong>Platform: iPhone only.</strong> Android means a separate build, and since January 2026 Google Play has reviewed the main blocking method more strictly.</p>
+<p><strong>Stack:</strong>
+- <strong>Expo</strong> with a custom development build and the <code>react-native-device-activity</code> library (version 0.6.1, February 2026) for picking apps, scheduling and shielding.
+- <strong>Hand-written Swift</strong> for the three extensions: the shield appearance, the shield buttons and the activity monitor.
+- <strong>Supabase or Firebase</strong> for friends, notifications and a server heartbeat.
+- <strong>RevenueCat</strong> for the paywall and subscriptions.</p>
+<p><strong>What Apple's Screen Time API can and can't do:</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Feasibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Block chosen apps on a schedule</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Custom block screen with the companion</td>
+<td>Yes, through the shield configuration</td>
+</tr>
+<tr>
+<td>Know which app was opened, or exact usage</td>
+<td><strong>No.</strong> Apple returns hidden tokens. Usage reports can be drawn on screen but not exported or sent to a server.</td>
+</tr>
+<tr>
+<td>Companion mood from usage</td>
+<td>Partly. It has to use rough threshold events, such as one per 15 minutes of use.</td>
+</tr>
+<tr>
+<td>"Years" number</td>
+<td>Only from a figure the user enters during onboarding</td>
+</tr>
+<tr>
+<td>Detect a sanctioned unlock and notify friends</td>
+<td>Yes. The block screen sends a notification, and tapping it opens our unlock screen, so every sanctioned unlock passes through our code.</td>
+</tr>
+<tr>
+<td>Detect the user revoking permission or deleting the app</td>
+<td>No live signal. A server heartbeat can tell friends when the blocker "goes quiet". This design still needs testing.</td>
+</tr>
+<tr>
+<td>Stop the user disabling the blocker</td>
+<td>Possibly. According to one sec, iOS 26.4 lets a Screen Time passcode lock third-party blockers, and a friend could set it. Apple hasn't confirmed this.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Hard parts and risks:</strong>
+- <strong>File Apple's permission requests on day one.</strong> Apple approves the Family Controls permission separately for the app and each of its three extensions. Developers report waits from one day to about two months, and beta testing is blocked until all four are approved.
+- <strong>Known iOS 26 bugs need guards from day one.</strong> Usage events fire with zero usage, schedule callbacks sometimes don't fire, and a schedule set to start "now" can slip to tomorrow. The technical report lists workarounds for each.
+- <strong>The iOS simulator can't run the background extensions.</strong> Expect weeks of overnight testing on real phones.
+- <strong>Reliability protects revenue.</strong> Users' angriest reviews are about blocks that silently stop and streaks that get wiped.</p>
+<hr />
+<h2 id="7-pricing-and-paywall">7. Pricing and paywall</h2>
+<p>Every choice below follows from the 2026 subscription benchmarks and from competitors' complaints.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paywall type</td>
+<td>Hard paywall at the end of onboarding</td>
+<td>Hard paywalls convert downloads to paid about 5 times better than freemium, with similar retention (RevenueCat 2026)</td>
+</tr>
+<tr>
+<td>Trial</td>
+<td>7 days, on the annual plan</td>
+<td>Trials of 5 to 9 days convert at a 37% median, against 26% for 4 days or less. 55% of 3-day-trial cancellations happen on day 0</td>
+</tr>
+<tr>
+<td>Price</td>
+<td><strong>$34.99 a year</strong> preselected, $5.99 a month</td>
+<td>The category band is $20 to $60. Opal's $99.99 draws the most anger</td>
+</tr>
+<tr>
+<td>Weekly plan</td>
+<td>None</td>
+<td>Weekly plans keep only 1 to 2% of subscribers after a year, and Brainrot reviewers call $5 a week "insane"</td>
+</tr>
+<tr>
+<td>Discounts</td>
+<td>No exit-intent discount</td>
+<td>Brainrot's "50% off forever" pop-up is called "scammy" in one-star reviews</td>
+</tr>
+<tr>
+<td>Honesty</td>
+<td>A trial reminder on day 5, the charge date visible on the paywall and in settings</td>
+<td>Surprise trial charges are about 24% of one-to-three-star reviews in this category</td>
+</tr>
+<tr>
+<td>Test later</td>
+<td>A three-friend group plan, such as $59.99 a year for three people</td>
+<td>Students pay less, and a group plan pulls in invites</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="8-launch-plan">8. Launch plan</h2>
+<p><strong>Timing.</strong> The build takes 8 to 12 weeks, so December 2026 finals are too soon. Content starts now and builds an audience, and the product launches ahead of spring finals.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Period</th>
+<th>Product</th>
+<th>Growth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nov 2026, weeks 1-2</strong></td>
+<td>File the Apple permission requests. Spike the shield, the unlock and the notification on a real phone.</td>
+<td>Start one founder-led account on TikTok and Instagram. Post the "I'm building an app that heals when I put my phone down" story daily. Put up a landing page with a waitlist.</td>
+</tr>
+<tr>
+<td><strong>Dec 2026</strong></td>
+<td>Core blocking, the companion, onboarding and the paywall</td>
+<td>Ride December finals with "lock in" study content filmed using a prototype. Recruit 30 to 50 student beta testers from the waitlist.</td>
+</tr>
+<tr>
+<td><strong>Jan 2027</strong></td>
+<td>Friends, finals mode, the weekly card, and guards for the iOS bugs</td>
+<td>New Year digital-detox content. Recruit campus ambassadors at 3 pilot schools.</td>
+</tr>
+<tr>
+<td><strong>Feb 2027</strong></td>
+<td>Private beta. Fix reliability. A/B test friend alerts on and off.</td>
+<td>Pitch campus libraries and counselling centres. One university library mounted a Brick for finals in October 2026, and its counselling centre gave out a free code for another blocker.</td>
+</tr>
+<tr>
+<td><strong>Mar 2027</strong></td>
+<td>Public launch</td>
+<td>Six posts a day across two TikTok accounts and Instagram. One $100 to $150 creator test, then 8 to 10 student micro-creators at about $150 a week each. Apple Search Ads at $30 a day on long-tail keywords.</td>
+</tr>
+<tr>
+<td><strong>Apr-May 2027</strong></td>
+<td>Finals mode campaign</td>
+<td>Spark Ads behind organic posts that already work. Run group finals sessions on campuses.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Budget.</strong> About $12K over the eight launch weeks:
+- creators
+- ambassadors at $100 a month plus $1 per install
+- Apple Search Ads, at a US median of $1.79 per tap
+- small boosts behind posts that already work</p>
+<p><strong>Expected result.</strong> 3 to 5 million views and 10,000 to 25,000 installs over eight weeks, if at least one format hits. That's an estimate built on founders' self-reported benchmarks.</p>
+<p><strong>Content formats with evidence behind them:</strong>
+1. <strong>Screen-time before-and-after.</strong> The screenshot is the proof, and this is the safest format for ads.
+2. <strong>The companion reacting.</strong> Opening TikTok makes it wilt, and a week later it's glowing.
+3. <strong>The friend-alert skit.</strong> "My friend got a notification that I opened TikTok at 1am."
+4. <strong>"Lock in" study sessions</strong> with the study-hours counter on screen.
+5. <strong>The founder's own story</strong>, posted daily. This is how Brainrot and one sec started.</p>
+<p><strong>App Store name.</strong> Lead with keywords you can win. "Screen time" and "app blocker" are held by apps with 53K to 91K ratings. "Lock in", "study blocker" and "dopamine detox" are within reach. For example: <em>[Name]: Lock In &amp; Study Blocker</em>, with the subtitle <em>Dopamine detox, friend check-ins</em>. Put "screen time" and "app blocker" in the keyword field, and avoid "brainrot".</p>
+<p><strong>Stop rule.</strong> If no post clears 50,000 views by week 5 of posting, change the hook format, not the posting volume.</p>
+<hr />
+<h2 id="9-financial-scenarios">9. Financial scenarios</h2>
+<p>These are the economics agent's own model, using RevenueCat medians, Apple's 15% small-business commission, and refunds. Every assumption is written down in the economics report.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>Pessimistic</th>
+<th>Base</th>
+<th>Optimistic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Installs in year 1</td>
+<td>21K</td>
+<td>88K</td>
+<td>267K</td>
+</tr>
+<tr>
+<td>Net revenue per install</td>
+<td>$0.34</td>
+<td>$0.89</td>
+<td>$1.83</td>
+</tr>
+<tr>
+<td>Monthly revenue at month 12</td>
+<td>~$0.6K</td>
+<td>~$7K</td>
+<td>~$45K</td>
+</tr>
+<tr>
+<td>Total net revenue in year 1</td>
+<td>~$7K</td>
+<td>~$73K</td>
+<td>~$450K</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What moves the numbers most:</strong>
+- <strong>Organic reach</strong>, which sets install volume.
+- <strong>Download-to-paid conversion.</strong> The Health &amp; Fitness median is 2.9%. Hard-paywall apps reach about 10%.
+- <strong>First annual renewal.</strong> Productivity apps have the weakest in the market, at 23% at the median. Cheap annual plans keep about 36%.</p>
+<p><strong>Paid ads only pay back if the unit economics get two to four times better.</strong> That would need a higher price, conversion above 8%, or strong renewals.</p>
+<hr />
+<h2 id="10-risks-and-when-to-stop">10. Risks and when to stop</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BePresent adds a character</td>
+<td>Move fast. Our edge is students, finals and friend visibility, not the character alone</td>
+</tr>
+<tr>
+<td>Apple changes or breaks the Screen Time API</td>
+<td>Guard against the known bugs, keep a server heartbeat, and keep the core value (the companion and friends) useful even when blocking is degraded</td>
+</tr>
+<tr>
+<td>Apple's permission approval is slow</td>
+<td>File on day one. Build the UI and friends features while waiting</td>
+</tr>
+<tr>
+<td>Friend alerts feel creepy or cause shame</td>
+<td>Keep alerts gentle and opt-in, let the user choose what friends see, and test with alerts on and off</td>
+</tr>
+<tr>
+<td>Novelty fades after a week</td>
+<td>Vary the prompts, lengthen the pause after repeated bypasses, and give the companion new stages and seasonal finals events</td>
+</tr>
+<tr>
+<td>Students don't pay</td>
+<td>Test a three-friend group plan and a lower price in the beta</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Stop or change course if:</strong>
+1. <strong>Content:</strong> after 8 weeks of daily posting, no post has cleared 50,000 views and the waitlist is under 1,000.
+2. <strong>Beta retention:</strong> fewer than 30% of beta users are still active on day 14.
+3. <strong>Friends:</strong> the friend alert doesn't improve day-14 retention compared with the control group.
+4. <strong>Conversion:</strong> download-to-paid is below 2% after 5,000 installs.</p>
+<hr />
+<h2 id="11-the-next-seven-days">11. The next seven days</h2>
+<ol>
+<li><strong>Day 1.</strong> Enrol in the Apple Developer Program. Create the bundle IDs for the app and its three extensions, and file all four Family Controls requests.</li>
+<li><strong>Day 1.</strong> Pick a working name and grab the TikTok and Instagram handles and a domain.</li>
+<li><strong>Days 2-3.</strong> Build a throwaway Expo prototype with <code>react-native-device-activity</code>. It should block one app with a custom shield showing a placeholder companion, then confirm the notification-to-unlock flow on a real iPhone.</li>
+<li><strong>Days 2-7.</strong> Post one video a day, starting with "Day 1 of building an app that heals when I put my phone down". Put up a landing page with a waitlist and an "add two friends" referral.</li>
+<li><strong>Day 4.</strong> Sketch the companion: three moods and a recovery animation. Commission an illustrator or use one consistent AI-assisted style.</li>
+<li><strong>Day 5.</strong> Message 20 students you know and ask them two questions: would they let two friends see when they break their own limit, and what would make that feel supportive rather than shaming?</li>
+<li><strong>Day 7.</strong> Review the week. Count views per post, waitlist sign-ups, and the students' answers on friend visibility.</li>
+</ol>
+<hr />
+<h2 id="sources">Sources</h2>
+<p>The five research reports behind this document are in <code>research/ideas/deepdive/</code>:</p>
+<ul>
+<li><strong>competitors:</strong> 47 sources, including App Store listings, AppGoblin, Screensdesign, Adapty, Starter Story, Entrepreneur and Stork.ai.</li>
+<li><strong>tech:</strong> 32 sources, including Apple developer documentation and forums, npm, and one sec's blog.</li>
+<li><strong>audience and science:</strong> Pew Research 2026, PNAS 2023, American Economic Review 2022, PNAS Nexus 2025, CHI 2016, and SSA life tables.</li>
+<li><strong>growth:</strong> Starter Story, RevenueCat Sub Club, Product Hunt, SplitMetrics Q2 2026, the iTunes Search API, and campus press.</li>
+<li><strong>economics:</strong> RevenueCat State of Subscription Apps 2026, Adapty 2026, paywall libraries, app reviews, and the Opal community forum.</li>
+</ul>
+<p>Key links:
+- <a href="https://adapty.io/paywall-library/opal-screen-time-for-focus/">Opal on Adapty</a>
+- <a href="https://screensdesign.com/showcase/bepresent-screen-time-control">BePresent teardown</a>
+- <a href="https://screensdesign.com/showcase/brainrot-screen-time-control">Brainrot teardown</a>
+- <a href="https://www.starterstory.com/stories/how-i-built-it-400k-month-ios-app">Brainrot founder interview</a>
+- <a href="https://screensdesign.com/showcase/focus-friend-by-hank-green">Focus Friend teardown</a>
+- <a href="https://apps.apple.com/us/app/id1541027222">ScreenZen on the App Store</a>
+- <a href="https://www.entrepreneur.com/business-news/these-founders-built-a-device-that-solves-phone-addiction">Brick in Entrepreneur</a>
+- <a href="https://unstar.app/blog/opal-forest-freedom-one-sec-jomo-screen-time-apps-ranked-2026">Unstar review analysis</a>
+- <a href="https://community.opal.so/t/7-days-into-a-full-year-seems-extreme/955">Opal community thread on trial charges</a></p></article>
+
+  <div class="foot">Revenue figures are third-party estimates or founders' claims unless marked verified. Financial scenarios are a model, with every assumption stated in the economics report.</div>
+</div>
+
+<script>
+(function(){
+  // wrap "Where sources disagree" and "Checklist" sections in panels
+  const doc=document.getElementById('doc');
+  doc.querySelectorAll('h3').forEach(h=>{
+    const t=h.textContent.toLowerCase();
+    let cls=null;
+    if(t.startsWith('where ')&&(t.includes('disagree')||t.includes('contradict'))) cls='disagree';
+    else if(t==='checklist') cls='check';
+    if(!cls) return;
+    h.classList.add('panel-h');
+    const box=document.createElement('div'); box.className='panel '+cls;
+    let n=h.nextElementSibling;
+    while(n && !/^H[23]$/.test(n.tagName) && n.tagName!=='HR'){ const nx=n.nextElementSibling; box.appendChild(n); n=nx; }
+    h.after(box);
+  });
+  // highlight current chapter in rail
+  const links=[...document.querySelectorAll('#toc a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const heads=[...doc.querySelectorAll('h2[id]')].filter(h=>map.has(h.id));
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.remove('on')); map.get(e.target.id)?.classList.add('on'); } });
+    },{rootMargin:'0px 0px -70% 0px'});
+    heads.forEach(h=>io.observe(h));
+  }
+})();
+</script>
