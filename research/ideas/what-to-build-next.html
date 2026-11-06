@@ -1,0 +1,509 @@
+<title>What to Build Next</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: field-guide report. Sticky chapter rail on the left, one reading column at ~66ch, numbered citations as small jade tags. */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --fg:#17211d; --muted:#5b6a64; --rule:#dbe3df;
+  --accent:#0d7a5f; --accent-soft:#e2f2ec; --amber:#b86a0b;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#151d1a; --fg:#e4ece8; --muted:#97a8a0; --rule:#26332e;
+  --accent:#4cc9a0; --accent-soft:#163229; --amber:#e3a24b; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#151d1a; --fg:#e4ece8; --muted:#97a8a0; --rule:#26332e;
+  --accent:#4cc9a0; --accent-soft:#163229; --amber:#e3a24b; color-scheme:dark }
+
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{background:var(--bg); color:var(--fg); font-family:var(--body); font-size:18px; line-height:1.62;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+
+.wrap{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:240px minmax(0,1fr); gap:56px; padding-block:48px 96px}
+@media (max-width: 900px){ .wrap{grid-template-columns:minmax(0,1fr); gap:24px; padding-block:24px 64px} }
+
+/* Masthead */
+.mast{grid-column:1/-1; display:grid; gap:14px; padding-bottom:32px; border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent)}
+.mast h1{font-family:var(--display); font-weight:800; font-size:clamp(38px, 6vw, 68px); line-height:1.02; letter-spacing:-.02em; margin:0; text-wrap:balance; max-width:16ch}
+.mast h1 span{color:var(--accent)}
+.mast p{margin:0; max-width:62ch; color:var(--muted); font-size:19px}
+.stats{display:flex; flex-wrap:wrap; gap:10px 28px; margin-top:6px; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.stats b{font-family:var(--display); font-size:22px; color:var(--fg); margin-right:6px; font-variant-numeric:tabular-nums}
+
+/* Rail */
+nav.rail{position:sticky; top:calc(env(safe-area-inset-top,0px) + 24px); align-self:start; font-family:var(--display)}
+nav.rail h2{font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 12px}
+nav.rail ol{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+nav.rail a{display:grid; grid-template-columns:22px 1fr; gap:6px; padding:7px 10px; border-radius:6px; color:var(--fg); text-decoration:none; font-size:15px; line-height:1.3}
+nav.rail a:hover, nav.rail a:focus-visible{background:var(--accent-soft); outline:none}
+nav.rail a.on{background:var(--accent-soft); color:var(--accent); font-weight:700}
+nav.rail .n{font-family:var(--mono); font-size:12px; color:var(--accent); padding-top:2px}
+@media (max-width: 900px){
+  nav.rail{position:static; border:1px solid var(--rule); border-radius:10px; background:var(--surface); padding:14px}
+  nav.rail ol{grid-template-columns:repeat(auto-fill, minmax(200px,1fr))}
+}
+
+/* Article */
+article{min-width:0; max-width:68ch}
+article h2{font-family:var(--display); font-weight:800; font-size:clamp(28px, 3.6vw, 40px); line-height:1.1; letter-spacing:-.015em; margin:88px 0 20px; text-wrap:balance; scroll-margin-top:24px}
+article h2:first-child{margin-top:0}
+article h3{font-family:var(--display); font-weight:700; font-size:22px; line-height:1.25; margin:44px 0 10px; text-wrap:balance; scroll-margin-top:24px}
+article h4{font-family:var(--display); font-weight:700; font-size:18px; margin:28px 0 8px}
+article p, article li{margin:0 0 14px}
+article ul, article ol{padding-left:1.3em; margin:0 0 18px}
+article li::marker{color:var(--accent); font-family:var(--mono); font-size:.85em}
+article strong{font-weight:600}
+article a{color:var(--accent); text-underline-offset:3px}
+article hr{border:0; border-top:1px solid var(--rule); margin:56px 0}
+article code{font-family:var(--mono); font-size:.85em; background:var(--accent-soft); padding:1px 5px; border-radius:4px}
+article blockquote{margin:20px 0; padding:4px 0 4px 18px; border-left:3px solid var(--amber); color:var(--muted); font-style:italic}
+
+/* chapter checklists and disagreement sections get a quiet panel */
+article h3.panel-h{margin-top:52px}
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:10px; padding:18px 22px 6px; margin:0 0 18px}
+.panel.disagree{border-left:3px solid var(--amber)}
+.panel.check{border-left:3px solid var(--accent)}
+
+a.cite{display:inline-block; font-family:var(--mono); font-size:11px; line-height:1; font-weight:500; text-decoration:none; color:var(--accent); background:var(--accent-soft); border-radius:4px; padding:3px 4px 2px; margin:0 1px; vertical-align:2px; font-variant-numeric:tabular-nums}
+a.cite:hover, a.cite:focus-visible{background:var(--accent); color:var(--bg); outline:none}
+
+.tbl{overflow-x:auto; margin:8px 0 22px; border:1px solid var(--rule); border-radius:8px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:15px; line-height:1.45}
+th, td{text-align:left; vertical-align:top; padding:9px 12px; border-bottom:1px solid var(--rule)}
+th{font-family:var(--display); font-weight:700; font-size:14px; background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+
+/* sources */
+#sources ~ ol li, #sources ~ ul li{font-size:15px; line-height:1.45; margin-bottom:8px}
+li:target{background:var(--accent-soft); border-radius:4px; outline:4px solid var(--accent-soft)}
+
+.foot{grid-column:1/-1; border-top:1px solid var(--rule); padding-top:20px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">Idea research · 27 apps scored · November 2026</div>
+    <h1>What to <span>build next</span></h1>
+    <p>Twenty-seven app ideas, researched on the web and scored against the patterns behind apps that actually took off. Five are worth building, four are worth a cheap test, and the rest come with reasons to skip them.</p>
+    <div class="stats"><span><b>27</b>ideas researched</span><span><b>~120</b>web searches</span><span><b>5</b>worth building</span><span><b>4</b>worth a cheap test</span></div>
+  </header>
+
+  <nav class="rail" aria-label="Chapters">
+    <h2>Contents</h2>
+    <ol id="toc"><li><a href="#the-short-answer"><span class="n"></span>The short answer</a></li>
+<li><a href="#how-this-was-done"><span class="n"></span>How this was done</a></li>
+<li><a href="#1-screen-time-companion-2730"><span class="n">1</span>Screen-time companion</a></li>
+<li><a href="#2-glow-up-through-food-2530"><span class="n">2</span>Glow-up through food</a></li>
+<li><a href="#3-daily-faith-habit-for-gen-z-2530"><span class="n">3</span>Daily faith habit for Gen Z</a></li>
+<li><a href="#4-supplement-stack-map-2330"><span class="n">4</span>Supplement stack map</a></li>
+<li><a href="#5-glp-1-off-ramp-2230"><span class="n">5</span>GLP-1 off-ramp</a></li>
+<li><a href="#worth-a-cheap-test"><span class="n"></span>Worth a cheap test</a></li>
+<li><a href="#skip-and-why"><span class="n"></span>Skip, and why</a></li>
+<li><a href="#your-nutrient-body-map-the-honest-verdict"><span class="n"></span>Your nutrient body map</a></li>
+<li><a href="#what-the-winners-have-in-common"><span class="n"></span>What the winners have in common</a></li>
+<li><a href="#how-to-start"><span class="n"></span>How to start</a></li></ol>
+  </nav>
+
+  <article id="doc"><h2 id="the-short-answer">The short answer</h2>
+<p>Five ideas stand out. Each has proven money in its category, a demo you can show in seconds, a daily reason to come back, and a clear angle that the current apps get wrong.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Idea</th>
+<th>Score</th>
+<th>Why it could take off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Screen-time companion</strong></td>
+<td>27/30</td>
+<td>Category already earns six figures a month per app, and a character-based blocker is the proven format</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Glow-up through food</strong></td>
+<td>25/30</td>
+<td>A solo-scale app in the same niche reached a verified $13.5K a month within seven months</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Daily faith habit for Gen Z</strong></td>
+<td>25/30</td>
+<td>Faith apps earn tens of millions, and nobody owns the small-group daily ritual</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Supplement stack map</strong></td>
+<td>23/30</td>
+<td>Two small apps earn a verified $64K to $69K a month, and it reuses your body-map idea</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>GLP-1 off-ramp</strong></td>
+<td>22/30</td>
+<td>Millions stop GLP-1 drugs each year, 60% of lost weight returns within a year, and no app owns that moment</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>My recommendation for you:</strong> build the <strong>supplement stack map</strong> first. It has the strongest verified revenue at solo scale. It takes the body map you already designed and points it at a habit people already spend about $600 a year on. And its main risk, drifting into medical advice, is one your "declare, don't prescribe" design already solves. The <strong>glow-up tracker</strong> is the strongest second choice if you want the bigger content engine.</p>
+<p>The rest of this page explains how the ideas were picked and scored, then gives each of the top five a full build brief. After that come four ideas worth a cheap test, the ones to skip and why, and an honest verdict on the nutrient app as originally designed.</p>
+<hr />
+<h2 id="how-this-was-done">How this was done</h2>
+<p><strong>The filter.</strong> The earlier research on 110 videos found the same traits in apps that spread and earned. Every idea here was scored 1 to 5 on six of them, for a total out of 30.</p>
+<ol>
+<li><strong>Two-second aha.</strong> Can the core value be shown in a two-second screen recording?</li>
+<li><strong>Video hook.</strong> Is there a natural short-video demo or transformation?</li>
+<li><strong>Money already flows.</strong> Do people already pay competitors or spend on the problem?</li>
+<li><strong>Daily reason to return.</strong> Is there a natural daily or weekly unit for a streak?</li>
+<li><strong>Shareable moment.</strong> Is there something users would screenshot and post?</li>
+<li><strong>Unit economics.</strong> Can revenue per install plausibly beat the cost of getting one?</li>
+</ol>
+<p><strong>The research.</strong> Nine research agents each took three ideas, for 27 in total. Together they ran about 120 web searches and read the pages behind them: app revenue trackers, verified revenue listings, app store pages, review analyses, press, and peer-reviewed studies where relevant.</p>
+<p><strong>How to read the numbers.</strong> Each figure is labelled by how much to trust it:</p>
+<ul>
+<li><strong>Verified</strong> means revenue connected through RevenueCat or Stripe and published on TrustMRR or similar sites. This is the strongest signal.</li>
+<li><strong>Third-party estimate</strong> means trackers like AppGoblin, Appfigures, Sensor Tower or trends.vc. These are useful for scale but can be off by several times.</li>
+<li><strong>Self-reported</strong> means founders talking about their own app. Treat these as claims.</li>
+</ul>
+<p><strong>Limits.</strong> Scores came from different agents, so a one or two point gap is not meaningful. Reddit blocked the page reader, so some community sizes are missing. App store reviews were read through review analyses rather than scraped directly.</p>
+<hr />
+<h2 id="1-screen-time-companion-2730">1. Screen-time companion: 27/30</h2>
+<p><strong>The pitch.</strong> A screen-time blocker with a character that wilts when you doomscroll and recovers when you don't. A "years of your life back" counter makes the cost feel real, and a small accountability group makes the blocker hard to quietly switch off.</p>
+<p><strong>Why now.</strong> Phone detox has gone mainstream. Business Insider called "bricking your phone" the new Dry January in 2026.</p>
+<p><strong>Money proof.</strong>
+- <strong>Opal:</strong> about $400K a month (Adapty, third-party estimate), with 2024 revenue listed at $4.8M (Lazyweb).
+- <strong>Brainrot:</strong> a cartoon-brain pet blocker launched in mid-2025, reportedly at $400K a month within a year (founder via Stork.ai, self-reported).
+- <strong>Brick:</strong> sells a $59 physical blocker and claims "multiple eight figures" and 500,000 active users (Entrepreneur, company claim).</p>
+<p><strong>What users hate about the incumbents.</strong> A review analysis of Opal, Forest, Freedom, one sec and Jomo grouped the complaints. It was published by a competitor, so treat the percentages as indicative.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Complaint</th>
+<th>Share</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Surprise charge when the trial ends</td>
+<td>24%</td>
+</tr>
+<tr>
+<td>Too easy to bypass</td>
+<td>19%</td>
+</tr>
+<tr>
+<td>Blocking silently breaks after iOS updates</td>
+<td>16%</td>
+</tr>
+<tr>
+<td>Guilt mechanics backfire</td>
+<td>12%</td>
+</tr>
+<tr>
+<td>Worked for a week, then stopped</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The angle to win.</strong>
+- <strong>Accountability instead of willpower.</strong> Unlocking a blocked app at 1am sends a gentle note to one or two chosen friends. That turns the bypass problem into a social one, and it builds in an invite loop.
+- <strong>A character that heals, not just rots.</strong> Brainrot only punishes. A companion that recovers, plus a lost day you can earn back, fixes the guilt complaint.
+- <strong>Honest billing.</strong> A reminder before the trial charge and an annual price under $40 answer the top complaint directly.
+- <strong>One audience first.</strong> College students in finals season, with a "lock in" mode and a shareable count of study hours.</p>
+<p><strong>The two-second clip.</strong> A split screen. On the left, TikTok opens and the character wilts under "-4.2 years of your life at this pace". On the right, a week later, the character glows over "You got back 11h 40m this week".</p>
+<p><strong>Core loop.</strong>
+- <strong>Onboarding aha:</strong> enter age and daily screen time, see "At this pace: 17 years of your remaining life on your phone", pick a character, and the first block starts.
+- <strong>Daily:</strong> character health updates through the day, and a five-second intention prompt before any unlock.
+- <strong>Streak:</strong> days under goal, with two freezes and an earn-back path.
+- <strong>Share:</strong> a weekly "hours reclaimed" card and an end-of-finals "I locked in for 42 hours" card.
+- <strong>Paywall:</strong> at the end of onboarding, $34.99 a year preselected, a 3-day trial, and the charge date stated.</p>
+<p><strong>Risks.</strong> It's the most crowded of the top five. Every iOS blocker depends on Apple's fragile Screen Time API, and Apple's own Screen Time is free. Copying Brainrot without the accountability angle would be a late copycat.</p>
+<p><strong>Verdict.</strong> Leaning build, if you can post short videos daily and commit to one audience.</p>
+<p>Sources: <a href="https://adapty.io/paywall-library/opal-screen-time-for-focus/">Adapty on Opal</a>, <a href="https://app.lazyweb.com/company/opal">Lazyweb on Opal</a>, <a href="https://www.stork.ai/blog/the-400k-app-that-started-with-phone-addiction">Stork.ai on Brainrot</a>, <a href="https://www.entrepreneur.com/business-news/these-founders-built-a-device-that-solves-phone-addiction">Entrepreneur on Brick</a>, <a href="https://unstar.app/blog/opal-forest-freedom-one-sec-jomo-screen-time-apps-ranked-2026">Unstar review analysis</a></p>
+<hr />
+<h2 id="2-glow-up-through-food-2530">2. Glow-up through food: 25/30</h2>
+<p><strong>The pitch.</strong> Log water, sugar, sleep and skin-friendly foods, take one guided selfie a day, and watch a timeline that shows what your skin did after your best and worst weeks. No face scores.</p>
+<p><strong>Money proof.</strong>
+- <strong>DailyGlowUp:</strong> a daily glow-up tracker launched in January 2026. Within seven months it reached $13,537 a month in revenue, $2.29 per download and a $116 lifetime value per paying user. It is now listed for sale at $450K (RevenueCat-verified on whatsthe.app). This is the clearest solo-scale proof in the whole study.
+- <strong>Umax:</strong> the face-rating looksmaxxing app reports about $500K a month and 7M+ downloads (founder via Fortune, self-reported).</p>
+<p><strong>What users hate.</strong> An analysis of 1,559 one- and two-star reviews of 12 face-rating and glow-up apps, published by a competing app:
+- 67.6% complain about paying or subscriptions.
+- 31.1% say results stayed locked until they paid, after they had uploaded photos.
+- 30.1% use words like "scam" or "misleading".</p>
+<p>None of these apps links diet to skin over time.</p>
+<p><strong>The angle to win.</strong>
+- <strong>Score-free and cause-and-effect.</strong> Instead of rating a face, show the user their own patterns: "Your three clearest days followed 2 litres of water and under 25g of added sugar", with matching selfies.
+- <strong>Guided capture.</strong> Same distance, a lighting check and a face outline, so the timeline is honest.
+- <strong>One real insight before the paywall.</strong> That answers the top complaint directly.</p>
+<p><strong>The two-second clip.</strong> A 30-day selfie timelapse going from red, bumpy cheeks to calm skin. A strip underneath ticks through the days: water filling, sugar shrinking, sleep rising. End frame: "Day 30. No new products. Just food."</p>
+<p><strong>Core loop.</strong>
+- <strong>Onboarding:</strong> five questions, a guided first selfie, and a 30-day plan that visibly uses the answers.
+- <strong>Daily:</strong> one selfie and four taps (water, sugar, sleep, one skin-friendly food).
+- <strong>Streak:</strong> a selfie streak with two freezes, plus a weekly skin report pairing the best and worst days with what was eaten.
+- <strong>Share:</strong> auto-built 7, 14 and 30-day timelapses, watermarked.
+- <strong>Paywall:</strong> after the plan reveal and one free insight, $39.99 a year preselected, with a weekly option.</p>
+<p><strong>Risks.</strong>
+- The audience skews teen, so set an age rating of 17+ and never rate attractiveness.
+- Evidence that diet clears skin is modest, so frame it as tracking, not treatment.
+- Visible skin change takes weeks, so the first week has to run on streaks and habit insights.</p>
+<p><strong>Verdict.</strong> Build. The content format and the money are proven, and the top complaints point straight at an honest, diet-driven angle.</p>
+<p>Sources: <a href="https://www.whatsthe.app/dailyglowup">DailyGlowUp on whatsthe.app</a>, <a href="https://www.escapethematrix.app/research/appearance-app-reviews/">appearance-app review analysis</a>, <a href="https://realworldappeal.com/en/blog/looksmaxxing-apps-compared">looksmaxxing apps compared</a>, <a href="https://apps.apple.com/us/app/umax-become-hot/id6471026798">Umax on the App Store</a></p>
+<hr />
+<h2 id="3-daily-faith-habit-for-gen-z-2530">3. Daily faith habit for Gen Z: 25/30</h2>
+<p><strong>The pitch.</strong> A two-minute daily faith practice: one verse, one reflection tied to what you're going through, and one short prayer. The streak is shared with three to five friends. It's built for young US Protestant and non-denominational Christians, who find Hallow too Catholic and YouVersion too much like homework.</p>
+<p><strong>Money proof.</strong>
+- <strong>Hallow:</strong> about $40M net in 2025 (Appfigures, third-party estimate). It saw 263,000 downloads on Ash Wednesday 2026, about 25 times a normal day.
+- <strong>Bible Chat:</strong> founders claim $15M a year and 10M users (self-reported), and over 95% of its revenue is from the US (Appfigures).
+- <strong>Bibly:</strong> a solo-built Bible app earning $4.3K a month from about 1,000 subscribers at $44.99 a year (TrustMRR, verified).</p>
+<p><strong>The angle to win.</strong> Every incumbent is either a content library (Hallow, YouVersion) or an AI chat (Bible Chat). None makes the daily act a small-group ritual.
+- <strong>Group streak.</strong> Pray with three to five friends every day, with a shared prayer-request wall.
+- <strong>Youth-pastor group codes</strong> as the distribution channel.
+- <strong>A Lent and Advent challenge</strong> for Protestants, who have no Hallow equivalent. Lent creates a predictable 40-day demand spike every year.</p>
+<p><strong>The two-second clip.</strong> Someone types "stressed about finals". A verse card animates in with a one-line reflection, then the group streak ticks from 41 to 42 as four friends' avatars light up.</p>
+<p><strong>Core loop.</strong>
+- <strong>Daily:</strong> verse, reflection, a 20-second prayer, and one tap to pray for a friend's request.
+- <strong>Streak:</strong> personal and group streaks with two freezes, and an earn-back day framed as "grace".
+- <strong>Share:</strong> a daily verse card carrying the streak count, designed for Instagram stories.
+- <strong>Paywall:</strong> at the end of onboarding, $34.99 a year with a 7-day trial. The free tier keeps the daily verse and group streak, so the social loop is never paywalled.</p>
+<p><strong>Risks.</strong>
+- More than 9,000 Bible apps exist, though only 46 earn over $10K a month (Appfigures).
+- Free YouVersion sets the price anchor at zero.
+- AI reflections must quote scripture and avoid doctrinal claims.
+- Social features for under-18s need parental consent.</p>
+<p><strong>Verdict.</strong> Leaning build, if you have or can build a channel into youth ministries or Christian creators. Muslims are a larger audience but pay less, as most of Muslim Pro's revenue comes from ads. That makes a Muslim version a good second product.</p>
+<p>Sources: <a href="https://appfigures.com/resources/insights/hallow-lent-surge-prayer-app-revenue">Appfigures on Hallow</a>, <a href="https://appfigures.com/resources/insights/20250418?f=5">Appfigures on Bible Chat</a>, <a href="https://trustmrr.com/startup/bibly">Bibly on TrustMRR</a>, <a href="https://www.romania-insider.com/bible-chat-investment-round-faith-app-romania-feb-2025">Bible Chat funding</a></p>
+<hr />
+<h2 id="4-supplement-stack-map-2330">4. Supplement stack map: 23/30</h2>
+<p><strong>The pitch.</strong> Scan every bottle in your cabinet and see your whole stack on a body map. It shows totals against official reference intakes and upper limits, flags overlaps, gives a cost per day, and has a daily "taken" check-off.</p>
+<p><strong>Why this fits you.</strong> It is your nutrient body map, pointed at a habit people already pay for. The organ map, the cited fact cards, the "declare, don't prescribe" voice and the streak with freezes all carry over directly.</p>
+<p><strong>Money proof.</strong>
+- <strong>BioStacks:</strong> about $64K a month in recurring revenue (TrustMRR, RevenueCat-verified, June 2026).
+- <strong>Supplements AI:</strong> about $69K in 30-day revenue from 256 active subscriptions (TrustMRR, verified). That implies very high revenue per subscriber.
+- <strong>The market:</strong> 75% of US adults take supplements, with a median spend of $50 a month among users (CRN 2024 survey).
+- <strong>SuppCo:</strong> the venture-backed leader, with about 123,000 monthly users and a $5.5M seed round (AppGoblin estimate and press).</p>
+<p><strong>What users hate about SuppCo.</strong>
+- Its score changes for no reason.
+- Product matching takes weeks and is sometimes wrong.
+- Users can't enter contents by hand.
+- Its scores favour "trusted" brands.</p>
+<p><strong>The angle to win: show the stack, not a score.</strong>
+- <strong>Transparent totals.</strong> Sum each nutrient across all products and show it against published NIH reference values, with citations.
+- <strong>Duplicate flags.</strong> For example, "Zinc from 3 products, 2.4 times the reference intake."
+- <strong>Label photos and manual entry.</strong> That fixes the matching complaint.
+- <strong>No "take more of X" advice.</strong> The body map shows which systems the stack touches.</p>
+<p><strong>The two-second clip.</strong> A hand sweeps eight bottles across a counter. Cut to the phone, where a body map glows and a red badge pulses on the liver: "Vitamin A: 3 products, above upper limit." Caption: "I scanned my supplement cabinet."</p>
+<p><strong>Core loop.</strong>
+- <strong>Onboarding aha:</strong> scan three bottles, then see the body map and one surprise, such as a duplicate or an over-the-limit nutrient.
+- <strong>Daily:</strong> a morning and evening "taken" check-off with reminders.
+- <strong>Streak:</strong> an adherence streak with two freezes, plus a monthly cost-per-day report.
+- <strong>Share:</strong> a "My Stack" card showing products, body coverage and daily cost.
+- <strong>Paywall:</strong> right after the first stack analysis, $39.99 a year with a 7-day trial.</p>
+<p><strong>Risks.</strong>
+- <strong>Medical advice is the biggest risk.</strong> Apple rejects uncited health advice, and dosage calculators need an approved source. Keep v1 to cited reference values and "ask your doctor or pharmacist", and leave drug interactions out entirely.
+- <strong>A missed upper-limit flag could cause harm.</strong> Vitamin A in pregnancy is one example, so the label data must be right.
+- <strong>The category is filling fast.</strong> At least six new trackers launched in 2026, so speed matters.</p>
+<p><strong>Verdict.</strong> Build, carefully and quickly.</p>
+<p>Sources: <a href="https://crnusa.org/newsroom/crn-survey-shows-consistent-supplement-usage-increase-specialty-product-use-over-time">CRN supplement survey</a>, <a href="https://appgoblin.info/apps/6504838951">SuppCo on AppGoblin</a>, <a href="https://justuseapp.com/en/app/6504838951/suppco-supplement-scanner/reviews">SuppCo reviews</a>, <a href="https://athletechnews.com/suppco-secures-5-5m-to-make-sense-of-supplements/">SuppCo seed round</a>, <a href="https://trustmrr.com/startup/biostacks">BioStacks on TrustMRR</a>, <a href="https://trustmrr.com/startup/supplements-ai">Supplements AI on TrustMRR</a></p>
+<hr />
+<h2 id="5-glp-1-off-ramp-2230">5. GLP-1 off-ramp: 22/30</h2>
+<p><strong>The pitch.</strong> An app for the many people who stop Ozempic, Wegovy, Mounjaro or Zepbound. It runs a guided taper and a year of maintenance built around a "keep-it-off band" for weight. Protein and two short strength sessions a week protect muscle, and a daily food-noise check catches regain early.</p>
+<p><strong>Why now.</strong>
+- <strong>Use is widespread and expensive.</strong> About 12% of US adults currently take a GLP-1 drug, and 56% of users say it's hard to afford (KFF poll).
+- <strong>Regain fear is in the news.</strong> A March 2026 meta-analysis found 60% of lost weight returns within a year of stopping.
+- <strong>The demand exists without a product.</strong> WeightWatchers, Noom and MeAgain all write articles about tapering off, but no app is built for it.</p>
+<p><strong>Money proof.</strong> trends.vc lists 20 paying GLP-1 companion apps, all third-party estimates.
+- <strong>Shotsy:</strong> $4.7M a year.
+- <strong>MeAgain:</strong> $1.9M a year.
+- <strong>PeptidePal:</strong> about $245K a year, founded in 2026.
+- <strong>Noom:</strong> sells a "Taper Off Guarantee" alongside its medication, which shows the post-drug phase is something people buy.</p>
+<p><strong>The angle to win.</strong> The incumbents are built around the dose: shot logs and medication curves. When the user stops, the app loses its reason to be opened. This app takes over on the day the dose log goes quiet, and it can import history from Shotsy or MeAgain. A protein tracker alone would not be enough, because MeAgain already logs protein and fiber.</p>
+<p><strong>The two-second clip.</strong> A weight chart with a steep drop on the drug, then a shaded green band stretching forward, with the user's dots staying inside it. Caption: "Month 6 off Zepbound. Still in the band."</p>
+<p><strong>Core loop.</strong>
+- <strong>Daily, 60 seconds total:</strong> a weigh-in, a protein photo and a food-noise slider.
+- <strong>Central measure:</strong> "days in band", with two freezes a month.
+- <strong>Share:</strong> a "180 days off Wegovy, 31 lb still gone" card.
+- <strong>Paywall:</strong> $49.99 a year, matching Shotsy's price, with a stated charge date.</p>
+<p><strong>Risks.</strong>
+- <strong>Willingness to pay is the big unknown.</strong> Many people stop because of cost.
+- <strong>Incumbents can copy it.</strong> Shotsy and MeAgain could add a maintenance mode.
+- <strong>Tapering advice must defer to the prescriber.</strong> The app tracks habits and never gives dosing instructions.</p>
+<p><strong>Verdict.</strong> Leaning build as a focused angle. Validate it with a landing page and "coming off Ozempic" videos before writing much code.</p>
+<p>Sources: <a href="https://trends.vc/opportunities/glp-1-companion-apps">trends.vc GLP-1 companion apps</a>, <a href="https://www.kff.org/public-opinion/poll-1-in-8-adults-say-they-are-currently-taking-a-glp-1-drug-for-weight-loss-diabetes-or-another-condition-even-as-half-say-the-drugs-are-difficult-to-afford/">KFF poll</a>, <a href="https://www.news-medical.net/news/20260309/Most-weight-lost-on-GLP-1-drugs-returns-within-a-year-after-stopping.aspx">regain meta-analysis coverage</a>, <a href="https://newsroom.clevelandclinic.org/2026/03/12/what-happens-when-patients-stop-taking-glp-1-drugs-new-cleveland-clinic-study-reveals-real-world-insights">Cleveland Clinic study</a>, <a href="https://www.weightwatchers.com/us/blog/tapering-off-glp-1">WeightWatchers taper guide</a></p>
+<hr />
+<h2 id="worth-a-cheap-test">Worth a cheap test</h2>
+<p>These four have real demand but weak money proof, so test them with two weeks of short videos or a landing page before building anything.</p>
+<ul>
+<li><strong>Quit sugar, 23/30.</strong> The "quit X" model is proven: Quittr reportedly hit $250K a month four months after launch, and Puff Count peaked around $44K a month (self-reported). r/sugarfree has about 200,000 members. But the only verified sugar app has 16 subscribers, and dozens of clones shipped in 2025 and 2026. The angle is the Quittr of sugar: no food logging, a craving SOS button, a body-recovery timeline, and logging a slip without resetting the counter.</li>
+<li><strong>Desk-worker reset, 22/30.</strong> Bend, a stretching app, is estimated at $500K to $1.1M a month (third-party). The angle is a Mac and iPhone pair that suggests a two-minute reset in calendar gaps and uses the webcam to measure head position before and after. It could later sell team plans to remote companies.</li>
+<li><strong>Declutter photo planner, 22/30.</strong> #CleanTok is huge and the before-and-after is the perfect clip. But the category leader sells at $19.99 a year, and every AI declutter app earns under $10K a month. The angle is ADHD-first: photo in, timer on, real after-photos.</li>
+<li><strong>No-spend streak, 19/30.</strong> There are 94 million "No Buy" TikTok posts but no app with revenue. The angle is a pause screen before Shein, Temu, Amazon or TikTok Shop opens, showing "Day 47, $1,284 kept". Launch it in December for "No Buy 2027".</li>
+</ul>
+<hr />
+<h2 id="skip-and-why">Skip, and why</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Idea</th>
+<th>Score</th>
+<th>Why skip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>South Asian home-food logger</td>
+<td>22</td>
+<td>HealthifyMe dominates India and its revenue fell. Diaspora apps earn under $10K a month, and RotiCal already sells the exact pitch</td>
+</tr>
+<tr>
+<td>ADHD focus</td>
+<td>22</td>
+<td>Loved brands (Finch, Tiimo) already own it. Only worth it with a sharp "help me start" angle</td>
+</tr>
+<tr>
+<td>Pet food scanner</td>
+<td>22</td>
+<td>A great hook, but about ten lookalikes launched with no traction</td>
+</tr>
+<tr>
+<td>Step pet</td>
+<td>20</td>
+<td>The money sits with Finch and Pikmin Bloom. The best small player earns under $3K a month</td>
+</tr>
+<tr>
+<td>Couples habits</td>
+<td>20</td>
+<td>Revenue tops out near $10K a month, and the aha only comes once the partner joins. Better as a mode inside another app</td>
+</tr>
+<tr>
+<td>Kids chores and money</td>
+<td>20</td>
+<td>The money goes to banks with kids' debit cards. Game-first apps earn little</td>
+</tr>
+<tr>
+<td>Resale scanner</td>
+<td>20</td>
+<td>More than 14 clones with no revenue, and eBay's sold-price data is locked away</td>
+</tr>
+<tr>
+<td>Gut and fiber tracker</td>
+<td>19</td>
+<td>Searches are at an all-time high, but every app earns under $10K a month. Better as a feature</td>
+</tr>
+<tr>
+<td>Picky-eater kids</td>
+<td>19</td>
+<td>Parents engage but don't pay much, and kids grow out of the problem</td>
+</tr>
+<tr>
+<td>AI speaking coach</td>
+<td>19</td>
+<td>The money is in language learning and enterprise sales, and free AI voice modes do this</td>
+</tr>
+<tr>
+<td>Caffeine and sleep cutoff</td>
+<td>19</td>
+<td>A great aha, but it fades once users learn their cutoff. Sleep apps already include it</td>
+</tr>
+<tr>
+<td>Dating profile coach</td>
+<td>19</td>
+<td>Rizz earns, its copies don't, and there's no daily reason to return</td>
+</tr>
+<tr>
+<td>Quit betting</td>
+<td>18</td>
+<td>No app earns from it, ads for addiction treatment are restricted, and shame stops sharing</td>
+</tr>
+<tr>
+<td>Peptide tracker</td>
+<td>18</td>
+<td>24 apps already, the best is free, and regulatory risk is high</td>
+</tr>
+<tr>
+<td>Subscription killer</td>
+<td>18</td>
+<td>The value is one-time, so it doesn't work as a subscription, and Rocket Money dominates</td>
+</tr>
+<tr>
+<td>Cycle-syncing</td>
+<td>15</td>
+<td>The hashtag is huge, but the apps earn little and the science is increasingly criticised</td>
+</tr>
+<tr>
+<td>Perimenopause companion</td>
+<td>14</td>
+<td>The leader earns under $10K a month, Apple and Flo now give tracking away, and the money goes to telehealth</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="your-nutrient-body-map-the-honest-verdict">Your nutrient body map: the honest verdict</h2>
+<p><strong>Score: 18/30.</strong> It ranks 22nd of 27.</p>
+<p><strong>What's strong.</strong>
+- <strong>The aha is excellent.</strong> Tap a nutrient and the body lights up.
+- <strong>The daily loop is natural.</strong>
+- <strong>The body-map visual looks unclaimed.</strong> The research found no App Store app with a nutrient-driven organ map.
+- <strong>It fixes Daily Dozen's complaints.</strong> Its closest relative, Dr. Greger's Daily Dozen, has about 20,000 ratings at 4.9 stars. Its users ask for history, an editable list, less scrolling and sharing, all of which your design already includes.</p>
+<p><strong>What's weak.</strong> No evidence shows anyone pays for declare-only nutrient tracking. Daily Dozen is free with no in-app purchases, and the paid money in nutrition goes to measurement apps like Cronometer, or to GLP-1 companions.</p>
+<p><strong>What would most improve its odds.</strong> All three of these come from the research:
+- <strong>Narrow the audience</strong> to GLP-1 users, who need protein, fiber and water, or to plant-based eaters. r/vegan has about 1.9 million members.
+- <strong>Add a 30-plants fiber row</strong> to ride the 2026 fibermaxxing trend.
+- <strong>Put a paywall at the end of onboarding</strong>, around $35 a year, instead of relying on a free grid.</p>
+<p><strong>The bigger move.</strong> Point the same body map at supplements. The supplement stack map in fourth place is your design with a scanner in front of it, and it has verified revenue behind it. Keep the food-based nutrient grid as a second tab later.</p>
+<hr />
+<h2 id="what-the-winners-have-in-common">What the winners have in common</h2>
+<ul>
+<li><strong>Money follows pain, identity or shame.</strong> Addiction, appearance, faith and weight all monetise. Gentle self-improvement, like fiber, caffeine or chores, mostly doesn't.</li>
+<li><strong>Every category got a 2025 to 2026 clone wave.</strong> Quit-sugar, peptide, step-pet, declutter, resale and supplement apps all saw dozens of new entrants. Speed and a real angle matter more than the idea.</li>
+<li><strong>Honest billing is an angle almost everywhere.</strong> Surprise trial charges were a top complaint in screen-time, glow-up and ADHD apps. Stating the charge date clearly is cheap and sets you apart.</li>
+<li><strong>Verified small-app revenue is the best signal.</strong> Ideas with RevenueCat-verified solo apps behind them were the most convincing: glow-up, supplements and faith. Category-leader estimates alone were less so.</li>
+</ul>
+<hr />
+<h2 id="how-to-start">How to start</h2>
+<ol>
+<li><strong>Pick one idea.</strong> I'd choose the supplement stack map, or the glow-up tracker if you want the stronger video engine.</li>
+<li><strong>Test demand for two weeks before coding.</strong> Post the two-second clip daily as a mock-up and put up a landing page with an email waitlist. Move on only if strangers ask where to get it.</li>
+<li><strong>Build the four-week MVP</strong> from the playbook: the data model first, one aha, a paywall at the end of onboarding, and a streak with two freezes.</li>
+<li><strong>Measure one number:</strong> whether the day-30 cohort curve flattens.</li>
+</ol></article>
+
+  <div class="foot">Verified means revenue connected through RevenueCat or Stripe. Third-party estimates and self-reported figures are labelled as such and were not independently checked.</div>
+</div>
+
+<script>
+(function(){
+  // wrap "Where sources disagree" and "Checklist" sections in panels
+  const doc=document.getElementById('doc');
+  doc.querySelectorAll('h3').forEach(h=>{
+    const t=h.textContent.toLowerCase();
+    let cls=null;
+    if(t.startsWith('where ')&&(t.includes('disagree')||t.includes('contradict'))) cls='disagree';
+    else if(t==='checklist') cls='check';
+    if(!cls) return;
+    h.classList.add('panel-h');
+    const box=document.createElement('div'); box.className='panel '+cls;
+    let n=h.nextElementSibling;
+    while(n && !/^H[23]$/.test(n.tagName) && n.tagName!=='HR'){ const nx=n.nextElementSibling; box.appendChild(n); n=nx; }
+    h.after(box);
+  });
+  // highlight current chapter in rail
+  const links=[...document.querySelectorAll('#toc a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const heads=[...doc.querySelectorAll('h2[id]')].filter(h=>map.has(h.id));
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.remove('on')); map.get(e.target.id)?.classList.add('on'); } });
+    },{rootMargin:'0px 0px -70% 0px'});
+    heads.forEach(h=>io.observe(h));
+  }
+})();
+</script>
